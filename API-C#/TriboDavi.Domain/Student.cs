@@ -17,10 +17,7 @@ namespace TriboDavi.Domain
         public string CPF { get; set; }
         public string SchoolName { get; set; }
         public int SchoolGrade { get; set; }
-        public string StreetName { get; set; }
-        public string StreetNumber { get; set; }
-        public string Neighborhood { get; set; }
-        public string City { get; set; }
+        public Address Address { get; set; }
         public virtual required LegalParent LegalParent { get; set; }
     }
 }
