@@ -12,8 +12,8 @@ using TriboDavi.Persistence;
 namespace TriboDavi.Persistence.Migrations
 {
     [DbContext(typeof(TriboDaviContext))]
-    [Migration("20230827211126_CreateTeacher")]
-    partial class CreateTeacher
+    [Migration("20230827213913_CreateLegalParent")]
+    partial class CreateLegalParent
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -153,12 +153,12 @@ namespace TriboDavi.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
+                    b.Property<string>("CPF")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -167,6 +167,10 @@ namespace TriboDavi.Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Graduation")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -195,6 +199,10 @@ namespace TriboDavi.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("RG")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -215,10 +223,6 @@ namespace TriboDavi.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("TriboDavi.Domain.Identity.UserRole", b =>
@@ -275,79 +279,6 @@ namespace TriboDavi.Persistence.Migrations
                     b.ToTable("LegalParents");
                 });
 
-            modelBuilder.Entity("TriboDavi.Domain.Student", b =>
-                {
-                    b.HasBaseType("TriboDavi.Domain.Identity.User");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("CPF")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Graduation")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Height")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("LegalParentId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("RG")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("SchoolGrade")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SchoolName")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("integer");
-
-                    b.HasIndex("LegalParentId");
-
-                    b.HasDiscriminator().HasValue("Student");
-                });
-
-            modelBuilder.Entity("TriboDavi.Domain.Teacher", b =>
-                {
-                    b.HasBaseType("TriboDavi.Domain.Identity.User");
-
-                    b.Property<int>("AssistantTeacherId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CPF")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Graduation")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("RG")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasIndex("AssistantTeacherId");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("CPF")
-                                .HasColumnName("Teacher_CPF");
-
-                            t.Property("Graduation")
-                                .HasColumnName("Teacher_Graduation");
-
-                            t.Property("RG")
-                                .HasColumnName("Teacher_RG");
-                        });
-
-                    b.HasDiscriminator().HasValue("Teacher");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("TriboDavi.Domain.Identity.Role", null)
@@ -401,28 +332,6 @@ namespace TriboDavi.Persistence.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TriboDavi.Domain.Student", b =>
-                {
-                    b.HasOne("TriboDavi.Domain.LegalParent", "LegalParent")
-                        .WithMany()
-                        .HasForeignKey("LegalParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LegalParent");
-                });
-
-            modelBuilder.Entity("TriboDavi.Domain.Teacher", b =>
-                {
-                    b.HasOne("TriboDavi.Domain.Teacher", "AssistantTeacher")
-                        .WithMany()
-                        .HasForeignKey("AssistantTeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AssistantTeacher");
                 });
 
             modelBuilder.Entity("TriboDavi.Domain.Identity.Role", b =>

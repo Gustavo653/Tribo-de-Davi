@@ -12,8 +12,8 @@ using TriboDavi.Persistence;
 namespace TriboDavi.Persistence.Migrations
 {
     [DbContext(typeof(TriboDaviContext))]
-    [Migration("20230827210047_CreateStudent")]
-    partial class CreateStudent
+    [Migration("20230827213923_CreateStudentAndTeacher")]
+    partial class CreateStudentAndTeacher
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -153,6 +153,10 @@ namespace TriboDavi.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
+                    b.Property<string>("CPF")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -167,6 +171,10 @@ namespace TriboDavi.Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Graduation")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -194,6 +202,10 @@ namespace TriboDavi.Persistence.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("RG")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -282,21 +294,11 @@ namespace TriboDavi.Persistence.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("CPF")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Graduation")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("Height")
                         .HasColumnType("integer");
 
                     b.Property<int>("LegalParentId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("RG")
-                        .HasColumnType("text");
 
                     b.Property<int?>("SchoolGrade")
                         .HasColumnType("integer");
@@ -310,6 +312,18 @@ namespace TriboDavi.Persistence.Migrations
                     b.HasIndex("LegalParentId");
 
                     b.HasDiscriminator().HasValue("Student");
+                });
+
+            modelBuilder.Entity("TriboDavi.Domain.Teacher", b =>
+                {
+                    b.HasBaseType("TriboDavi.Domain.Identity.User");
+
+                    b.Property<int?>("AssistantTeacherId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("AssistantTeacherId");
+
+                    b.HasDiscriminator().HasValue("Teacher");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -376,6 +390,15 @@ namespace TriboDavi.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("LegalParent");
+                });
+
+            modelBuilder.Entity("TriboDavi.Domain.Teacher", b =>
+                {
+                    b.HasOne("TriboDavi.Domain.Teacher", "AssistantTeacher")
+                        .WithMany()
+                        .HasForeignKey("AssistantTeacherId");
+
+                    b.Navigation("AssistantTeacher");
                 });
 
             modelBuilder.Entity("TriboDavi.Domain.Identity.Role", b =>

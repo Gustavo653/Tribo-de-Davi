@@ -29,9 +29,11 @@ namespace TriboDavi.API
             var configuration = builder.Configuration;
 
             string databaseTriboDavi = Environment.GetEnvironmentVariable("DatabaseConnection") ?? configuration.GetConnectionString("DatabaseConnection")!;
+            string migrate = Environment.GetEnvironmentVariable("Migrate") ?? "false";
 
             Console.WriteLine("Início dos parâmetros da aplicação \n");
             Console.WriteLine($"(DatabaseConnection) String de conexao com banco de dados para TriboDavi: \n{databaseTriboDavi} \n");
+            Console.WriteLine($"(Migrate) Executar migrate: \n{migrate} \n");
             Console.WriteLine("Fim dos parâmetros da aplicação \n");
 
             builder.Services.AddDbContext<TriboDaviContext>(x =>
@@ -62,13 +64,14 @@ namespace TriboDavi.API
             builder.Services.AddScoped<RoleManager<Role>>();
             builder.Services.AddScoped<UserManager<User>>();
 
-            using (var serviceProvider = builder.Services.BuildServiceProvider())
-            {
-                var dbContext = serviceProvider.GetService<TriboDaviContext>();
-                dbContext.Database.Migrate();
-                SeedRoles(serviceProvider).Wait();
-                //SeedAdminUser(serviceProvider).Wait();
-            }
+            if (migrate == "true")
+                using (var serviceProvider = builder.Services.BuildServiceProvider())
+                {
+                    var dbContext = serviceProvider.GetService<TriboDaviContext>();
+                    dbContext.Database.Migrate();
+                    SeedRoles(serviceProvider).Wait();
+                    SeedAdminUser(serviceProvider).Wait();
+                }
 
             builder.Services.AddIdentityCore<User>(options =>
             {

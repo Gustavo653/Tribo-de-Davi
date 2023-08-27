@@ -6,21 +6,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TriboDavi.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateStudent : Migration
+    public partial class CreateStudentAndTeacher : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<int>(
+                name: "AssistantTeacherId",
+                table: "AspNetUsers",
+                type: "integer",
+                nullable: true);
+
             migrationBuilder.AddColumn<DateTime>(
                 name: "BirthDate",
                 table: "AspNetUsers",
                 type: "timestamp without time zone",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "CPF",
-                table: "AspNetUsers",
-                type: "text",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
@@ -29,12 +29,6 @@ namespace TriboDavi.Persistence.Migrations
                 type: "text",
                 nullable: false,
                 defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Graduation",
-                table: "AspNetUsers",
-                type: "text",
-                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "Height",
@@ -46,12 +40,6 @@ namespace TriboDavi.Persistence.Migrations
                 name: "LegalParentId",
                 table: "AspNetUsers",
                 type: "integer",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "RG",
-                table: "AspNetUsers",
-                type: "text",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
@@ -73,9 +61,21 @@ namespace TriboDavi.Persistence.Migrations
                 nullable: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_AssistantTeacherId",
+                table: "AspNetUsers",
+                column: "AssistantTeacherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_LegalParentId",
                 table: "AspNetUsers",
                 column: "LegalParentId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_AspNetUsers_AssistantTeacherId",
+                table: "AspNetUsers",
+                column: "AssistantTeacherId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_LegalParents_LegalParentId",
@@ -90,7 +90,15 @@ namespace TriboDavi.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_AspNetUsers_AssistantTeacherId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUsers_LegalParents_LegalParentId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_AssistantTeacherId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropIndex(
@@ -98,19 +106,15 @@ namespace TriboDavi.Persistence.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
+                name: "AssistantTeacherId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
                 name: "BirthDate",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "CPF",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
                 name: "Discriminator",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "Graduation",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
@@ -119,10 +123,6 @@ namespace TriboDavi.Persistence.Migrations
 
             migrationBuilder.DropColumn(
                 name: "LegalParentId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "RG",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
