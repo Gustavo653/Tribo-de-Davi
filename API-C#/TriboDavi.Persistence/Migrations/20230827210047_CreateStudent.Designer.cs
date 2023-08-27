@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TriboDavi.Persistence;
@@ -11,9 +12,11 @@ using TriboDavi.Persistence;
 namespace TriboDavi.Persistence.Migrations
 {
     [DbContext(typeof(TriboDaviContext))]
-    partial class TriboDaviContextModelSnapshot : ModelSnapshot
+    [Migration("20230827210047_CreateStudent")]
+    partial class CreateStudent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -309,42 +312,6 @@ namespace TriboDavi.Persistence.Migrations
                     b.HasDiscriminator().HasValue("Student");
                 });
 
-            modelBuilder.Entity("TriboDavi.Domain.Teacher", b =>
-                {
-                    b.HasBaseType("TriboDavi.Domain.Identity.User");
-
-                    b.Property<int>("AssistantTeacherId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CPF")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Graduation")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("RG")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasIndex("AssistantTeacherId");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("CPF")
-                                .HasColumnName("Teacher_CPF");
-
-                            t.Property("Graduation")
-                                .HasColumnName("Teacher_Graduation");
-
-                            t.Property("RG")
-                                .HasColumnName("Teacher_RG");
-                        });
-
-                    b.HasDiscriminator().HasValue("Teacher");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("TriboDavi.Domain.Identity.Role", null)
@@ -409,17 +376,6 @@ namespace TriboDavi.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("LegalParent");
-                });
-
-            modelBuilder.Entity("TriboDavi.Domain.Teacher", b =>
-                {
-                    b.HasOne("TriboDavi.Domain.Teacher", "AssistantTeacher")
-                        .WithMany()
-                        .HasForeignKey("AssistantTeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AssistantTeacher");
                 });
 
             modelBuilder.Entity("TriboDavi.Domain.Identity.Role", b =>

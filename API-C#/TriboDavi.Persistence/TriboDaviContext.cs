@@ -17,10 +17,14 @@ namespace TriboDavi.Persistence
         }
 
         public DbSet<LegalParent> LegalParents { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Ignore<Address>();
 
             modelBuilder.Entity<UserRole>(userRole =>
             {

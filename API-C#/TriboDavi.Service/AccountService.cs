@@ -40,7 +40,7 @@ namespace TriboDavi.Service
             {
                 return await _userRepository.GetEntities()
                                             .Include(x => x.UserRoles).ThenInclude(x => x.Role)
-                                            .FirstOrDefaultAsync(x => x.NormalizedEmail == email.ToUpper());
+                                            .FirstOrDefaultAsync(x => x.Email!.ToUpper() == email.ToUpper());
             }
             catch (Exception ex)
             {

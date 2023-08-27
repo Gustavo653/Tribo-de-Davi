@@ -53,6 +53,7 @@ namespace TriboDavi.API
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<ILegalParentService, LegalParentService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IStudentService, StudentService>();
 
             builder.Services.AddScoped<ILegalParentRepository, LegalParentRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -66,7 +67,7 @@ namespace TriboDavi.API
                 var dbContext = serviceProvider.GetService<TriboDaviContext>();
                 dbContext.Database.Migrate();
                 SeedRoles(serviceProvider).Wait();
-                SeedAdminUser(serviceProvider).Wait();
+                //SeedAdminUser(serviceProvider).Wait();
             }
 
             builder.Services.AddIdentityCore<User>(options =>
@@ -208,13 +209,13 @@ namespace TriboDavi.API
             var adminEmail = "admin@admin.com";
 
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
-            var user = new Teacher() { Name = "Admin", CPF = "000.000.000-00", Graduation = "", RG = "0.000.000", Email = adminEmail, UserName = "admin" };
+            var teacher = new Teacher() { Name = "Admin", CPF = "000.000.000-00", Graduation = "", RG = "0.000.000", Email = adminEmail, UserName = "admin" };
             if (adminUser == null)
             {
-                await userManager.CreateAsync(user, "Admin@123");
+                await userManager.CreateAsync(teacher, "Admin@123");
             }
-            if (!await userManager.IsInRoleAsync(adminUser ?? user, RoleName.Admin.ToString()))
-                await userManager.AddToRoleAsync(adminUser ?? user, RoleName.Admin.ToString());
+            if (!await userManager.IsInRoleAsync(adminUser ?? teacher, RoleName.Admin.ToString()))
+                await userManager.AddToRoleAsync(adminUser ?? teacher, RoleName.Admin.ToString());
         }
     }
 }
