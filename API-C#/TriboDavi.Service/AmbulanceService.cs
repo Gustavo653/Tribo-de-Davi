@@ -28,8 +28,6 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-          
-
                 var ambulance = new Ambulance
                 {
                     Number = ambulanceDTO.Number,
