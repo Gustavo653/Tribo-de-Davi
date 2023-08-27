@@ -2,8 +2,8 @@
 
 public class RollCall : BaseEntity
 {
-    public FieldOperationTeacher FieldOperationTeacher { get; set; }
-    public Student Student { get; set; }
-    public DateTime Date { get; set; }
-    public bool Presence { get; set; }
+    public required virtual FieldOperationTeacher FieldOperationTeacher { get; set; }
+    public required virtual Student Student { get; set; }
+    public required virtual DateTime Date { get; set; }
+    public required virtual bool Presence { get; set; }
 }

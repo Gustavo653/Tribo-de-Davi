@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
+using TriboDavi.Domain;
 
 namespace TriboDavi.API
 {
@@ -47,12 +48,15 @@ namespace TriboDavi.API
                             .AddEntityFrameworkStores<TriboDaviContext>()
                             .AddDefaultTokenProviders();
 
-            builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<IAccountService, AccountService>();
-            builder.Services.AddScoped<IAmbulanceService, AmbulanceService>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<ILegalParentService, LegalParentService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+
+            builder.Services.AddScoped<ILegalParentRepository, LegalParentRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IAmbulanceRepository, AmbulanceRepository>();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
             builder.Services.AddScoped<RoleManager<Role>>();
             builder.Services.AddScoped<UserManager<User>>();
@@ -188,7 +192,7 @@ namespace TriboDavi.API
         private static async Task SeedRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
-            var roles = new List<string>() { RoleName.Student.ToString(), RoleName.Teacher.ToString(), RoleName.AssistantTeacher.ToString(), RoleName.Admin.ToString() };
+            var roles = new List<string>() { RoleName.Student.ToString(), RoleName.AssistantTeacher.ToString(), RoleName.Teacher.ToString(), RoleName.Admin.ToString() };
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -204,7 +208,7 @@ namespace TriboDavi.API
             var adminEmail = "admin@admin.com";
 
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
-            var user = new User { Name = "Admin", Email = adminEmail, UserName = "admin" };
+            var user = new Teacher() { Name = "Admin", CPF = "000.000.000-00", Graduation = "", RG = "0.000.000", Email = adminEmail, UserName = "admin" };
             if (adminUser == null)
             {
                 await userManager.CreateAsync(user, "Admin@123");

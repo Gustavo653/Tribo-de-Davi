@@ -2,6 +2,6 @@
 
 public class FieldOperation : BaseEntity
 {
-    public string Name { get; set; }
-    public Address Address { get; set; }
+    public required string Name { get; set; }
+    public required virtual Address Address { get; set; }
 }

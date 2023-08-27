@@ -1,4 +1,5 @@
 using AutoMapper;
+using TriboDavi.Domain;
 using TriboDavi.Domain.Identity;
 using TriboDavi.DTO;
 
@@ -10,6 +11,7 @@ namespace TriboDavi.Service
         {
             CreateMap<User, UserDTO>(MemberList.None).ReverseMap();
             CreateMap<User, UserLoginDTO>(MemberList.None).ReverseMap();
+            CreateMap<LegalParent, LegalParentDTO>(MemberList.None).ReverseMap();
         }
     }
 }

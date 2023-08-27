@@ -16,7 +16,7 @@ namespace TriboDavi.Persistence
         {
         }
 
-        public DbSet<Ambulance> Ambulances { get; set; }
+        public DbSet<LegalParent> LegalParents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

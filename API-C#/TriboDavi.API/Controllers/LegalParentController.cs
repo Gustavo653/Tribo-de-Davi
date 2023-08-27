@@ -1,0 +1,49 @@
+using TriboDavi.Domain.Enum;
+using TriboDavi.DTO;
+using TriboDavi.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace TriboDavi.API.Controllers
+{
+    public class LegalParentController : BaseController
+    {
+        private readonly ILegalParentService _legalParentService;
+
+        public LegalParentController(ILegalParentService legalParentService)
+        {
+            _legalParentService = legalParentService;
+        }
+
+        [HttpPost("")]
+        [Authorize(Roles = nameof(RoleName.Admin))]
+        public async Task<IActionResult> CreateLegalParent([FromBody] LegalParentDTO legalParentDTO)
+        {
+            var legalParent = await _legalParentService.Create(legalParentDTO);
+            return StatusCode(legalParent.Code, legalParent);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = nameof(RoleName.Admin))]
+        public async Task<IActionResult> UpdateLegalParent([FromRoute] int id, [FromBody] LegalParentDTO legalParentDTO)
+        {
+            var legalParent = await _legalParentService.Update(id, legalParentDTO);
+            return StatusCode(legalParent.Code, legalParent);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = nameof(RoleName.Admin))]
+        public async Task<IActionResult> RemoveLegalParent([FromRoute] int id)
+        {
+            var legalParent = await _legalParentService.Remove(id);
+            return StatusCode(legalParent.Code, legalParent);
+        }
+
+        [HttpGet("")]
+        public async Task<IActionResult> GetLegalParents()
+        {
+            var legalParent = await _legalParentService.GetList();
+            return StatusCode(legalParent.Code, legalParent);
+        }
+    }
+}

@@ -2,8 +2,8 @@
 
 public class FieldOperationTeacher : BaseEntity
 {
-    public required Teacher Teacher { get; set; }
-    public Teacher AssistantTeacher { get; set; }
-    public required FieldOperation FieldOperation { get; set; }
-    public bool Enabled { get; set; }
+    public required virtual Teacher Teacher { get; set; }
+    public virtual Teacher? AssistantTeacher { get; set; }
+    public required virtual FieldOperation FieldOperation { get; set; }
+    public required bool Enabled { get; set; }
 }
