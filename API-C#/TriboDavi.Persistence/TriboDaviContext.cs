@@ -1,8 +1,8 @@
-﻿using TriboDavi.Domain;
-using TriboDavi.Domain.Identity;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TriboDavi.Domain;
+using TriboDavi.Domain.Identity;
 
 namespace TriboDavi.Persistence
 {

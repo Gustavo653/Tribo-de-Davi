@@ -1,14 +1,10 @@
+using AutoMapper;
 using Common.DTO;
-using Common.Functions;
+using Microsoft.EntityFrameworkCore;
 using TriboDavi.DataAccess.Interface;
-using TriboDavi.Domain.Enum;
-using TriboDavi.Domain.Identity;
+using TriboDavi.Domain;
 using TriboDavi.DTO;
 using TriboDavi.Service.Interface;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using TriboDavi.Domain;
-using AutoMapper;
 
 namespace TriboDavi.Service
 {
@@ -86,7 +82,7 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                LegalParent? legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.CPF == objectDTO.CPF);
+                LegalParent? legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == id);
                 if (legalParent == null)
                 {
                     responseDTO.SetBadInput("Não existe um responsável legal cadastrado com este CPF!");

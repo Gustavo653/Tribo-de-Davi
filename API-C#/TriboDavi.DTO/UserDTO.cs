@@ -1,5 +1,5 @@
-using TriboDavi.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
+using TriboDavi.Domain.Enum;
 
 namespace TriboDavi.DTO
 {

@@ -1,13 +1,6 @@
 using Common.Functions;
 using Hangfire;
 using Hangfire.PostgreSql;
-using TriboDavi.DataAccess;
-using TriboDavi.DataAccess.Interface;
-using TriboDavi.Domain.Enum;
-using TriboDavi.Domain.Identity;
-using TriboDavi.Persistence;
-using TriboDavi.Service;
-using TriboDavi.Service.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +8,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
+using TriboDavi.DataAccess;
+using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
+using TriboDavi.Domain.Enum;
+using TriboDavi.Domain.Identity;
+using TriboDavi.Persistence;
+using TriboDavi.Service;
+using TriboDavi.Service.Interface;
 
 namespace TriboDavi.API
 {

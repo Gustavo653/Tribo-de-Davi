@@ -1,8 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TriboDavi.Domain.Enum;
 using TriboDavi.DTO;
 using TriboDavi.Service.Interface;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace TriboDavi.API.Controllers
 {
@@ -40,6 +40,7 @@ namespace TriboDavi.API.Controllers
         }
 
         [HttpGet("")]
+        [Authorize(Roles = nameof(RoleName.Admin))]
         public async Task<IActionResult> GetLegalParents()
         {
             var legalParent = await _legalParentService.GetList();
