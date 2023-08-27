@@ -12,6 +12,6 @@ namespace TriboDavi.Domain
         public required string Graduation { get; set; } // Analisar
         public required string RG { get; set; }
         public required string CPF { get; set; }
-        public required string PhoneNumber { get; set; }
+        public virtual Teacher AssistantTeacher { get; set; }
     }
 }

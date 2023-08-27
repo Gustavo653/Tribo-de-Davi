@@ -188,7 +188,7 @@ namespace TriboDavi.API
         private static async Task SeedRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
-            var roles = new List<string>() { RoleName.Manager.ToString(), RoleName.Admin.ToString() };
+            var roles = new List<string>() { RoleName.Student.ToString(), RoleName.Teacher.ToString(), RoleName.AssistantTeacher.ToString(), RoleName.Admin.ToString() };
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))

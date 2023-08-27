@@ -21,7 +21,6 @@ namespace TriboDavi.Domain
         public string StreetNumber { get; set; }
         public string Neighborhood { get; set; }
         public string City { get; set; }
-        public string PhoneNumber { get; set; }
-        public required virtual LegalParent LegalParent { get; set; }
+        public virtual required LegalParent LegalParent { get; set; }
     }
 }
