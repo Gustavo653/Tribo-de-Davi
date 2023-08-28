@@ -26,7 +26,7 @@ namespace TriboDavi.DTO
         public string? SchoolName { get; set; }
         public int? SchoolGrade { get; set; }
         public AddressDTO? Address { get; set; }
-        [Required]
-        public required LegalParentDTO LegalParent { get; set; }
+        public LegalParentDTO? LegalParent { get; set; }
+        public int? LegalParentId { get; set; }
     }
 }
