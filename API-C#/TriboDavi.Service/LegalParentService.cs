@@ -64,7 +64,7 @@ namespace TriboDavi.Service
                 LegalParent? legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == id);
                 if (legalParent == null)
                 {
-                    responseDTO.SetBadInput("Não existe um responsável legal cadastrado com este ID!");
+                    responseDTO.SetNotFound();
                     return responseDTO;
                 }
 
@@ -85,7 +85,7 @@ namespace TriboDavi.Service
                 LegalParent? legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == id);
                 if (legalParent == null)
                 {
-                    responseDTO.SetBadInput("Não existe um responsável legal cadastrado com este CPF!");
+                    responseDTO.SetNotFound();
                     return responseDTO;
                 }
 
