@@ -52,17 +52,19 @@ namespace TriboDavi.API
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<ILegalParentService, LegalParentService>();
-            builder.Services.AddScoped<IAccountService, AccountService>();
-            builder.Services.AddScoped<IStudentService, StudentService>();
+            builder.Services.AddTransient<ITokenService, TokenService>();
+            builder.Services.AddTransient<ILegalParentService, LegalParentService>();
+            builder.Services.AddTransient<IAccountService, AccountService>();
+            builder.Services.AddTransient<IStudentService, StudentService>();
 
-            builder.Services.AddScoped<ILegalParentRepository, LegalParentRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddTransient<ILegalParentRepository, LegalParentRepository>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
+            builder.Services.AddTransient<IStudentRepository, StudentRepository>();
+            builder.Services.AddTransient<IGraduationRepository, GraduationRepository>();
+            builder.Services.AddTransient<IAddressRepository, AddressRepository>();
 
-            builder.Services.AddScoped<RoleManager<Role>>();
-            builder.Services.AddScoped<UserManager<User>>();
+            builder.Services.AddTransient<RoleManager<Role>>();
+            builder.Services.AddTransient<UserManager<User>>();
 
             if (migrate == "true")
                 using (var serviceProvider = builder.Services.BuildServiceProvider())
@@ -212,7 +214,7 @@ namespace TriboDavi.API
             var adminEmail = "admin@admin.com";
 
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
-            var teacher = new Teacher() { Name = "Admin", CPF = "000.000.000-00", Graduation = "", RG = "0.000.000", Email = adminEmail, UserName = "admin" };
+            var teacher = new Teacher() { Name = "Admin", CPF = "000.000.000-00", Graduation = new Graduation() { Name = "Admin", Url = "Admin", Position = -1 }, RG = "0.000.000", Email = adminEmail, UserName = "admin" };
             if (adminUser == null)
             {
                 await userManager.CreateAsync(teacher, "Admin@123");

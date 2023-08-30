@@ -10,12 +10,12 @@ namespace TriboDavi.DTO
         public required DateTime BirthDate { get; set; }
         [Required]
         [Range(0, int.MaxValue)]
-        public required int Weight { get; set; }
+        public required decimal Weight { get; set; }
         [Required]
         [Range(0, int.MaxValue)]
-        public required int Height { get; set; }
+        public required decimal Height { get; set; }
         [Required]
-        public required string Graduation { get; set; }
+        public required int GraduationId { get; set; }
         [Required]
         [Phone]
         public required string PhoneNumber { get; set; }
@@ -30,7 +30,7 @@ namespace TriboDavi.DTO
         public string? SchoolName { get; set; }
         public int? SchoolGrade { get; set; }
         public AddressDTO? Address { get; set; }
-        public LegalParentDTO? LegalParent { get; set; }
-        public int? LegalParentId { get; set; }
+        [Required]
+        public required LegalParentDTO LegalParent { get; set; }
     }
 }

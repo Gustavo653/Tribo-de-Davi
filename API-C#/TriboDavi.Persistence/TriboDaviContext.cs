@@ -18,13 +18,30 @@ namespace TriboDavi.Persistence
 
         public DbSet<LegalParent> LegalParents { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<Graduation> Graduations { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Ignore<Address>();
+            modelBuilder.Entity<User>(x =>
+            {
+                x.HasIndex(a => a.Email).IsUnique();
+                x.Property(a => a.Email).IsRequired();
+            });
+
+            modelBuilder.Entity<LegalParent>(x =>
+            {
+                x.HasIndex(a => a.CPF).IsUnique();
+            });
+
+            modelBuilder.Entity<Graduation>(x =>
+            {
+                x.HasIndex(a => a.Position).IsUnique();
+                x.HasIndex(a => a.Name).IsUnique();
+            });
 
             modelBuilder.Entity<UserRole>(userRole =>
             {
