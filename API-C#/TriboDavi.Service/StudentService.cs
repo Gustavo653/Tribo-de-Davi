@@ -116,6 +116,8 @@ namespace TriboDavi.Service
                 await _studentRepository.SaveChangesAsync();
 
                 await UpdateSecurityAndRoleAsync(student);
+
+                responseDTO.Object = student;
             }
             catch (Exception ex)
             {
@@ -191,6 +193,8 @@ namespace TriboDavi.Service
                 SetStudentProperties(objectDTO, student, graduation, legalParent);
 
                 await _studentRepository.SaveChangesAsync();
+
+                responseDTO.Object = student;
             }
             catch (Exception ex)
             {

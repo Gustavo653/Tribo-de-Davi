@@ -57,12 +57,14 @@ namespace TriboDavi.API
             builder.Services.AddTransient<IAccountService, AccountService>();
             builder.Services.AddTransient<IStudentService, StudentService>();
             builder.Services.AddTransient<IGraduationService, GraduationService>();
+            builder.Services.AddTransient<ITeacherService, TeacherService>();
 
             builder.Services.AddTransient<ILegalParentRepository, LegalParentRepository>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddTransient<IStudentRepository, StudentRepository>();
             builder.Services.AddTransient<IGraduationRepository, GraduationRepository>();
             builder.Services.AddTransient<IAddressRepository, AddressRepository>();
+            builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
 
             builder.Services.AddTransient<RoleManager<Role>>();
             builder.Services.AddTransient<UserManager<User>>();

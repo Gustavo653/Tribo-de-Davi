@@ -33,6 +33,8 @@ namespace TriboDavi.Service
 
                 await _legalParentRepository.InsertAsync(legalParent);
                 await _legalParentRepository.SaveChangesAsync();
+
+                responseDTO.Object = legalParent;
             }
             catch (Exception ex)
             {
@@ -91,6 +93,8 @@ namespace TriboDavi.Service
 
                 legalParent = _mapper.Map<LegalParent>(objectDTO);
                 await _legalParentRepository.SaveChangesAsync();
+
+                responseDTO.Object = legalParent;
             }
             catch (Exception ex)
             {

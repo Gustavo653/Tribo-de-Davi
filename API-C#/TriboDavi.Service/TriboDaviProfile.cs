@@ -14,6 +14,8 @@ namespace TriboDavi.Service
             CreateMap<LegalParent, LegalParentDTO>(MemberList.None).ReverseMap();
             CreateMap<Student, StudentDTO>(MemberList.None).ReverseMap();
             CreateMap<Address, AddressDTO>(MemberList.None).ReverseMap();
+            CreateMap<Graduation, GraduationDTO>(MemberList.None).ReverseMap();
+            CreateMap<Teacher, TeacherDTO>(MemberList.None).ReverseMap();
         }
     }
 }

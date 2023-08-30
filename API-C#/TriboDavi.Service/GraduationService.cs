@@ -23,9 +23,9 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                if (await _graduationRepository.GetEntities().AnyAsync(x => x.Name == objectDTO.Name))
+                if (await _graduationRepository.GetEntities().AnyAsync(x => x.Name == objectDTO.Name || x.Position == objectDTO.Position))
                 {
-                    responseDTO.SetBadInput("Já existe uma graduação cadastrada com este nome!");
+                    responseDTO.SetBadInput("Já existe uma graduação cadastrada com este nome e/ou posição!");
                     return responseDTO;
                 }
 
@@ -33,6 +33,8 @@ namespace TriboDavi.Service
 
                 await _graduationRepository.InsertAsync(graduation);
                 await _graduationRepository.SaveChangesAsync();
+
+                responseDTO.Object = graduation;
             }
             catch (Exception ex)
             {
@@ -89,8 +91,16 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
+                if (await _graduationRepository.GetEntities().AnyAsync(x => x.Id != id && (x.Name == objectDTO.Name || x.Position == objectDTO.Position)))
+                {
+                    responseDTO.SetBadInput("Já existe uma graduação cadastrada com este nome e/ou posição!");
+                    return responseDTO;
+                }
+
                 graduation = _mapper.Map<Graduation>(objectDTO);
                 await _graduationRepository.SaveChangesAsync();
+
+                responseDTO.Object = graduation;
             }
             catch (Exception ex)
             {

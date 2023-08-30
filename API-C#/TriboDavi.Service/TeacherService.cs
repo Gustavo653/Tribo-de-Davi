@@ -32,7 +32,7 @@ namespace TriboDavi.Service
         private async Task UpdateSecurityAndRoleAsync(Teacher teacher, RoleName role)
         {
             await _userManager.UpdateSecurityStampAsync(teacher);
-            await _userManager.AddToRoleAsync(teacher, nameof(role));
+            await _userManager.AddToRoleAsync(teacher, role.ToString());
         }
 
         private void SetTeacherProperties(TeacherDTO objectDTO, Teacher teacher, Graduation graduation)
@@ -94,7 +94,9 @@ namespace TriboDavi.Service
                 await _teacherRepository.InsertAsync(teacher);
                 await _teacherRepository.SaveChangesAsync();
 
-                await UpdateSecurityAndRoleAsync(teacher, teacher.AssistantTeacher != null ? RoleName.Teacher : RoleName.AssistantTeacher);
+                await UpdateSecurityAndRoleAsync(teacher, teacher.AssistantTeacher == null ? RoleName.Teacher : RoleName.AssistantTeacher);
+
+                responseDTO.Object = teacher;
             }
             catch (Exception ex)
             {
@@ -183,7 +185,9 @@ namespace TriboDavi.Service
                 await _teacherRepository.SaveChangesAsync();
 
                 await _userManager.RemoveFromRolesAsync(teacher, new List<string>() { nameof(RoleName.AssistantTeacher), nameof(RoleName.Teacher) });
-                await UpdateSecurityAndRoleAsync(teacher, teacher.AssistantTeacher != null ? RoleName.Teacher : RoleName.AssistantTeacher);
+                await UpdateSecurityAndRoleAsync(teacher, teacher.AssistantTeacher == null ? RoleName.Teacher : RoleName.AssistantTeacher);
+
+                responseDTO.Object = teacher;
             }
             catch (Exception ex)
             {
