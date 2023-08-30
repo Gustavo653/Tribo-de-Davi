@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Common.Functions
 {
@@ -12,24 +14,28 @@ namespace Common.Functions
             {
                 if (ignore != null && ignore.Contains(parentProperty.Name))
                     continue;
-                foreach (var childProperty in childProperties)
+
+                var parentPropertyType = parentProperty.PropertyType;
+                if (IsSimpleType(parentPropertyType))
                 {
-                    if (parentProperty.Name == childProperty.Name)
+                    foreach (var childProperty in childProperties)
                     {
-                        var value = ChangeType(parentProperty.GetValue(parent), childProperty.PropertyType);
-                        childProperty.SetValue(child, value);
-                        break;
+                        if (parentProperty.Name == childProperty.Name)
+                        {
+                            var value = ChangeType(parentProperty.GetValue(parent), childProperty.PropertyType);
+                            childProperty.SetValue(child, value);
+                            break;
+                        }
                     }
                 }
             }
         }
-        /// <summary>
-        /// This wrapper around Convert.ChangeType was done to handle nullable types.
-        /// See original authors work here: http://aspalliance.com/852
-        /// </summary>
-        /// <param name="value">The value to convert.</param>
-        /// <param name="conversionType">The type to convert to.</param>
-        /// <returns></returns>
+
+        public static bool IsSimpleType(Type type)
+        {
+            return type.IsPrimitive || type == typeof(string) || type == typeof(decimal) || type == typeof(DateTime) || type.IsEnum;
+        }
+
         public static object? ChangeType(object? value, Type conversionType)
         {
             if (conversionType == null)

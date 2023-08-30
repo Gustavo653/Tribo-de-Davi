@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.DTO;
+using Common.Functions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TriboDavi.DataAccess.Interface;
@@ -29,6 +30,48 @@ namespace TriboDavi.Service
             _userManager = userManager;
             _legalParentRepository = legalParentRepository;
             _graduationRepository = graduation;
+        }
+
+
+        private async Task<LegalParent> GetOrCreateLegalParent(LegalParentDTO legalParentDTO)
+        {
+            var legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.CPF == legalParentDTO.CPF)
+                              ?? new LegalParent()
+                              {
+                                  CPF = legalParentDTO.CPF,
+                                  Name = legalParentDTO.Name,
+                                  PhoneNumber = legalParentDTO.PhoneNumber,
+                                  Relationship = legalParentDTO.Relationship,
+                                  RG = legalParentDTO.RG
+                              };
+
+            if (legalParent.Id == 0)
+            {
+                legalParent.SetCreatedAt();
+            }
+
+            return legalParent;
+        }
+
+        private async Task UpdateSecurityAndRoleAsync(Student student)
+        {
+            await _userManager.UpdateSecurityStampAsync(student);
+            await _userManager.AddToRoleAsync(student, nameof(RoleName.Student));
+        }
+
+        private void SetStudentProperties(StudentDTO objectDTO, Student student, Graduation graduation, LegalParent legalParent)
+        {
+            PropertyCopier<StudentDTO, Student>.Copy(objectDTO, student);
+
+            student.Graduation = graduation;
+            student.LegalParent = legalParent;
+            student.UserName = student.Email;
+            student.NormalizedEmail = student.Email.ToUpper();
+            student.NormalizedUserName = student.Email.ToUpper();
+            student.CPF ??= "";
+            student.RG ??= "";
+            if (!string.IsNullOrEmpty(objectDTO.Password))
+                student.PasswordHash = _userManager.PasswordHasher.HashPassword(student, objectDTO.Password);
         }
 
         public async Task<ResponseDTO> Create(StudentDTO objectDTO)
@@ -67,15 +110,7 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                student.Graduation = graduation;
-                student.LegalParent = legalParent;
-                student.UserName = student.Email;
-                student.NormalizedEmail = student.Email.ToUpper();
-                student.NormalizedUserName = student.Email.ToUpper();
-                student.CPF ??= "";
-                student.RG ??= "";
-                if (!string.IsNullOrEmpty(objectDTO.Password))
-                    student.PasswordHash = _userManager.PasswordHasher.HashPassword(student, objectDTO.Password);
+                SetStudentProperties(objectDTO, student, graduation, legalParent);
 
                 await _studentRepository.InsertAsync(student);
                 await _studentRepository.SaveChangesAsync();
@@ -88,33 +123,6 @@ namespace TriboDavi.Service
             }
 
             return responseDTO;
-        }
-
-        private async Task<LegalParent> GetOrCreateLegalParent(LegalParentDTO legalParentDTO)
-        {
-            var legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.CPF == legalParentDTO.CPF)
-                              ?? new LegalParent()
-                              {
-                                  CPF = legalParentDTO.CPF,
-                                  Name = legalParentDTO.Name,
-                                  PhoneNumber = legalParentDTO.PhoneNumber,
-                                  Relationship = legalParentDTO.Relationship,
-                                  RG = legalParentDTO.RG
-                              };
-
-            if (legalParent.Id == 0)
-            {
-                legalParent.SetCreatedAt();
-                _legalParentRepository.Attach(legalParent);
-            }
-
-            return legalParent;
-        }
-
-        private async Task UpdateSecurityAndRoleAsync(Student student)
-        {
-            await _userManager.UpdateSecurityStampAsync(student);
-            await _userManager.AddToRoleAsync(student, nameof(RoleName.Student));
         }
 
         public async Task<ResponseDTO> GetList()
@@ -180,21 +188,9 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                student = _mapper.Map<Student>(objectDTO);
+                SetStudentProperties(objectDTO, student, graduation, legalParent);
 
-                student.Graduation = graduation;
-                student.LegalParent = legalParent;
-                student.UserName = student.Email;
-                student.NormalizedEmail = student.Email.ToUpper();
-                student.NormalizedUserName = student.Email.ToUpper();
-                student.CPF ??= "";
-                student.RG ??= "";
-                if (!string.IsNullOrEmpty(objectDTO.Password))
-                    student.PasswordHash = _userManager.PasswordHasher.HashPassword(student, objectDTO.Password);
-
-                var teste = _studentRepository.GetChanges();
-
-                var te0ste = await _studentRepository.SaveChangesAsync();
+                await _studentRepository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
