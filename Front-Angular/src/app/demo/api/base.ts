@@ -89,17 +89,17 @@ export const MenuRoutes = [
                     {
                         label: 'Gerenciar Professores',
                         icon: 'pi pi-fw pi-sliders-h',
-                        routerLink: ['/config/devices'],
+                        routerLink: ['/config/teachers'],
                     },
                     {
                         label: 'Gerenciar Alunos',
                         icon: 'pi pi-fw pi-sliders-h',
-                        routerLink: ['/config/medias'],
+                        routerLink: ['/config/students'],
                     },
                     {
                         label: 'Gerenciar Graduações',
                         icon: 'pi pi-fw pi-sliders-h',
-                        routerLink: ['/config/device-medias'],
+                        routerLink: ['/config/graduations'],
                     },
                 ],
             },

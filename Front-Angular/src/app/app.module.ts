@@ -14,9 +14,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ToastModule } from 'primeng/toast';
 import { UserService } from './demo/service/user.service';
-import { DeviceService } from './demo/service/device.service';
-import { DeviceMediaService } from './demo/service/deviceMedia.service';
-import { MediaService } from './demo/service/media.service';
+import { TeacherService } from './demo/service/teacher.service';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -38,9 +36,7 @@ import { MediaService } from './demo/service/media.service';
         AuthService,
         ConfirmationService,
         MessageService,
-        DeviceService,
-        DeviceMediaService,
-        MediaService,
+        TeacherService,
         StorageService,
         UserService,
     ],

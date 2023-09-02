@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.DTO;
+using Common.Functions;
 using Microsoft.EntityFrameworkCore;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
@@ -30,6 +31,8 @@ namespace TriboDavi.Service
                 }
 
                 Graduation graduation = _mapper.Map<Graduation>(objectDTO);
+
+                graduation.SetCreatedAt();
 
                 await _graduationRepository.InsertAsync(graduation);
                 await _graduationRepository.SaveChangesAsync();
@@ -71,6 +74,7 @@ namespace TriboDavi.Service
                 }
 
                 _graduationRepository.Delete(graduation);
+                await _graduationRepository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -97,7 +101,10 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                graduation = _mapper.Map<Graduation>(objectDTO);
+                PropertyCopier<GraduationDTO, Graduation>.Copy(objectDTO, graduation);
+
+                graduation.SetUpdatedAt();
+
                 await _graduationRepository.SaveChangesAsync();
 
                 responseDTO.Object = graduation;

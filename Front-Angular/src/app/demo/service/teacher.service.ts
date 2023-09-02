@@ -7,44 +7,44 @@ import { StorageService } from './storage.service';
 @Injectable({
     providedIn: 'root',
 })
-export class MediaService {
+export class TeacherService {
     constructor(private http: HttpClient, private storageService: StorageService) {}
 
     private getAPIURL(): Observable<string> {
         return this.storageService.getAPIURL();
     }
 
-    getMedias(): Observable<any> {
+    getTeachers(): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/medias`;
+                const apiUrl = `${url}/teacher`;
                 return this.http.get(apiUrl);
             })
         );
     }
 
-    createMedia(media: any): Observable<any> {
+    createTeacher(device: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/medias`;
-                return this.http.post(apiUrl, media);
+                const apiUrl = `${url}/teacher`;
+                return this.http.post(apiUrl, device);
             })
         );
     }
 
-    updateMedia(id: string, media: any): Observable<any> {
+    updateTeacher(id: string, device: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/medias/${id}`;
-                return this.http.put(apiUrl, media);
+                const apiUrl = `${url}/teacher/${id}`;
+                return this.http.put(apiUrl, device);
             })
         );
     }
 
-    deleteMedia(id: string): Observable<any> {
+    deleteTeacher(id: string): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/medias/${id}`;
+                const apiUrl = `${url}/teacher/${id}`;
                 return this.http.delete(apiUrl);
             })
         );

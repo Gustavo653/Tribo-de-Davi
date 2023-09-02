@@ -2,7 +2,7 @@
 <p-confirmDialog></p-confirmDialog>
 <app-form [fields]="fields" [modalDialog]="modalDialog" buttonLabel="Salvar" [inputData]="selectedRegistry" (formData)="getFormData($event)"></app-form>
 <div class="card" *ngIf="loading == false">
-    <h3>Gerenciar Dispositivos</h3>
-    <button pButton icon="pi pi-plus" label="Criar Dispositivo" class="p-button-success mb-3" (click)="create()"></button>
+    <h3>Gerenciar Professores</h3>
+    <button pButton icon="pi pi-plus" label="Criar Professor" class="p-button-success mb-3" (click)="create()"></button>
     <app-form-table [loading]="loading" [cols]="cols" [data]="data" (event)="event($event)"></app-form-table>
 </div>

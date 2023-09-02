@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { FormField, MessageServiceSuccess } from 'src/app/demo/api/base';
-import { MediaService } from 'src/app/demo/service/media.service';
+import { TeacherService } from 'src/app/demo/service/teacher.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
-    templateUrl: './medias.component.html',
+    templateUrl: './teacher.component.html',
     providers: [MessageService, ConfirmationService],
     styles: [
         `
@@ -20,37 +20,20 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
             :host ::ng-deep .p-progressbar {
                 height: 0.5rem;
             }
-
-            .user-profile {
-                display: flex;
-                align-items: center;
-                margin: 10px;
-            }
         `,
     ],
 })
-export class MediasComponent implements OnInit {
+export class TeacherComponent implements OnInit {
     loading: boolean = true;
     cols: any[] = [];
     data: any[] = [];
     fields: FormField[] = [
         { id: 'name', type: 'text', label: 'Nome', required: true },
-        { id: 'url', type: 'text', label: 'URL', required: true },
-        {
-            id: 'type',
-            type: 'listbox',
-            label: 'Tipo',
-            required: true,
-            options: [
-                { code: 'image', name: 'Imagem' },
-                { code: 'video', name: 'Vídeo' },
-                { code: 'web_woauth', name: 'Site sem autenticação' },
-            ],
-        },
+        { id: 'serialNumber', type: 'text', label: 'Serial Number', required: true },
     ];
     modalDialog: boolean = false;
     selectedRegistry: any;
-    constructor(protected layoutService: LayoutService, private mediaService: MediaService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
+    constructor(protected layoutService: LayoutService, private teacherService: TeacherService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
 
     ngOnInit() {
         this.cols = [
@@ -65,14 +48,9 @@ export class MediasComponent implements OnInit {
                 type: 'text',
             },
             {
-                field: 'url',
-                header: 'URL',
+                field: 'serialNumber',
+                header: 'Serial Number',
                 type: 'text',
-            },
-            {
-                field: 'type',
-                header: 'Tipo',
-                type: 'type',
             },
             {
                 field: 'createdAt',
@@ -129,7 +107,7 @@ export class MediasComponent implements OnInit {
             rejectLabel: 'Rejeitar',
             accept: () => {
                 this.loading = true;
-                this.mediaService.deleteMedia(registry.id).subscribe((x) => {
+                this.teacherService.deleteTeacher(registry.id).subscribe((x) => {
                     this.messageService.add(MessageServiceSuccess);
                     this.fetchData();
                 });
@@ -144,12 +122,12 @@ export class MediasComponent implements OnInit {
             this.modalDialog = false;
         } else {
             if (registry.id) {
-                this.mediaService.updateMedia(registry.id, registry).subscribe((x) => {
+                this.teacherService.updateTeacher(registry.id, registry).subscribe((x) => {
                     this.fetchData();
                     this.modalDialog = false;
                 });
             } else {
-                this.mediaService.createMedia(registry).subscribe((x) => {
+                this.teacherService.createTeacher(registry).subscribe((x) => {
                     this.fetchData();
                     this.modalDialog = false;
                 });
@@ -158,8 +136,8 @@ export class MediasComponent implements OnInit {
     }
 
     fetchData() {
-        this.mediaService.getMedias().subscribe((x) => {
-            this.data = x;
+        this.teacherService.getTeachers().subscribe((x) => {
+            this.data = x.object;
             this.loading = false;
         });
     }

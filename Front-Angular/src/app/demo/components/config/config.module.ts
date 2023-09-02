@@ -10,12 +10,11 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { ConfigRoutingModule } from './config-routing.module';
-import { DeviceMediasComponent } from './deviceMedias/deviceMedias.component';
-import { MediasComponent } from './medias/medias.component';
-import { DevicesComponent } from './devices/devices.component';
+import { TeacherComponent } from './teacher/teacher.component';
+import { GraduationComponent } from './graduation/graduation.component';
 
 @NgModule({
-    declarations: [MediasComponent, DeviceMediasComponent, DevicesComponent],
+    declarations: [TeacherComponent, GraduationComponent],
     imports: [
         CommonModule,
         ReactiveFormsModule,

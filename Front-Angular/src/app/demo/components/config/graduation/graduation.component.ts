@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { FormField, MessageServiceSuccess } from 'src/app/demo/api/base';
-import { DeviceService } from 'src/app/demo/service/device.service';
+import { GraduationService } from 'src/app/demo/service/graduation.service';
+import { TeacherService } from 'src/app/demo/service/teacher.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
-    templateUrl: './devices.component.html',
+    templateUrl: './graduation.component.html',
     providers: [MessageService, ConfirmationService],
     styles: [
         `
@@ -20,26 +21,21 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
             :host ::ng-deep .p-progressbar {
                 height: 0.5rem;
             }
-
-            .user-profile {
-                display: flex;
-                align-items: center;
-                margin: 10px;
-            }
         `,
     ],
 })
-export class DevicesComponent implements OnInit {
+export class GraduationComponent implements OnInit {
     loading: boolean = true;
     cols: any[] = [];
     data: any[] = [];
     fields: FormField[] = [
         { id: 'name', type: 'text', label: 'Nome', required: true },
-        { id: 'serialNumber', type: 'text', label: 'Serial Number', required: true },
+        { id: 'url', type: 'text', label: 'URL', required: true },
+        { id: 'position', type: 'number', label: 'Posição', required: true },
     ];
     modalDialog: boolean = false;
     selectedRegistry: any;
-    constructor(protected layoutService: LayoutService, private deviceService: DeviceService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
+    constructor(protected layoutService: LayoutService, private graduationService: GraduationService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
 
     ngOnInit() {
         this.cols = [
@@ -54,8 +50,13 @@ export class DevicesComponent implements OnInit {
                 type: 'text',
             },
             {
-                field: 'serialNumber',
-                header: 'Serial Number',
+                field: 'position',
+                header: 'Posição',
+                type: 'number',
+            },
+            {
+                field: 'url',
+                header: 'URL',
                 type: 'text',
             },
             {
@@ -113,7 +114,7 @@ export class DevicesComponent implements OnInit {
             rejectLabel: 'Rejeitar',
             accept: () => {
                 this.loading = true;
-                this.deviceService.deleteDevice(registry.id).subscribe((x) => {
+                this.graduationService.deleteGraduation(registry.id).subscribe((x) => {
                     this.messageService.add(MessageServiceSuccess);
                     this.fetchData();
                 });
@@ -128,12 +129,12 @@ export class DevicesComponent implements OnInit {
             this.modalDialog = false;
         } else {
             if (registry.id) {
-                this.deviceService.updateDevice(registry.id, registry).subscribe((x) => {
+                this.graduationService.updateGraduation(registry.id, registry).subscribe((x) => {
                     this.fetchData();
                     this.modalDialog = false;
                 });
             } else {
-                this.deviceService.createDevice(registry).subscribe((x) => {
+                this.graduationService.createGraduation(registry).subscribe((x) => {
                     this.fetchData();
                     this.modalDialog = false;
                 });
@@ -142,8 +143,8 @@ export class DevicesComponent implements OnInit {
     }
 
     fetchData() {
-        this.deviceService.getDevices().subscribe((x) => {
-            this.data = x;
+        this.graduationService.getGraduations().subscribe((x) => {
+            this.data = x.object;
             this.loading = false;
         });
     }

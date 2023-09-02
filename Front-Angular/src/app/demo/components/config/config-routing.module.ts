@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { DeviceMediasComponent } from './deviceMedias/deviceMedias.component';
-import { DevicesComponent } from './devices/devices.component';
-import { MediasComponent } from './medias/medias.component';
+import { TeacherComponent } from './teacher/teacher.component';
+import { GraduationComponent } from './graduation/graduation.component';
 
 @NgModule({
     imports: [
         RouterModule.forChild([
-            { path: 'devices', component: DevicesComponent },
-            { path: 'device-medias', component: DeviceMediasComponent },
-            { path: 'medias', component: MediasComponent },
+            { path: 'teachers', component: TeacherComponent },
+            { path: 'graduations', component: GraduationComponent },
         ]),
     ],
     exports: [RouterModule],
