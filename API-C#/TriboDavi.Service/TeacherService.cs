@@ -111,7 +111,7 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                responseDTO.Object = await _teacherRepository.GetEntities().ToListAsync();
+                responseDTO.Object = await _teacherRepository.GetEntities().Include(x => x.Graduation).Include(x => x.AssistantTeacher).ToListAsync();
             }
             catch (Exception ex)
             {
