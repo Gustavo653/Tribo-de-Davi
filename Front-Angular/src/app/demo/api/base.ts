@@ -59,38 +59,49 @@ export interface RuntimeConfig {
 export const MenuRoutes = [
     {
         label: 'Geral',
-        role: ['admin', 'viewer'],
+        role: ['Admin', 'Student', 'Teacher', 'AssistantTeacher'],
         items: [
             {
                 label: 'Dashboard',
                 icon: 'pi pi-fw pi-chart-line',
                 routerLink: [''],
             },
+        ],
+    },
+    {
+        label: 'Aluno',
+        role: ['Admin', 'Student'],
+        items: [],
+    },
+    {
+        label: 'Professor',
+        role: ['Admin', 'Teacher', 'AssistantTeacher'],
+        items: [],
+    },
+    {
+        label: 'Administrador',
+        role: ['Admin'],
+        items: [
             {
                 label: 'Configurações',
                 icon: 'pi pi-fw pi-cog',
                 items: [
                     {
-                        label: 'Gerenciar Dispositivos',
+                        label: 'Gerenciar Professores',
                         icon: 'pi pi-fw pi-sliders-h',
                         routerLink: ['/config/devices'],
                     },
                     {
-                        label: 'Gerenciar Mídias',
+                        label: 'Gerenciar Alunos',
                         icon: 'pi pi-fw pi-sliders-h',
                         routerLink: ['/config/medias'],
                     },
                     {
-                        label: 'Gerenciar Vinculo de Mídias',
+                        label: 'Gerenciar Graduações',
                         icon: 'pi pi-fw pi-sliders-h',
                         routerLink: ['/config/device-medias'],
                     },
                 ],
-            },
-            {
-                label: 'Logs',
-                icon: 'pi pi-fw pi-book',
-                routerLink: ['/logs'],
             },
         ],
     },
