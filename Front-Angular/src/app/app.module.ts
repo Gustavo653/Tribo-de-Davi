@@ -13,7 +13,6 @@ import { ErrorInterceptor } from './demo/components/auth/error.interceptor';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ToastModule } from 'primeng/toast';
-import { UserService } from './demo/service/user.service';
 import { TeacherService } from './demo/service/teacher.service';
 
 @NgModule({
@@ -38,7 +37,6 @@ import { TeacherService } from './demo/service/teacher.service';
         MessageService,
         TeacherService,
         StorageService,
-        UserService,
     ],
     bootstrap: [AppComponent],
     exports: [],

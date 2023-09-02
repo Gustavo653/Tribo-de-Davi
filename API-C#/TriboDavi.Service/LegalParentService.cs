@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.DTO;
+using Common.Functions;
 using Microsoft.EntityFrameworkCore;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
@@ -30,6 +31,8 @@ namespace TriboDavi.Service
                 }
 
                 LegalParent legalParent = _mapper.Map<LegalParent>(objectDTO);
+
+                legalParent.SetCreatedAt();
 
                 await _legalParentRepository.InsertAsync(legalParent);
                 await _legalParentRepository.SaveChangesAsync();
@@ -71,6 +74,7 @@ namespace TriboDavi.Service
                 }
 
                 _legalParentRepository.Delete(legalParent);
+                await _legalParentRepository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -91,7 +95,10 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                legalParent = _mapper.Map<LegalParent>(objectDTO);
+                PropertyCopier<LegalParentDTO, LegalParent>.Copy(objectDTO, legalParent);
+
+                legalParent.SetUpdatedAt();
+
                 await _legalParentRepository.SaveChangesAsync();
 
                 responseDTO.Object = legalParent;
