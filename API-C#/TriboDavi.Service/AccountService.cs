@@ -64,7 +64,7 @@ namespace TriboDavi.Service
                 if (!password.Succeeded)
                 {
                     responseDTO.Code = 401;
-                    responseDTO.Message = $"Não autenticado! {password}!";
+                    responseDTO.Message = $"Não autenticado! Verifique suas credenciais! {password}!";
                     return responseDTO;
                 }
 
