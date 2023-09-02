@@ -26,11 +26,6 @@ import { AuthGuard } from './demo/components/auth/auth.guard';
                             loadChildren: () => import('./demo/components/home/home.module').then((m) => m.HomeModule),
                         },
                         {
-                            path: 'users',
-                            canActivate: [AuthGuard],
-                            loadChildren: () => import('./demo/components/user/user.module').then((m) => m.UserModule),
-                        },
-                        {
                             path: 'config',
                             canActivate: [AuthGuard],
                             loadChildren: () => import('./demo/components/config/config.module').then((m) => m.ConfigModule),
