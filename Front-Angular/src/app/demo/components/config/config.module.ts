@@ -12,6 +12,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfigRoutingModule } from './config-routing.module';
 import { TeacherComponent } from './teacher/teacher.component';
 import { GraduationComponent } from './graduation/graduation.component';
+import { ListboxModule } from 'primeng/listbox';
+import { DropdownModule } from 'primeng/dropdown';
+import { FieldsetModule } from 'primeng/fieldset';
 
 @NgModule({
     declarations: [TeacherComponent, GraduationComponent],
@@ -26,6 +29,9 @@ import { GraduationComponent } from './graduation/graduation.component';
         AtomicModule,
         ButtonModule,
         InputTextareaModule,
+        ListboxModule,
+        FieldsetModule,
+        DropdownModule,
         InputTextModule,
         ConfigRoutingModule,
     ],

@@ -75,9 +75,9 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                if (objectDTO.TeacherId != null)
+                if (objectDTO.MainTeacherId != null)
                 {
-                    var assistantTeacher = await _teacherRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.TeacherId && x.AssistantTeacher == null);
+                    var assistantTeacher = await _teacherRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.MainTeacherId && x.MainTeacher == null);
                     if (assistantTeacher == null)
                     {
                         responseDTO.SetBadInput("O professor assistente não existe!");
@@ -85,7 +85,7 @@ namespace TriboDavi.Service
                     }
                     else
                     {
-                        teacher.AssistantTeacher = assistantTeacher;
+                        teacher.MainTeacher = assistantTeacher;
                     }
                 }
 
@@ -94,7 +94,7 @@ namespace TriboDavi.Service
                 await _teacherRepository.InsertAsync(teacher);
                 await _teacherRepository.SaveChangesAsync();
 
-                await UpdateSecurityAndRoleAsync(teacher, teacher.AssistantTeacher == null ? RoleName.Teacher : RoleName.AssistantTeacher);
+                await UpdateSecurityAndRoleAsync(teacher, teacher.MainTeacher == null ? RoleName.Teacher : RoleName.AssistantTeacher);
 
                 responseDTO.Object = teacher;
             }
@@ -111,7 +111,44 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                responseDTO.Object = await _teacherRepository.GetEntities().Include(x => x.Graduation).Include(x => x.AssistantTeacher).ToListAsync();
+                responseDTO.Object = await _teacherRepository.GetEntities()
+                                                             .Include(x => x.Graduation)
+                                                             .Include(x => x.MainTeacher)
+                                                             .Select(x => new
+                                                             {
+                                                                 x.Id,
+                                                                 x.Name,
+                                                                 x.PhoneNumber,
+                                                                 x.Email,
+                                                                 x.CPF,
+                                                                 x.RG,
+                                                                 GraduationId = x.Graduation.Id,
+                                                                 GraduationName = x.Graduation.Name,
+                                                                 MainTeacherName = x.MainTeacher != null ? x.MainTeacher.Name : "Professor Principal",
+                                                                 MainTeacherId = x.MainTeacher != null ? x.MainTeacher.Id : 0
+                                                             })
+                                                             .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                responseDTO.SetError(ex);
+            }
+            return responseDTO;
+        }
+
+        public async Task<ResponseDTO> GetTeacherForListbox()
+        {
+            ResponseDTO responseDTO = new();
+            try
+            {
+                responseDTO.Object = await _teacherRepository.GetEntities()
+                                                             .Where(x => x.MainTeacher == null)
+                                                             .Select(x => new
+                                                             {
+                                                                 Code = x.Id,
+                                                                 x.Name,
+                                                             })
+                                                             .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -152,6 +189,7 @@ namespace TriboDavi.Service
             {
                 var teacher = await _teacherRepository.GetTrackedEntities()
                                                       .Include(x => x.Graduation)
+                                                      .Include(x => x.MainTeacher)
                                                       .FirstOrDefaultAsync(x => x.Id == id);
                 if (teacher == null)
                 {
@@ -166,9 +204,9 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                if (objectDTO.TeacherId != null)
+                if (objectDTO.MainTeacherId != null)
                 {
-                    var assistantTeacher = await _teacherRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.TeacherId && x.AssistantTeacher == null);
+                    var assistantTeacher = await _teacherRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.MainTeacherId && x.MainTeacher == null);
                     if (assistantTeacher == null)
                     {
                         responseDTO.SetBadInput("O professor assistente não existe!");
@@ -176,8 +214,12 @@ namespace TriboDavi.Service
                     }
                     else
                     {
-                        teacher.AssistantTeacher = assistantTeacher;
+                        teacher.MainTeacher = assistantTeacher;
                     }
+                }
+                else
+                {
+                    teacher.MainTeacher = null;
                 }
 
                 SetTeacherProperties(objectDTO, teacher, graduation);
@@ -185,7 +227,7 @@ namespace TriboDavi.Service
                 await _teacherRepository.SaveChangesAsync();
 
                 await _userManager.RemoveFromRolesAsync(teacher, new List<string>() { nameof(RoleName.AssistantTeacher), nameof(RoleName.Teacher) });
-                await UpdateSecurityAndRoleAsync(teacher, teacher.AssistantTeacher == null ? RoleName.Teacher : RoleName.AssistantTeacher);
+                await UpdateSecurityAndRoleAsync(teacher, teacher.MainTeacher == null ? RoleName.Teacher : RoleName.AssistantTeacher);
 
                 responseDTO.Object = teacher;
             }

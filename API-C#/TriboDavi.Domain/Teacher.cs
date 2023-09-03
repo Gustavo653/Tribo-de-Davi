@@ -4,6 +4,6 @@ namespace TriboDavi.Domain
 {
     public class Teacher : User
     {
-        public virtual Teacher? AssistantTeacher { get; set; }
+        public virtual Teacher? MainTeacher { get; set; }
     }
 }

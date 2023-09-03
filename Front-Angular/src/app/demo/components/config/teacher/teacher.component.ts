@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { FormField, MessageServiceSuccess } from 'src/app/demo/api/base';
+import { FormField, MessageServiceSuccess, TableColumn } from 'src/app/demo/api/base';
+import { GraduationService } from 'src/app/demo/service/graduation.service';
 import { TeacherService } from 'src/app/demo/service/teacher.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
@@ -24,45 +25,58 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
     ],
 })
 export class TeacherComponent implements OnInit {
+    dialog: boolean = false;
     loading: boolean = true;
-    cols: any[] = [];
+    cols: TableColumn[] = [];
     data: any[] = [];
-    fields: FormField[] = [
-        { id: 'name', type: 'text', label: 'Nome', required: true },
-        { id: 'serialNumber', type: 'text', label: 'Serial Number', required: true },
-    ];
+    graduationsListbox: any[] = [];
+    teachersListbox: any[] = [];
     modalDialog: boolean = false;
-    selectedRegistry: any;
-    constructor(protected layoutService: LayoutService, private teacherService: TeacherService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
+    selectedRegistry: any = {};
+    constructor(
+        protected layoutService: LayoutService,
+        private teacherService: TeacherService,
+        private graduationService: GraduationService,
+        private confirmationService: ConfirmationService,
+        private messageService: MessageService
+    ) {}
 
     ngOnInit() {
         this.cols = [
-            {
-                field: 'id',
-                header: 'ID',
-                type: 'number',
-            },
             {
                 field: 'name',
                 header: 'Nome',
                 type: 'text',
             },
             {
-                field: 'serialNumber',
-                header: 'Serial Number',
+                field: 'rg',
+                header: 'RG',
                 type: 'text',
             },
             {
-                field: 'createdAt',
-                header: 'Criado em',
-                type: 'date',
-                format: 'dd/MM/yy HH:mm:ss',
+                field: 'cpf',
+                header: 'CPF',
+                type: 'text',
             },
             {
-                field: 'updatedAt',
-                header: 'Atualizado em',
-                type: 'date',
-                format: 'dd/MM/yy HH:mm:ss',
+                field: 'email',
+                header: 'Email',
+                type: 'text',
+            },
+            {
+                field: 'phoneNumber',
+                header: 'Telefone',
+                type: 'text',
+            },
+            {
+                field: 'mainTeacherName',
+                header: 'Nome Professor Principal',
+                type: 'text',
+            },
+            {
+                field: 'graduationName',
+                header: 'Graduação',
+                type: 'text',
             },
             {
                 field: '',
@@ -97,6 +111,26 @@ export class TeacherComponent implements OnInit {
     editRegistry(registry: any) {
         this.selectedRegistry = { ...registry };
         this.modalDialog = true;
+    }
+
+    hideDialog() {
+        this.selectedRegistry = {};
+        this.modalDialog = false;
+    }
+
+    save() {
+        console.log(this.selectedRegistry);
+        if (this.selectedRegistry.id) {
+            this.teacherService.updateTeacher(this.selectedRegistry.id, this.selectedRegistry).subscribe((x) => {
+                this.hideDialog();
+                this.fetchData();
+            });
+        } else {
+            this.teacherService.createTeacher(this.selectedRegistry).subscribe((x) => {
+                this.hideDialog();
+                this.fetchData();
+            });
+        }
     }
 
     deleteRegistry(registry: any) {
@@ -136,9 +170,15 @@ export class TeacherComponent implements OnInit {
     }
 
     fetchData() {
-        this.teacherService.getTeachers().subscribe((x) => {
-            this.data = x.object;
-            this.loading = false;
+        this.teacherService.getTeacherForListbox().subscribe((x) => {
+            this.teachersListbox = x.object;
+            this.graduationService.getGraduationsForListbox().subscribe((y) => {
+                this.graduationsListbox = y.object;
+                this.teacherService.getTeachers().subscribe((z) => {
+                    this.data = z.object;
+                    this.loading = false;
+                });
+            });
         });
     }
 }

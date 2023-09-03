@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { FormField, MessageServiceSuccess } from 'src/app/demo/api/base';
+import { FormField, MessageServiceSuccess, TableColumn } from 'src/app/demo/api/base';
 import { GraduationService } from 'src/app/demo/service/graduation.service';
 import { TeacherService } from 'src/app/demo/service/teacher.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
@@ -26,7 +26,7 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 })
 export class GraduationComponent implements OnInit {
     loading: boolean = true;
-    cols: any[] = [];
+    cols: TableColumn[] = [];
     data: any[] = [];
     fields: FormField[] = [
         { id: 'name', type: 'text', label: 'Nome', required: true },

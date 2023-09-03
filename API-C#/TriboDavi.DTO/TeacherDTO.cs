@@ -19,6 +19,6 @@ namespace TriboDavi.DTO
         public string? RG { get; set; }
         [RegularExpression(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$", ErrorMessage = "O campo CPF não é válido.")]
         public string? CPF { get; set; }
-        public int? TeacherId { get; set; }
+        public int? MainTeacherId { get; set; }
     }
 }

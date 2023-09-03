@@ -22,6 +22,15 @@ export class GraduationService {
             })
         );
     }
+    
+    getGraduationsForListbox(): Observable<any> {
+        return this.getAPIURL().pipe(
+            switchMap((url) => {
+                const apiUrl = `${url}/graduation/listbox`;
+                return this.http.get(apiUrl);
+            })
+        );
+    }
 
     createGraduation(device: any): Observable<any> {
         return this.getAPIURL().pipe(

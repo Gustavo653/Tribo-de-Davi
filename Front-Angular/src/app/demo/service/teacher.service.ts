@@ -23,6 +23,15 @@ export class TeacherService {
         );
     }
 
+    getTeacherForListbox(): Observable<any> {
+        return this.getAPIURL().pipe(
+            switchMap((url) => {
+                const apiUrl = `${url}/teacher/listbox`;
+                return this.http.get(apiUrl);
+            })
+        );
+    }
+
     createTeacher(device: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {

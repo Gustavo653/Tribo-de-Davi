@@ -46,5 +46,13 @@ namespace TriboDavi.API.Controllers
             var graduation = await _graduationService.GetList();
             return StatusCode(graduation.Code, graduation);
         }
+
+        [HttpGet("Listbox")]
+        [Authorize(Roles = nameof(RoleName.Admin))]
+        public async Task<IActionResult> GetGraduationsForListbox()
+        {
+            var graduation = await _graduationService.GetGraduationsForListbox();
+            return StatusCode(graduation.Code, graduation);
+        }
     }
 }

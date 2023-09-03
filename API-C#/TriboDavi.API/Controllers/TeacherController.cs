@@ -46,5 +46,13 @@ namespace TriboDavi.API.Controllers
             var teacher = await _teacherService.GetList();
             return StatusCode(teacher.Code, teacher);
         }
+
+        [HttpGet("Listbox")]
+        [Authorize(Roles = nameof(RoleName.Admin))]
+        public async Task<IActionResult> GetTeacherForListbox()
+        {
+            var teacher = await _teacherService.GetTeacherForListbox();
+            return StatusCode(teacher.Code, teacher);
+        }
     }
 }
