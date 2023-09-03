@@ -4,7 +4,7 @@
 <p-dialog [(visible)]="modalDialog" header="Detalhes do Registro" [transitionOptions]="'100ms'" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="grid">
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-6">
                 <p-fieldset legend="Dados Pessoais">
                     <label>Nome</label><small class="p-error">*</small>
                     <input [(ngModel)]="selectedRegistry.name" pInputText />
@@ -14,41 +14,12 @@
                     <input [(ngModel)]="selectedRegistry.cpf" pInputText />
                 </p-fieldset>
             </div>
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-6">
                 <p-fieldset legend="Dados de Contato">
-                    <label>Email</label><small class="p-error">*</small>
-                    <input [(ngModel)]="selectedRegistry.email" pInputText />
+                    <label>Parentesco</label><small class="p-error">*</small>
+                    <input [(ngModel)]="selectedRegistry.relationship" pInputText />
                     <label>Telefone</label><small class="p-error">*</small>
                     <input [(ngModel)]="selectedRegistry.phoneNumber" pInputText />
-                </p-fieldset>
-            </div>
-            <div class="col-12 md:col-6 lg:col-4">
-                <p-fieldset legend="Vínculos">
-                    <label>Graduação</label><small class="p-error">*</small>
-                    <p-dropdown
-                        [options]="graduationsListbox"
-                        [(ngModel)]="selectedRegistry.graduationId"
-                        placeholder="Selecione um valor"
-                        [filter]="true"
-                        filterBy="name"
-                        optionValue="code"
-                        optionLabel="name"
-                        appendTo="body"
-                        class="w-full"
-                    ></p-dropdown>
-                    <label>Nome Professor Principal</label>
-                    <p-dropdown
-                        [options]="teachersListbox"
-                        [(ngModel)]="selectedRegistry.mainTeacherId"
-                        placeholder="Selecione um valor"
-                        [filter]="true"
-                        filterBy="name"
-                        [showClear]="true"
-                        optionValue="code"
-                        optionLabel="name"
-                        appendTo="body"
-                        class="w-full"
-                    ></p-dropdown>
                 </p-fieldset>
             </div>
         </div>
@@ -59,7 +30,7 @@
     </ng-template>
 </p-dialog>
 <div class="card" *ngIf="loading == false">
-    <h3>Gerenciar Professores</h3>
+    <h3>Gerenciar Responsáveis Legais</h3>
     <button pButton icon="pi pi-plus" label="Criar Professor" class="p-button-success mb-3" (click)="create()"></button>
     <app-form-table [loading]="loading" [cols]="cols" [data]="data" (event)="event($event)"></app-form-table>
 </div>

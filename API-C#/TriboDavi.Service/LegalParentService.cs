@@ -51,8 +51,20 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                List<LegalParent> legalParent = await _legalParentRepository.GetEntities().ToListAsync();
-                responseDTO.Object = legalParent;
+                responseDTO.Object = await _legalParentRepository.GetEntities()
+                                                                 .Include(x => x.Students)
+                                                                 .Select(x => new
+                                                                 {
+                                                                    x.Id,
+                                                                    x.Name,
+                                                                    x.Relationship,
+                                                                    x.RG,
+                                                                    x.CPF,
+                                                                    x.PhoneNumber,
+                                                                    x.CreatedAt,
+                                                                    x.UpdatedAt,
+                                                                    StudentsCount = x.Students.Count
+                                                                 }).ToListAsync();
             }
             catch (Exception ex)
             {

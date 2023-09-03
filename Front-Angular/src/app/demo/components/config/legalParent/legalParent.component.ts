@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { FormField, MessageServiceSuccess, TableColumn } from 'src/app/demo/api/base';
 import { GraduationService } from 'src/app/demo/service/graduation.service';
-import { TeacherService } from 'src/app/demo/service/teacher.service';
+import { LegalParentService } from 'src/app/demo/service/legalParent.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
-    templateUrl: './teacher.component.html',
+    templateUrl: './legalParent.component.html',
     providers: [MessageService, ConfirmationService],
     styles: [
         `
@@ -24,18 +24,16 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
         `,
     ],
 })
-export class TeacherComponent implements OnInit {
+export class LegalParentComponent implements OnInit {
     dialog: boolean = false;
     loading: boolean = true;
     cols: TableColumn[] = [];
     data: any[] = [];
-    graduationsListbox: any[] = [];
-    teachersListbox: any[] = [];
     modalDialog: boolean = false;
     selectedRegistry: any = {};
     constructor(
         protected layoutService: LayoutService,
-        private teacherService: TeacherService,
+        private legalParentService: LegalParentService,
         private graduationService: GraduationService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService
@@ -59,8 +57,8 @@ export class TeacherComponent implements OnInit {
                 type: 'text',
             },
             {
-                field: 'email',
-                header: 'Email',
+                field: 'relationship',
+                header: 'Parentesco',
                 type: 'text',
             },
             {
@@ -69,14 +67,9 @@ export class TeacherComponent implements OnInit {
                 type: 'text',
             },
             {
-                field: 'mainTeacherName',
-                header: 'Nome Professor Principal',
-                type: 'text',
-            },
-            {
-                field: 'graduationName',
-                header: 'Graduação',
-                type: 'text',
+                field: 'studentsCount',
+                header: 'Quantidade de Alunos',
+                type: 'number',
             },
             {
                 field: '',
@@ -122,16 +115,8 @@ export class TeacherComponent implements OnInit {
         const rgPattern = /^[0-9]{2}\.[0-9]{3}\.[0-9]{3}-[0-9]{1}$/;
         const cpfPattern = /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/;
         const phoneNumberPattern = /^[0-9]{11}$/;
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-        if (
-            !this.selectedRegistry.name ||
-            !this.selectedRegistry.rg ||
-            !this.selectedRegistry.cpf ||
-            !this.selectedRegistry.email ||
-            !this.selectedRegistry.phoneNumber ||
-            !this.selectedRegistry.graduationId
-        ) {
+        if (!this.selectedRegistry.name || !this.selectedRegistry.rg || !this.selectedRegistry.cpf || !this.selectedRegistry.relationship || !this.selectedRegistry.phoneNumber) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
             return false;
         }
@@ -151,11 +136,6 @@ export class TeacherComponent implements OnInit {
             return false;
         }
 
-        if (!this.selectedRegistry.email.match(emailPattern)) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Email inválido' });
-            return false;
-        }
-
         return true;
     }
 
@@ -163,12 +143,12 @@ export class TeacherComponent implements OnInit {
         console.log(this.selectedRegistry);
         if (this.validateData()) {
             if (this.selectedRegistry.id) {
-                this.teacherService.updateTeacher(this.selectedRegistry.id, this.selectedRegistry).subscribe((x) => {
+                this.legalParentService.updateLegalParent(this.selectedRegistry.id, this.selectedRegistry).subscribe((x) => {
                     this.hideDialog();
                     this.fetchData();
                 });
             } else {
-                this.teacherService.createTeacher(this.selectedRegistry).subscribe((x) => {
+                this.legalParentService.createLegalParent(this.selectedRegistry).subscribe((x) => {
                     this.hideDialog();
                     this.fetchData();
                 });
@@ -184,7 +164,7 @@ export class TeacherComponent implements OnInit {
             rejectLabel: 'Rejeitar',
             accept: () => {
                 this.loading = true;
-                this.teacherService.deleteTeacher(registry.id).subscribe((x) => {
+                this.legalParentService.deleteLegalParent(registry.id).subscribe((x) => {
                     this.messageService.add(MessageServiceSuccess);
                     this.fetchData();
                 });
@@ -199,12 +179,12 @@ export class TeacherComponent implements OnInit {
             this.modalDialog = false;
         } else {
             if (registry.id) {
-                this.teacherService.updateTeacher(registry.id, registry).subscribe((x) => {
+                this.legalParentService.updateLegalParent(registry.id, registry).subscribe((x) => {
                     this.fetchData();
                     this.modalDialog = false;
                 });
             } else {
-                this.teacherService.createTeacher(registry).subscribe((x) => {
+                this.legalParentService.createLegalParent(registry).subscribe((x) => {
                     this.fetchData();
                     this.modalDialog = false;
                 });
@@ -213,15 +193,9 @@ export class TeacherComponent implements OnInit {
     }
 
     fetchData() {
-        this.teacherService.getTeacherForListbox().subscribe((x) => {
-            this.teachersListbox = x.object;
-            this.graduationService.getGraduationsForListbox().subscribe((y) => {
-                this.graduationsListbox = y.object;
-                this.teacherService.getTeachers().subscribe((z) => {
-                    this.data = z.object;
-                    this.loading = false;
-                });
-            });
+        this.legalParentService.getLegalParents().subscribe((z) => {
+            this.data = z.object;
+            this.loading = false;
         });
     }
 }

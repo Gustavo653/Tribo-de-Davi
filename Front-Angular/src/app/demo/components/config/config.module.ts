@@ -15,9 +15,11 @@ import { GraduationComponent } from './graduation/graduation.component';
 import { ListboxModule } from 'primeng/listbox';
 import { DropdownModule } from 'primeng/dropdown';
 import { FieldsetModule } from 'primeng/fieldset';
+import { ToastModule } from 'primeng/toast';
+import { LegalParentComponent } from './legalParent/legalParent.component';
 
 @NgModule({
-    declarations: [TeacherComponent, GraduationComponent],
+    declarations: [TeacherComponent, GraduationComponent, LegalParentComponent],
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -32,6 +34,7 @@ import { FieldsetModule } from 'primeng/fieldset';
         ListboxModule,
         FieldsetModule,
         DropdownModule,
+        ToastModule,
         InputTextModule,
         ConfigRoutingModule,
     ],
