@@ -49,6 +49,8 @@
                         appendTo="body"
                         class="w-full"
                     ></p-dropdown>
+                    <label>Senha</label><small *ngIf="!selectedRegistry.id" class="p-error">*</small>
+                    <input [(ngModel)]="selectedRegistry.password" pInputText />
                 </p-fieldset>
             </div>
         </div>

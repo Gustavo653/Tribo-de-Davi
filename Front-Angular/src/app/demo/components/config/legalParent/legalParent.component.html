@@ -31,6 +31,6 @@
 </p-dialog>
 <div class="card" *ngIf="loading == false">
     <h3>Gerenciar Responsáveis Legais</h3>
-    <button pButton icon="pi pi-plus" label="Criar Professor" class="p-button-success mb-3" (click)="create()"></button>
+    <button pButton icon="pi pi-plus" label="Criar Responsável Legal" class="p-button-success mb-3" (click)="create()"></button>
     <app-form-table [loading]="loading" [cols]="cols" [data]="data" (event)="event($event)"></app-form-table>
 </div>

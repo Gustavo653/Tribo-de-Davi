@@ -110,6 +110,7 @@ export class TeacherComponent implements OnInit {
 
     editRegistry(registry: any) {
         this.selectedRegistry = { ...registry };
+        this.selectedRegistry.mainTeacherId = this.selectedRegistry.mainTeacherId == 0 ? undefined : this.selectedRegistry.mainTeacherId;
         this.modalDialog = true;
     }
 
@@ -130,6 +131,7 @@ export class TeacherComponent implements OnInit {
             !this.selectedRegistry.cpf ||
             !this.selectedRegistry.email ||
             !this.selectedRegistry.phoneNumber ||
+            (!this.selectedRegistry.id && !this.selectedRegistry.password) ||
             !this.selectedRegistry.graduationId
         ) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
@@ -160,7 +162,6 @@ export class TeacherComponent implements OnInit {
     }
 
     save() {
-        console.log(this.selectedRegistry);
         if (this.validateData()) {
             if (this.selectedRegistry.id) {
                 this.teacherService.updateTeacher(this.selectedRegistry.id, this.selectedRegistry).subscribe((x) => {

@@ -132,7 +132,29 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                responseDTO.Object = await _studentRepository.GetEntities().ToListAsync();
+                responseDTO.Object = await _studentRepository.GetEntities()
+                                                             .Include(x => x.Address)
+                                                             .Include(x => x.LegalParent)
+                                                             .Include(x => x.Graduation)
+                                                             .Select(x => new
+                                                             {
+                                                                 x.Id,
+                                                                 x.BirthDate,
+                                                                 x.Email,
+                                                                 x.RG,
+                                                                 x.CPF,
+                                                                 x.Name,
+                                                                 x.Address,
+                                                                 x.LegalParent,
+                                                                 x.PhoneNumber,
+                                                                 GraduationId = x.Graduation.Id,
+                                                                 GraduationName = x.Graduation.Name,
+                                                                 x.SchoolGrade,
+                                                                 x.Weight,
+                                                                 x.Height,
+                                                                 x.SchoolName
+                                                             })
+                                                             .ToListAsync();
             }
             catch (Exception ex)
             {

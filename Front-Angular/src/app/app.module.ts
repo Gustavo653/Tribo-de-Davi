@@ -14,6 +14,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ToastModule } from 'primeng/toast';
 import { TeacherService } from './demo/service/teacher.service';
+import { StudentService } from './demo/service/student.service';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -35,6 +36,7 @@ import { TeacherService } from './demo/service/teacher.service';
         AuthService,
         ConfirmationService,
         MessageService,
+        StudentService,
         TeacherService,
         StorageService,
     ],
