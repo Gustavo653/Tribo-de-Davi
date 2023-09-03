@@ -77,16 +77,20 @@ namespace TriboDavi.Service
 
                 if (objectDTO.MainTeacherId != null)
                 {
-                    var assistantTeacher = await _teacherRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.MainTeacherId && x.MainTeacher == null);
-                    if (assistantTeacher == null)
+                    var mainTeacher = await _teacherRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.MainTeacherId && x.MainTeacher == null);
+                    if (mainTeacher == null)
                     {
                         responseDTO.SetBadInput("O professor assistente não existe!");
                         return responseDTO;
                     }
                     else
                     {
-                        teacher.MainTeacher = assistantTeacher;
+                        teacher.MainTeacher = mainTeacher;
                     }
+                }
+                else
+                {
+                    teacher.MainTeacher = null;
                 }
 
                 SetTeacherProperties(objectDTO, teacher, graduation);
