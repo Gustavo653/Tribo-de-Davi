@@ -142,12 +142,12 @@ export class LegalParentComponent implements OnInit {
     save() {
         if (this.validateData()) {
             if (this.selectedRegistry.id) {
-                this.legalParentService.updateLegalParent(this.selectedRegistry.id, this.selectedRegistry).subscribe((x) => {
+                this.legalParentService.updateLegalParent(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
                     this.hideDialog();
                     this.fetchData();
                 });
             } else {
-                this.legalParentService.createLegalParent(this.selectedRegistry).subscribe((x) => {
+                this.legalParentService.createLegalParent(this.selectedRegistry).subscribe(() => {
                     this.hideDialog();
                     this.fetchData();
                 });

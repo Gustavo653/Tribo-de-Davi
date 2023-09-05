@@ -27,6 +27,7 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 export class StudentComponent implements OnInit {
     dialog: boolean = false;
     loading: boolean = true;
+    birthDate: Date = new Date();
     cols: TableColumn[] = [];
     data: any[] = [];
     graduationsListbox: any[] = [];
@@ -68,13 +69,13 @@ export class StudentComponent implements OnInit {
                 type: 'text',
             },
             {
-                field: 'mainStudentName',
-                header: 'Nome Professor Principal',
+                field: 'graduation.name',
+                header: 'Graduação',
                 type: 'text',
             },
             {
-                field: 'graduationName',
-                header: 'Graduação',
+                field: 'legalParent.name',
+                header: 'Responsável Legal',
                 type: 'text',
             },
             {
@@ -103,12 +104,39 @@ export class StudentComponent implements OnInit {
     }
 
     create() {
+        // this.selectedRegistry = {
+        //     name: 'ffffffffffff',
+        //     birthDate: '2020-08-30T17:40:51.853Z',
+        //     weight: 2147483647,
+        //     height: 2147483647,
+        //     graduationId: 1,
+        //     phoneNumber: '11111111111',
+        //     email: 'user@example.com',
+        //     password: 'string',
+        //     cpf: '877.226.889-87',
+        //     schoolName: 'stringdd',
+        //     schoolGrade: 0,
+        //     address: {
+        //         streetName: 'string',
+        //         streetNumber: 'string',
+        //         neighborhood: 'string',
+        //         city: 'string',
+        //     },
+        //     legalParent: {
+        //         name: 'string',
+        //         relationship: 'string',
+        //         rg: '79.695.857-7',
+        //         cpf: '140.293.030-55',
+        //         phoneNumber: '11111111111',
+        //     },
+        // };
         this.selectedRegistry = { address: {}, legalParent: {} };
         this.modalDialog = true;
     }
 
     editRegistry(registry: any) {
         this.selectedRegistry = { ...registry };
+        this.birthDate = new Date(this.selectedRegistry.birthDate);
         this.modalDialog = true;
     }
 
@@ -144,6 +172,11 @@ export class StudentComponent implements OnInit {
 
         if (this.selectedRegistry.rg && !this.selectedRegistry.rg.match(rgPattern)) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG inválido' });
+            return false;
+        }
+
+        if (this.birthDate > new Date()) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Data de Nascimento inválida' });
             return false;
         }
 
@@ -193,13 +226,14 @@ export class StudentComponent implements OnInit {
             if (Object.keys(this.selectedRegistry.address).length === 0) {
                 this.selectedRegistry.address = undefined;
             }
+            this.selectedRegistry.birthDate = this.birthDate;
             if (this.selectedRegistry.id) {
-                this.studentService.updateStudent(this.selectedRegistry.id, this.selectedRegistry).subscribe((x) => {
+                this.studentService.updateStudent(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
                     this.hideDialog();
                     this.fetchData();
                 });
             } else {
-                this.studentService.createStudent(this.selectedRegistry).subscribe((x) => {
+                this.studentService.createStudent(this.selectedRegistry).subscribe(() => {
                     this.hideDialog();
                     this.fetchData();
                 });

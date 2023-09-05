@@ -3,6 +3,7 @@ using Common.DTO;
 using Common.Functions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TriboDavi.DataAccess;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
 using TriboDavi.Domain.Enum;
@@ -15,6 +16,7 @@ namespace TriboDavi.Service
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly ITeacherRepository _teacherRepository;
         private readonly IGraduationRepository _graduationRepository;
         private readonly ILegalParentRepository _legalParentRepository;
         private readonly UserManager<User> _userManager;
@@ -23,13 +25,15 @@ namespace TriboDavi.Service
                               IMapper mapper,
                               UserManager<User> userManager,
                               ILegalParentRepository legalParentRepository,
-                              IGraduationRepository graduation)
+                              IGraduationRepository graduation,
+                              ITeacherRepository teacherRepository)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
             _userManager = userManager;
             _legalParentRepository = legalParentRepository;
             _graduationRepository = graduation;
+            _teacherRepository = teacherRepository;
         }
 
 
@@ -86,9 +90,22 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
+                if (objectDTO.BirthDate > DateTime.Now)
+                {
+                    responseDTO.SetBadInput("A data de nascimento deve ser menor que o dia de hoje!");
+                    return responseDTO;
+                }
+
                 if (objectDTO.CPF == objectDTO.LegalParent.CPF)
                 {
                     responseDTO.SetBadInput("O CPF do estudante deve ser diferente do CPF do responsável legal!");
+                    return responseDTO;
+                }
+
+                var existingTeacherWithEmail = await _teacherRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
+                if (existingTeacherWithEmail)
+                {
+                    responseDTO.SetBadInput("Já existe um professor cadastrado com este e-mail!");
                     return responseDTO;
                 }
 
@@ -144,15 +161,15 @@ namespace TriboDavi.Service
                                                                  x.RG,
                                                                  x.CPF,
                                                                  x.Name,
-                                                                 x.Address,
-                                                                 x.LegalParent,
                                                                  x.PhoneNumber,
-                                                                 GraduationId = x.Graduation.Id,
-                                                                 GraduationName = x.Graduation.Name,
                                                                  x.SchoolGrade,
                                                                  x.Weight,
                                                                  x.Height,
-                                                                 x.SchoolName
+                                                                 x.SchoolName,
+                                                                 GraduationId = x.Graduation.Id,
+                                                                 x.Address,
+                                                                 x.Graduation,
+                                                                 x.LegalParent,
                                                              })
                                                              .ToListAsync();
             }
@@ -193,6 +210,12 @@ namespace TriboDavi.Service
 
             try
             {
+                if (objectDTO.BirthDate > DateTime.Now)
+                {
+                    responseDTO.SetBadInput("A data de nascimento deve ser menor que o dia de hoje!");
+                    return responseDTO;
+                }
+
                 var student = await _studentRepository.GetTrackedEntities()
                                                       .Include(x => x.LegalParent)
                                                       .Include(x => x.Graduation)

@@ -104,7 +104,16 @@ export class TeacherComponent implements OnInit {
     }
 
     create() {
-        this.selectedRegistry = { name: undefined };
+        // this.selectedRegistry = {
+        //     name: 'diogo',
+        //     rg: '11.111.111-1',
+        //     cpf: '111.111.111-11',
+        //     email: 'teste@teste.com',
+        //     phoneNumber: '47999999999',
+        //     graduationId: 1,
+        //     password: 'ad12345',
+        // };
+        this.selectedRegistry = {};
         this.modalDialog = true;
     }
 
@@ -200,12 +209,12 @@ export class TeacherComponent implements OnInit {
             this.modalDialog = false;
         } else {
             if (registry.id) {
-                this.teacherService.updateTeacher(registry.id, registry).subscribe((x) => {
+                this.teacherService.updateTeacher(registry.id, registry).subscribe(() => {
                     this.fetchData();
                     this.modalDialog = false;
                 });
             } else {
-                this.teacherService.createTeacher(registry).subscribe((x) => {
+                this.teacherService.createTeacher(registry).subscribe(() => {
                     this.fetchData();
                     this.modalDialog = false;
                 });

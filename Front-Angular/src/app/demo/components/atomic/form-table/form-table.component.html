@@ -75,10 +75,10 @@
                         <p-checkbox [ngModel]="_(rowData, col.field)" trueValue="T" falseValue="N" [binary]="true" [readonly]="true"></p-checkbox>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="col.type == 'edit'">
+                <ng-container *ngIf="col.type == 'edit' && rowData.name != 'Admin'">
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning" (click)="edit(rowData)"></button>
                 </ng-container>
-                <ng-container *ngIf="col.type == 'delete'">
+                <ng-container *ngIf="col.type == 'delete' && rowData.name != 'Admin'">
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="delete(rowData)"></button>
                 </ng-container>
                 <ng-container *ngIf="col.type == 'redirect'">

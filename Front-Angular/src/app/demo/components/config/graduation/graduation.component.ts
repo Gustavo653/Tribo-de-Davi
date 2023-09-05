@@ -40,11 +40,6 @@ export class GraduationComponent implements OnInit {
     ngOnInit() {
         this.cols = [
             {
-                field: 'id',
-                header: 'ID',
-                type: 'number',
-            },
-            {
                 field: 'name',
                 header: 'Nome',
                 type: 'text',

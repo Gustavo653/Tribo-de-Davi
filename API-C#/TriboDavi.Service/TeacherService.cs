@@ -3,6 +3,7 @@ using Common.DTO;
 using Common.Functions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TriboDavi.DataAccess;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
 using TriboDavi.Domain.Enum;
@@ -15,18 +16,21 @@ namespace TriboDavi.Service
     public class TeacherService : ITeacherService
     {
         private readonly ITeacherRepository _teacherRepository;
+        private readonly IStudentRepository _studentRepository;
         private readonly IGraduationRepository _graduationRepository;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         public TeacherService(ITeacherRepository teacherRepository,
                               IMapper mapper,
                               UserManager<User> userManager,
-                              IGraduationRepository graduation)
+                              IGraduationRepository graduation,
+                              IStudentRepository studentRepository)
         {
             _teacherRepository = teacherRepository;
             _mapper = mapper;
             _userManager = userManager;
             _graduationRepository = graduation;
+            _studentRepository = studentRepository;
         }
 
         private async Task UpdateSecurityAndRoleAsync(Teacher teacher, RoleName role)
@@ -59,10 +63,17 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                var existingStudentWithEmail = await _teacherRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
-                if (existingStudentWithEmail)
+                var existingTeacherWithEmail = await _teacherRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
+                if (existingTeacherWithEmail)
                 {
                     responseDTO.SetBadInput("Já existe um professor cadastrado com este e-mail!");
+                    return responseDTO;
+                }
+
+                var existingStudentWithEmail = await _studentRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
+                if (existingStudentWithEmail)
+                {
+                    responseDTO.SetBadInput("Já existe um aluno cadastrado com este e-mail!");
                     return responseDTO;
                 }
 

@@ -17,13 +17,13 @@
                     <label>Série da Escola</label>
                     <input [(ngModel)]="selectedRegistry.schoolGrade" pInputText />
                     <label>Peso</label><small class="p-error">*</small>
-                    <p-inputNumber [(ngModel)]="selectedRegistry.weight" [minFractionDigits]="0" [maxFractionDigits]="2" suffix="Kg"> </p-inputNumber>
+                    <p-inputNumber [(ngModel)]="selectedRegistry.weight" [minFractionDigits]="0" [min]="1" [max]="250" [maxFractionDigits]="2" suffix="Kg"> </p-inputNumber>
                     <label>Altura</label><small class="p-error">*</small>
-                    <p-inputNumber [(ngModel)]="selectedRegistry.height" [minFractionDigits]="0" [maxFractionDigits]="2" suffix="Cm"> </p-inputNumber>
+                    <p-inputNumber [(ngModel)]="selectedRegistry.height" [minFractionDigits]="0" [min]="1" [max]="250" [maxFractionDigits]="2" suffix="Cm"> </p-inputNumber>
                     <label>Senha</label><small *ngIf="!selectedRegistry.id" class="p-error">*</small>
                     <input [(ngModel)]="selectedRegistry.password" pInputText />
                     <label>Data de Nascimento</label><small class="p-error">*</small>
-                    <p-calendar [(ngModel)]="selectedRegistry.birthDate" dateFormat="dd/mm/yy" [showButtonBar]="true" appendTo="body"></p-calendar>
+                    <p-calendar [(ngModel)]="birthDate" dateFormat="dd/mm/yy" [showButtonBar]="true" appendTo="body"></p-calendar>
                 </p-fieldset>
             </div>
             <div class="col-12 md:col-6 lg:col-4">
@@ -34,9 +34,9 @@
                     <input [(ngModel)]="selectedRegistry.phoneNumber" pInputText />
                     <p-fieldset legend="Endereço">
                         <label>Rua</label>
-                        <input [(ngModel)]="selectedRegistry.address.name" pInputText />
+                        <input [(ngModel)]="selectedRegistry.address.streetName" pInputText />
                         <label>Número</label>
-                        <input [(ngModel)]="selectedRegistry.address.number" pInputText />
+                        <input [(ngModel)]="selectedRegistry.address.streetNumber" pInputText />
                         <label>Bairro</label>
                         <input [(ngModel)]="selectedRegistry.address.neighborhood" pInputText />
                         <label>Cidade</label>
