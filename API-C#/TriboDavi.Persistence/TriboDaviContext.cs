@@ -16,6 +16,8 @@ namespace TriboDavi.Persistence
         {
         }
 
+        public DbSet<FieldOperation> FieldOperations { get; set; }
+        //public DbSet<FieldOperationTeacher> FieldOperationTeachers { get; set; }
         public DbSet<LegalParent> LegalParents { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Graduation> Graduations { get; set; }
@@ -35,6 +37,11 @@ namespace TriboDavi.Persistence
             modelBuilder.Entity<LegalParent>(x =>
             {
                 x.HasIndex(a => a.CPF).IsUnique();
+            });
+
+            modelBuilder.Entity<FieldOperation>(x =>
+            {
+                x.HasIndex(a => a.Name).IsUnique();
             });
 
             modelBuilder.Entity<Graduation>(x =>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="TriboDavi.Domain.FieldOperation">
-    <Position X="6.75" Y="2" Width="1.5" />
+    <Position X="5.5" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>FieldOperation.cs</FileName>
@@ -18,33 +18,32 @@
     </TypeIdentifier>
   </Class>
   <Class Name="TriboDavi.Domain.FieldOperationTeacher">
-    <Position X="7.75" Y="5.25" Width="2" />
+    <Position X="8.25" Y="4.25" Width="2" />
     <AssociationLine Name="Teacher" Type="TriboDavi.Domain.Teacher" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.75" Y="5.25" />
-        <Point X="8.75" Y="4.591" />
-        <Point X="11.75" Y="4.591" />
+        <Point X="10.25" Y="5" />
+        <Point X="11.625" Y="5" />
+        <Point X="11.625" Y="3.747" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAEAAAAAAAAAAIAAEAAAAgAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAEAAAAAAAAAAIAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>FieldOperationTeacher.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Teacher" />
-      <Property Name="AssistantTeacher" />
       <Property Name="FieldOperation" />
     </ShowAsAssociation>
   </Class>
   <Class Name="TriboDavi.Domain.Teacher">
-    <Position X="11.75" Y="4" Width="1.5" />
+    <Position X="10.75" Y="2.75" Width="1.5" />
     <AssociationLine Name="MainTeacher" Type="TriboDavi.Domain.Teacher" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="12.274" Y="4" />
-        <Point X="12.274" Y="3.625" />
-        <Point X="13.625" Y="3.625" />
-        <Point X="13.625" Y="4.688" />
-        <Point X="13.25" Y="4.688" />
+        <Point X="11.274" Y="2.75" />
+        <Point X="11.274" Y="2.375" />
+        <Point X="12.625" Y="2.375" />
+        <Point X="12.625" Y="3.438" />
+        <Point X="12.25" Y="3.438" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.07" Y="-0.275" />
@@ -64,8 +63,8 @@
       <Path>
         <Point X="5.5" Y="4.463" />
         <Point X="5.875" Y="4.463" />
-        <Point X="5.875" Y="6" />
-        <Point X="7.75" Y="6" />
+        <Point X="5.875" Y="5" />
+        <Point X="8.25" Y="5" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="Student" Type="TriboDavi.Domain.Student" FixedFromPoint="true" FixedToPoint="true">

@@ -1,0 +1,36 @@
+<p-progressBar [hidden]="!loading" mode="indeterminate" [style]="{ height: '3px' }"></p-progressBar>
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
+<p-dialog [(visible)]="modalDialog" header="Detalhes do Registro" [transitionOptions]="'100ms'" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="grid">
+            <div class="col-12 md:col-6 lg:col-6">
+                <p-fieldset legend="Informações Gerais">
+                    <label>Nome</label><small class="p-error">*</small>
+                    <input [(ngModel)]="selectedRegistry.name" pInputText />
+                </p-fieldset>
+            </div>
+            <div class="col-12 md:col-6 lg:col-6">
+                <p-fieldset legend="Endereço">
+                    <label>Rua</label><small class="p-error">*</small>
+                    <input [(ngModel)]="selectedRegistry.address.streetName" pInputText />
+                    <label>Número</label><small class="p-error">*</small>
+                    <input [(ngModel)]="selectedRegistry.address.streetNumber" pInputText />
+                    <label>Bairro</label><small class="p-error">*</small>
+                    <input [(ngModel)]="selectedRegistry.address.neighborhood" pInputText />
+                    <label>Cidade</label><small class="p-error">*</small>
+                    <input [(ngModel)]="selectedRegistry.address.city" pInputText />
+                </p-fieldset>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
+    </ng-template>
+</p-dialog>
+<div class="card" *ngIf="loading == false">
+    <h3>Gerenciar Campos de Operação</h3>
+    <button pButton icon="pi pi-plus" label="Criar Campo de Operação" class="p-button-success mb-3" (click)="create()"></button>
+    <app-form-table [loading]="loading" [cols]="cols" [data]="data" (event)="event($event)"></app-form-table>
+</div>

@@ -102,6 +102,11 @@ export const MenuRoutes = [
                         routerLink: ['/config/teachers'],
                     },
                     {
+                        label: 'Gerenciar Campos de Operação',
+                        icon: 'pi pi-fw pi-sliders-h',
+                        routerLink: ['/config/field-operations'],
+                    },
+                    {
                         label: 'Gerenciar Responsáveis Legais',
                         icon: 'pi pi-fw pi-sliders-h',
                         routerLink: ['/config/legal-parents'],

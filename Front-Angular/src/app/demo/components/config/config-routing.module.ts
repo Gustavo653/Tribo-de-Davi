@@ -4,6 +4,7 @@ import { TeacherComponent } from './teacher/teacher.component';
 import { GraduationComponent } from './graduation/graduation.component';
 import { LegalParentComponent } from './legalParent/legalParent.component';
 import { StudentComponent } from './student/student.component';
+import { FieldOperationComponent } from './fieldOperation/fieldOperation.component';
 
 @NgModule({
     imports: [
@@ -12,6 +13,7 @@ import { StudentComponent } from './student/student.component';
             { path: 'teachers', component: TeacherComponent },
             { path: 'graduations', component: GraduationComponent },
             { path: 'legal-parents', component: LegalParentComponent },
+            { path: 'field-operations', component: FieldOperationComponent },
         ]),
     ],
     exports: [RouterModule],

@@ -16,6 +16,7 @@ namespace TriboDavi.Service
             CreateMap<Address, AddressDTO>(MemberList.None).ReverseMap();
             CreateMap<Graduation, GraduationDTO>(MemberList.None).ReverseMap();
             CreateMap<Teacher, TeacherDTO>(MemberList.None).ReverseMap();
+            CreateMap<FieldOperation, FieldOperationDTO>(MemberList.None).ReverseMap();
         }
     }
 }

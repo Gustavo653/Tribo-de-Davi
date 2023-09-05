@@ -20,9 +20,10 @@ import { LegalParentComponent } from './legalParent/legalParent.component';
 import { StudentComponent } from './student/student.component';
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { FieldOperationComponent } from './fieldOperation/fieldOperation.component';
 
 @NgModule({
-    declarations: [TeacherComponent, GraduationComponent, LegalParentComponent, StudentComponent],
+    declarations: [TeacherComponent, GraduationComponent, LegalParentComponent, StudentComponent, FieldOperationComponent],
     imports: [
         CommonModule,
         ReactiveFormsModule,

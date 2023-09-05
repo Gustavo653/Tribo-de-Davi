@@ -257,26 +257,6 @@ export class StudentComponent implements OnInit {
         });
     }
 
-    getFormData(registry: any) {
-        this.loading = true;
-        if (!registry) {
-            this.loading = false;
-            this.modalDialog = false;
-        } else {
-            if (registry.id) {
-                this.studentService.updateStudent(registry.id, registry).subscribe((x) => {
-                    this.fetchData();
-                    this.modalDialog = false;
-                });
-            } else {
-                this.studentService.createStudent(registry).subscribe((x) => {
-                    this.fetchData();
-                    this.modalDialog = false;
-                });
-            }
-        }
-    }
-
     fetchData() {
         this.graduationService.getGraduationsForListbox().subscribe((y) => {
             this.graduationsListbox = y.object;

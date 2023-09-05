@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TriboDavi.Persistence;
@@ -11,9 +12,11 @@ using TriboDavi.Persistence;
 namespace TriboDavi.Persistence.Migrations
 {
     [DbContext(typeof(TriboDaviContext))]
-    partial class TriboDaviContextModelSnapshot : ModelSnapshot
+    [Migration("20230905232949_CreateFieldOperation")]
+    partial class CreateFieldOperation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

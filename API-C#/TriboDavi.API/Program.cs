@@ -58,6 +58,7 @@ namespace TriboDavi.API
             builder.Services.AddTransient<IStudentService, StudentService>();
             builder.Services.AddTransient<IGraduationService, GraduationService>();
             builder.Services.AddTransient<ITeacherService, TeacherService>();
+            builder.Services.AddTransient<IFieldOperationService, FieldOperationService>();
 
             builder.Services.AddTransient<ILegalParentRepository, LegalParentRepository>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -65,6 +66,7 @@ namespace TriboDavi.API
             builder.Services.AddTransient<IGraduationRepository, GraduationRepository>();
             builder.Services.AddTransient<IAddressRepository, AddressRepository>();
             builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
+            builder.Services.AddTransient<IFieldOperationRepository, FieldOperationRepository>();
 
             builder.Services.AddTransient<RoleManager<Role>>();
             builder.Services.AddTransient<UserManager<User>>();

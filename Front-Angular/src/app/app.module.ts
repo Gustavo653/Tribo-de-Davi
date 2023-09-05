@@ -15,6 +15,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { ToastModule } from 'primeng/toast';
 import { TeacherService } from './demo/service/teacher.service';
 import { StudentService } from './demo/service/student.service';
+import { FieldOperationService } from './demo/service/fieldOperation.service';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -37,6 +38,7 @@ import { StudentService } from './demo/service/student.service';
         ConfirmationService,
         MessageService,
         StudentService,
+        FieldOperationService,
         TeacherService,
         StorageService,
     ],
