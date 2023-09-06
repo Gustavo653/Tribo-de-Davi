@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TriboDavi.Domain.Enum;
 using TriboDavi.DTO;
+using TriboDavi.Service;
 using TriboDavi.Service.Interface;
 
 namespace TriboDavi.API.Controllers
@@ -45,6 +46,14 @@ namespace TriboDavi.API.Controllers
         {
             var student = await _studentService.GetList();
             return StatusCode(student.Code, student);
+        }
+
+        [HttpGet("Listbox")]
+        [Authorize(Roles = nameof(RoleName.Admin))]
+        public async Task<IActionResult> GetStudentsForListbox()
+        {
+            var students = await _studentService.GetStudentsForListbox();
+            return StatusCode(students.Code, students);
         }
     }
 }

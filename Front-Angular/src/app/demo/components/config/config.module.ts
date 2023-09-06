@@ -23,9 +23,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FieldOperationComponent } from './fieldOperation/fieldOperation.component';
 import { FieldOperationTeacherComponent } from './fieldOperationTeacher/fieldOperationTeacher.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { FieldOperationStudentComponent } from './fieldOperationStudent/fieldOperationStudent.component';
 
 @NgModule({
-    declarations: [TeacherComponent, GraduationComponent, LegalParentComponent, StudentComponent, FieldOperationComponent, FieldOperationTeacherComponent],
+    declarations: [TeacherComponent, GraduationComponent, LegalParentComponent, StudentComponent, FieldOperationComponent, FieldOperationTeacherComponent, FieldOperationStudentComponent],
     imports: [
         CommonModule,
         ReactiveFormsModule,

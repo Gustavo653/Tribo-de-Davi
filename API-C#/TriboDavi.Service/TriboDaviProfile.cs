@@ -18,6 +18,7 @@ namespace TriboDavi.Service
             CreateMap<Teacher, TeacherDTO>(MemberList.None).ReverseMap();
             CreateMap<FieldOperation, FieldOperationDTO>(MemberList.None).ReverseMap();
             CreateMap<FieldOperationTeacher, FieldOperationTeacherDTO>(MemberList.None).ReverseMap();
+            CreateMap<FieldOperationStudent, FieldOperationStudentDTO>(MemberList.None).ReverseMap();
         }
     }
 }

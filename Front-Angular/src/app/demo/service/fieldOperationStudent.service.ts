@@ -7,53 +7,44 @@ import { StorageService } from './storage.service';
 @Injectable({
     providedIn: 'root',
 })
-export class StudentService {
+export class FieldOperationStudentService {
     constructor(private http: HttpClient, private storageService: StorageService) {}
 
     private getAPIURL(): Observable<string> {
         return this.storageService.getAPIURL();
     }
 
-    getStudents(): Observable<any> {
+    getFieldOperationStudents(): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/student`;
+                const apiUrl = `${url}/fieldOperationStudent`;
                 return this.http.get(apiUrl);
             })
         );
     }
 
-    getStudentsForListbox(): Observable<any> {
+    createFieldOperationStudent(device: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/student/listbox`;
-                return this.http.get(apiUrl);
-            })
-        );
-    }
-
-    createStudent(device: any): Observable<any> {
-        return this.getAPIURL().pipe(
-            switchMap((url) => {
-                const apiUrl = `${url}/student`;
+                const apiUrl = `${url}/fieldOperationStudent`;
                 return this.http.post(apiUrl, device);
             })
         );
     }
 
-    updateStudent(id: string, device: any): Observable<any> {
+    updateFieldOperationStudent(id: string, device: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/student/${id}`;
+                const apiUrl = `${url}/fieldOperationStudent/${id}`;
                 return this.http.put(apiUrl, device);
             })
         );
     }
 
-    deleteStudent(id: string): Observable<any> {
+    deleteFieldOperationStudent(id: string): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/student/${id}`;
+                const apiUrl = `${url}/fieldOperationStudent/${id}`;
                 return this.http.delete(apiUrl);
             })
         );

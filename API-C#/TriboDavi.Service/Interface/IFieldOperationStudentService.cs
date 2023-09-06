@@ -4,8 +4,7 @@ using TriboDavi.DTO;
 
 namespace TriboDavi.Service.Interface
 {
-    public interface IStudentService : IServiceBase<StudentDTO>
+    public interface IFieldOperationStudentService : IServiceBase<FieldOperationStudentDTO>
     {
-        Task<ResponseDTO> GetStudentsForListbox();
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TriboDavi.Persistence;
@@ -11,9 +12,11 @@ using TriboDavi.Persistence;
 namespace TriboDavi.Persistence.Migrations
 {
     [DbContext(typeof(TriboDaviContext))]
-    partial class TriboDaviContextModelSnapshot : ModelSnapshot
+    [Migration("20230906231301_CreateFieldOperationStudent")]
+    partial class CreateFieldOperationStudent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -458,36 +461,6 @@ namespace TriboDavi.Persistence.Migrations
                     b.ToTable("LegalParents");
                 });
 
-            modelBuilder.Entity("TriboDavi.Domain.RollCall", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("FieldOperationStudentId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("Presence")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FieldOperationStudentId");
-
-                    b.ToTable("RollCalls");
-                });
-
             modelBuilder.Entity("TriboDavi.Domain.Student", b =>
                 {
                     b.HasBaseType("TriboDavi.Domain.Identity.User");
@@ -645,17 +618,6 @@ namespace TriboDavi.Persistence.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TriboDavi.Domain.RollCall", b =>
-                {
-                    b.HasOne("TriboDavi.Domain.FieldOperationStudent", "FieldOperationStudent")
-                        .WithMany()
-                        .HasForeignKey("FieldOperationStudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FieldOperationStudent");
                 });
 
             modelBuilder.Entity("TriboDavi.Domain.Student", b =>

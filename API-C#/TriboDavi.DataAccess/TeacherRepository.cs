@@ -10,5 +10,10 @@ namespace TriboDavi.DataAccess
         public TeacherRepository(TriboDaviContext context) : base(context)
         {
         }
+
+        public override IQueryable<Teacher> GetEntities()
+        {
+            return base.GetEntities().Where(x => x.Email != "admin@admin.com");
+        }
     }
 }

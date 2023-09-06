@@ -16,7 +16,6 @@ namespace TriboDavi.Service
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
-        private readonly IAddressRepository _addressRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly IGraduationRepository _graduationRepository;
         private readonly ILegalParentRepository _legalParentRepository;
@@ -27,8 +26,7 @@ namespace TriboDavi.Service
                               UserManager<User> userManager,
                               ILegalParentRepository legalParentRepository,
                               IGraduationRepository graduation,
-                              ITeacherRepository teacherRepository,
-                              IAddressRepository addressRepository)
+                              ITeacherRepository teacherRepository)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
@@ -36,7 +34,6 @@ namespace TriboDavi.Service
             _legalParentRepository = legalParentRepository;
             _graduationRepository = graduation;
             _teacherRepository = teacherRepository;
-            _addressRepository = addressRepository;
         }
 
 
@@ -73,12 +70,16 @@ namespace TriboDavi.Service
             {
                 student.Address = new Address()
                 {
-                    City = objectDTO.Address.City,
-                    Neighborhood = objectDTO.Address.Neighborhood,
-                    StreetName = objectDTO.Address.StreetName,
-                    StreetNumber = objectDTO.Address.StreetNumber
+                    City = objectDTO.Address.City ?? "",
+                    Neighborhood = objectDTO.Address.Neighborhood ?? "",
+                    StreetName = objectDTO.Address.StreetName ?? "",
+                    StreetNumber = objectDTO.Address.StreetNumber ?? ""
                 };
                 student.Address.SetCreatedAt();
+            }
+            else
+            {
+                student.Address = null;
             }
 
             student.Graduation = graduation;
@@ -184,6 +185,26 @@ namespace TriboDavi.Service
                                                                  x.Address,
                                                                  x.Graduation,
                                                                  x.LegalParent,
+                                                             })
+                                                             .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                responseDTO.SetError(ex);
+            }
+            return responseDTO;
+        }
+
+        public async Task<ResponseDTO> GetStudentsForListbox()
+        {
+            ResponseDTO responseDTO = new();
+            try
+            {
+                responseDTO.Object = await _studentRepository.GetEntities()
+                                                             .Select(x => new
+                                                             {
+                                                                 Code = x.Id,
+                                                                 Name = x.Name,
                                                              })
                                                              .ToListAsync();
             }

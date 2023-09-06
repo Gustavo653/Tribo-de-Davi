@@ -23,6 +23,15 @@ export class FieldOperationTeacherService {
         );
     }
 
+    getFieldOperationTeachersForListbox(): Observable<any> {
+        return this.getAPIURL().pipe(
+            switchMap((url) => {
+                const apiUrl = `${url}/fieldOperationTeacher/listbox`;
+                return this.http.get(apiUrl);
+            })
+        );
+    }
+
     createFieldOperationTeacher(device: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {

@@ -10,5 +10,9 @@ namespace TriboDavi.DataAccess
         public GraduationRepository(TriboDaviContext context) : base(context)
         {
         }
+        public override IQueryable<Graduation> GetEntities()
+        {
+            return base.GetEntities().Where(x => x.Name != "Admin");
+        }
     }
 }

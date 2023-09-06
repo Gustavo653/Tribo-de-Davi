@@ -107,6 +107,26 @@ namespace TriboDavi.Service
             return responseDTO;
         }
 
+        public async Task<ResponseDTO> GetFieldOperationTeachersForListbox()
+        {
+            ResponseDTO responseDTO = new();
+            try
+            {
+                var graduation = await _fieldOperationTeacherRepository.GetEntities()
+                                                            .Select(x => new
+                                                            {
+                                                                Code = x.Id,
+                                                                Name = $"{x.FieldOperation.Name} - {x.Teacher.Name}",
+                                                            }).ToListAsync();
+                responseDTO.Object = graduation;
+            }
+            catch (Exception ex)
+            {
+                responseDTO.SetError(ex);
+            }
+            return responseDTO;
+        }
+
         public async Task<ResponseDTO> Remove(int id)
         {
             ResponseDTO responseDTO = new();

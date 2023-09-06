@@ -6,5 +6,6 @@ namespace TriboDavi.Service.Interface
 {
     public interface IFieldOperationTeacherService : IServiceBase<FieldOperationTeacherDTO>
     {
+        Task<ResponseDTO> GetFieldOperationTeachersForListbox();
     }
 }

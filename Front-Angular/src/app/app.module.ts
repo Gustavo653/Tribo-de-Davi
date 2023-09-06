@@ -17,6 +17,7 @@ import { TeacherService } from './demo/service/teacher.service';
 import { StudentService } from './demo/service/student.service';
 import { FieldOperationService } from './demo/service/fieldOperation.service';
 import { FieldOperationTeacherService } from './demo/service/fieldOperationTeacher.service';
+import { FieldOperationStudentService } from './demo/service/fieldOperationStudent.service';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -41,6 +42,7 @@ import { FieldOperationTeacherService } from './demo/service/fieldOperationTeach
         StudentService,
         FieldOperationService,
         FieldOperationTeacherService,
+        FieldOperationStudentService,
         TeacherService,
         StorageService,
     ],

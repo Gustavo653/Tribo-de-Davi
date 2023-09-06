@@ -18,6 +18,8 @@ namespace TriboDavi.Persistence
 
         public DbSet<FieldOperation> FieldOperations { get; set; }
         public DbSet<FieldOperationTeacher> FieldOperationTeachers { get; set; }
+        public DbSet<FieldOperationStudent> FieldOperationStudents { get; set; }
+        public DbSet<RollCall> RollCalls { get; set; }
         public DbSet<LegalParent> LegalParents { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Graduation> Graduations { get; set; }
