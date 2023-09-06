@@ -5,6 +5,7 @@ import { GraduationComponent } from './graduation/graduation.component';
 import { LegalParentComponent } from './legalParent/legalParent.component';
 import { StudentComponent } from './student/student.component';
 import { FieldOperationComponent } from './fieldOperation/fieldOperation.component';
+import { FieldOperationTeacherComponent } from './fieldOperationTeacher/fieldOperationTeacher.component';
 
 @NgModule({
     imports: [
@@ -14,6 +15,7 @@ import { FieldOperationComponent } from './fieldOperation/fieldOperation.compone
             { path: 'graduations', component: GraduationComponent },
             { path: 'legal-parents', component: LegalParentComponent },
             { path: 'field-operations', component: FieldOperationComponent },
+            { path: 'field-operation-teachers', component: FieldOperationTeacherComponent },
         ]),
     ],
     exports: [RouterModule],

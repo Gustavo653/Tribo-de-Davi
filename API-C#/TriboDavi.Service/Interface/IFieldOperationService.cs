@@ -6,5 +6,6 @@ namespace TriboDavi.Service.Interface
 {
     public interface IFieldOperationService : IServiceBase<FieldOperationDTO>
     {
+        Task<ResponseDTO> GetFieldOperationsForListbox();
     }
 }

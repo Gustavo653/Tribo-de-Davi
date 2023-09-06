@@ -2,6 +2,7 @@ using AutoMapper;
 using Common.DTO;
 using Common.Functions;
 using Microsoft.EntityFrameworkCore;
+using TriboDavi.DataAccess;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
 using TriboDavi.DTO;
@@ -26,7 +27,7 @@ namespace TriboDavi.Service
             {
                 if (await _fieldOperationRepository.GetEntities().AnyAsync(x => x.Name == objectDTO.Name))
                 {
-                    responseDTO.SetBadInput("Já existe um campo de operação cadastrad com este nome!");
+                    responseDTO.SetBadInput("Já existe um campo de operação cadastrado com este nome!");
                     return responseDTO;
                 }
 
@@ -38,6 +39,25 @@ namespace TriboDavi.Service
                 await _fieldOperationRepository.SaveChangesAsync();
 
                 responseDTO.Object = fieldOperation;
+            }
+            catch (Exception ex)
+            {
+                responseDTO.SetError(ex);
+            }
+            return responseDTO;
+        }
+
+        public async Task<ResponseDTO> GetFieldOperationsForListbox()
+        {
+            ResponseDTO responseDTO = new();
+            try
+            {
+                responseDTO.Object = await _fieldOperationRepository.GetEntities()
+                                                                .Select(x => new
+                                                                {
+                                                                    Code = x.Id,
+                                                                    Name = x.Name,
+                                                                }).ToListAsync();
             }
             catch (Exception ex)
             {

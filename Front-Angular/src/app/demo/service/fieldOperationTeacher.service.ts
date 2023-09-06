@@ -7,53 +7,44 @@ import { StorageService } from './storage.service';
 @Injectable({
     providedIn: 'root',
 })
-export class FieldOperationService {
+export class FieldOperationTeacherService {
     constructor(private http: HttpClient, private storageService: StorageService) {}
 
     private getAPIURL(): Observable<string> {
         return this.storageService.getAPIURL();
     }
 
-    getFieldOperations(): Observable<any> {
+    getFieldOperationTeachers(): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/fieldOperation`;
+                const apiUrl = `${url}/fieldOperationTeacher`;
                 return this.http.get(apiUrl);
             })
         );
     }
 
-    getFieldOperationForListbox(): Observable<any> {
+    createFieldOperationTeacher(device: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/fieldOperation/listbox`;
-                return this.http.get(apiUrl);
-            })
-        );
-    }
-
-    createFieldOperation(device: any): Observable<any> {
-        return this.getAPIURL().pipe(
-            switchMap((url) => {
-                const apiUrl = `${url}/fieldOperation`;
+                const apiUrl = `${url}/fieldOperationTeacher`;
                 return this.http.post(apiUrl, device);
             })
         );
     }
 
-    updateFieldOperation(id: string, device: any): Observable<any> {
+    updateFieldOperationTeacher(id: string, device: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/fieldOperation/${id}`;
+                const apiUrl = `${url}/fieldOperationTeacher/${id}`;
                 return this.http.put(apiUrl, device);
             })
         );
     }
 
-    deleteFieldOperation(id: string): Observable<any> {
+    deleteFieldOperationTeacher(id: string): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/fieldOperation/${id}`;
+                const apiUrl = `${url}/fieldOperationTeacher/${id}`;
                 return this.http.delete(apiUrl);
             })
         );

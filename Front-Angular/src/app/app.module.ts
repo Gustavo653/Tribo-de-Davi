@@ -16,6 +16,7 @@ import { ToastModule } from 'primeng/toast';
 import { TeacherService } from './demo/service/teacher.service';
 import { StudentService } from './demo/service/student.service';
 import { FieldOperationService } from './demo/service/fieldOperation.service';
+import { FieldOperationTeacherService } from './demo/service/fieldOperationTeacher.service';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -39,6 +40,7 @@ import { FieldOperationService } from './demo/service/fieldOperation.service';
         MessageService,
         StudentService,
         FieldOperationService,
+        FieldOperationTeacherService,
         TeacherService,
         StorageService,
     ],

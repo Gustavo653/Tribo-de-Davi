@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TriboDavi.Domain.Enum;
 using TriboDavi.DTO;
+using TriboDavi.Service;
 using TriboDavi.Service.Interface;
 
 namespace TriboDavi.API.Controllers
@@ -45,6 +46,14 @@ namespace TriboDavi.API.Controllers
         {
             var fieldOperation = await _fieldOperationService.GetList();
             return StatusCode(fieldOperation.Code, fieldOperation);
+        }
+
+        [HttpGet("Listbox")]
+        [Authorize(Roles = nameof(RoleName.Admin))]
+        public async Task<IActionResult> GetFieldOperationsForListbox()
+        {
+            var graduation = await _fieldOperationService.GetFieldOperationsForListbox();
+            return StatusCode(graduation.Code, graduation);
         }
     }
 }

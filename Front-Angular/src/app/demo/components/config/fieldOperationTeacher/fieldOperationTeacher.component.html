@@ -1,0 +1,50 @@
+<p-progressBar [hidden]="!loading" mode="indeterminate" [style]="{ height: '3px' }"></p-progressBar>
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
+<p-dialog [(visible)]="modalDialog" header="Detalhes do Registro" [transitionOptions]="'100ms'" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="grid">
+            <div class="col-12">
+                <p-fieldset legend="Vínculos">
+                    <label>Campo de Operação</label><small class="p-error">*</small>
+                    <p-dropdown
+                        [options]="fieldOperationsListbox"
+                        [(ngModel)]="selectedRegistry.fieldOperationId"
+                        placeholder="Selecione um valor"
+                        [filter]="true"
+                        filterBy="name"
+                        [showClear]="true"
+                        optionValue="code"
+                        optionLabel="name"
+                        appendTo="body"
+                        class="w-full"
+                    ></p-dropdown>
+                    <label>Professor</label><small class="p-error">*</small>
+                    <p-dropdown
+                        [options]="teachersListbox"
+                        [(ngModel)]="selectedRegistry.teacherId"
+                        placeholder="Selecione um valor"
+                        [filter]="true"
+                        filterBy="name"
+                        [showClear]="true"
+                        optionValue="code"
+                        optionLabel="name"
+                        appendTo="body"
+                        class="w-full"
+                    ></p-dropdown>
+                    <label>Ativo?</label><small class="p-error">*</small>
+                    <p-selectButton [options]="stateOptions" [(ngModel)]="selectedRegistry.enabled" optionLabel="name" optionValue="code"></p-selectButton>
+                </p-fieldset>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
+    </ng-template>
+</p-dialog>
+<div class="card" *ngIf="loading == false">
+    <h3>Gerenciar Professores dos Campos de Operações</h3>
+    <button pButton icon="pi pi-plus" label="Criar Professor do Campo de Operação" class="p-button-success mb-3" (click)="create()"></button>
+    <app-form-table [loading]="loading" [cols]="cols" [data]="data" (event)="event($event)"></app-form-table>
+</div>

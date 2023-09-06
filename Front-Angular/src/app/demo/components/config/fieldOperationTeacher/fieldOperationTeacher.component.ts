@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { MessageServiceSuccess, TableColumn } from 'src/app/demo/api/base';
 import { FieldOperationService } from 'src/app/demo/service/fieldOperation.service';
+import { FieldOperationTeacherService } from 'src/app/demo/service/fieldOperationTeacher.service';
+import { TeacherService } from 'src/app/demo/service/teacher.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
-    templateUrl: './fieldOperation.component.html',
+    templateUrl: './fieldOperationTeacher.component.html',
     providers: [MessageService, ConfirmationService],
     styles: [
         `
@@ -23,17 +25,23 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
         `,
     ],
 })
-export class FieldOperationComponent implements OnInit {
+export class FieldOperationTeacherComponent implements OnInit {
     dialog: boolean = false;
     loading: boolean = true;
-    birthDate: Date = new Date();
     cols: TableColumn[] = [];
     data: any[] = [];
-    graduationsListbox: any[] = [];
+    teachersListbox: any[] = [];
+    fieldOperationsListbox: any[] = [];
     modalDialog: boolean = false;
-    selectedRegistry: any = { address: {}, legalParent: {} };
+    selectedRegistry: any = {};
+    stateOptions: any[] = [
+        { name: 'Não', code: false },
+        { name: 'Sim', code: true },
+    ];
     constructor(
         protected layoutService: LayoutService,
+        private fieldOperationTeacherService: FieldOperationTeacherService,
+        private teacherService: TeacherService,
         private fieldOperationService: FieldOperationService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService
@@ -42,9 +50,19 @@ export class FieldOperationComponent implements OnInit {
     ngOnInit() {
         this.cols = [
             {
-                field: 'name',
-                header: 'Nome',
+                field: 'fieldOperationName',
+                header: 'Campo de Operação',
                 type: 'text',
+            },
+            {
+                field: 'teacherName',
+                header: 'Professor',
+                type: 'text',
+            },
+            {
+                field: 'enabled',
+                header: 'Ativo?',
+                type: 'boolean',
             },
             {
                 field: 'createdAt',
@@ -84,29 +102,23 @@ export class FieldOperationComponent implements OnInit {
     }
 
     create() {
-        this.selectedRegistry = { address: {} };
+        this.selectedRegistry = {};
         this.modalDialog = true;
     }
 
     editRegistry(registry: any) {
         this.selectedRegistry = { ...registry };
-        this.birthDate = new Date(this.selectedRegistry.birthDate);
         this.modalDialog = true;
     }
 
     hideDialog() {
-        this.selectedRegistry = { address: {} };
+        this.selectedRegistry = {};
         this.modalDialog = false;
     }
 
     validateData(): boolean {
-        if (
-            !this.selectedRegistry.name ||
-            !this.selectedRegistry.address.streetName ||
-            !this.selectedRegistry.address.streetNumber ||
-            !this.selectedRegistry.address.neighborhood ||
-            !this.selectedRegistry.address.city
-        ) {
+        console.log(this.selectedRegistry);
+        if (!this.selectedRegistry.teacherId || !this.selectedRegistry.fieldOperationId || this.selectedRegistry.enabled == undefined) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
             return false;
         }
@@ -116,14 +128,13 @@ export class FieldOperationComponent implements OnInit {
 
     save() {
         if (this.validateData()) {
-            this.selectedRegistry.birthDate = this.birthDate;
             if (this.selectedRegistry.id) {
-                this.fieldOperationService.updateFieldOperation(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
+                this.fieldOperationTeacherService.updateFieldOperationTeacher(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
                     this.hideDialog();
                     this.fetchData();
                 });
             } else {
-                this.fieldOperationService.createFieldOperation(this.selectedRegistry).subscribe(() => {
+                this.fieldOperationTeacherService.createFieldOperationTeacher(this.selectedRegistry).subscribe(() => {
                     this.hideDialog();
                     this.fetchData();
                 });
@@ -134,12 +145,12 @@ export class FieldOperationComponent implements OnInit {
     deleteRegistry(registry: any) {
         this.confirmationService.confirm({
             header: 'Deletar registro',
-            message: `Tem certeza que deseja apagar o registro: ${registry.name}`,
+            message: `Tem certeza que deseja apagar o registro?`,
             acceptLabel: 'Aceitar',
             rejectLabel: 'Rejeitar',
             accept: () => {
                 this.loading = true;
-                this.fieldOperationService.deleteFieldOperation(registry.id).subscribe((x) => {
+                this.fieldOperationTeacherService.deleteFieldOperationTeacher(registry.id).subscribe((x) => {
                     this.messageService.add(MessageServiceSuccess);
                     this.fetchData();
                 });
@@ -148,9 +159,15 @@ export class FieldOperationComponent implements OnInit {
     }
 
     fetchData() {
-        this.fieldOperationService.getFieldOperations().subscribe((x) => {
-            this.data = x.object;
-            this.loading = false;
+        this.teacherService.getTeacherForListbox().subscribe((x) => {
+            this.teachersListbox = x.object;
+            this.fieldOperationService.getFieldOperationForListbox().subscribe((y) => {
+                this.fieldOperationsListbox = y.object;
+                this.fieldOperationTeacherService.getFieldOperationTeachers().subscribe((z) => {
+                    this.data = z.object;
+                    this.loading = false;
+                });
+            });
         });
     }
 }

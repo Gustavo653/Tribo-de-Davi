@@ -21,9 +21,11 @@ import { StudentComponent } from './student/student.component';
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FieldOperationComponent } from './fieldOperation/fieldOperation.component';
+import { FieldOperationTeacherComponent } from './fieldOperationTeacher/fieldOperationTeacher.component';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
-    declarations: [TeacherComponent, GraduationComponent, LegalParentComponent, StudentComponent, FieldOperationComponent],
+    declarations: [TeacherComponent, GraduationComponent, LegalParentComponent, StudentComponent, FieldOperationComponent, FieldOperationTeacherComponent],
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -31,6 +33,7 @@ import { FieldOperationComponent } from './fieldOperation/fieldOperation.compone
         ConfirmDialogModule,
         ProgressBarModule,
         DataViewModule,
+        SelectButtonModule,
         FormsModule,
         AtomicModule,
         ButtonModule,

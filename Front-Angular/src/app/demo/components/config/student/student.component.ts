@@ -221,7 +221,6 @@ export class StudentComponent implements OnInit {
     }
 
     save() {
-        console.log(this.selectedRegistry);
         if (this.validateData()) {
             if (Object.keys(this.selectedRegistry.address).length === 0) {
                 this.selectedRegistry.address = undefined;
