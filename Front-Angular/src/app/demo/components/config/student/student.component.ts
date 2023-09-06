@@ -161,7 +161,7 @@ export class StudentComponent implements OnInit {
             !this.selectedRegistry.email ||
             !this.selectedRegistry.weight ||
             !this.selectedRegistry.height ||
-            !this.selectedRegistry.birthDate ||
+            !this.birthDate ||
             !this.selectedRegistry.phoneNumber ||
             (!this.selectedRegistry.id && !this.selectedRegistry.password) ||
             !this.selectedRegistry.graduationId

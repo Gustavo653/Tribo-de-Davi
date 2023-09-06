@@ -16,6 +16,7 @@ namespace TriboDavi.Service
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly IAddressRepository _addressRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly IGraduationRepository _graduationRepository;
         private readonly ILegalParentRepository _legalParentRepository;
@@ -26,7 +27,8 @@ namespace TriboDavi.Service
                               UserManager<User> userManager,
                               ILegalParentRepository legalParentRepository,
                               IGraduationRepository graduation,
-                              ITeacherRepository teacherRepository)
+                              ITeacherRepository teacherRepository,
+                              IAddressRepository addressRepository)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
@@ -34,6 +36,7 @@ namespace TriboDavi.Service
             _legalParentRepository = legalParentRepository;
             _graduationRepository = graduation;
             _teacherRepository = teacherRepository;
+            _addressRepository = addressRepository;
         }
 
 
@@ -66,6 +69,17 @@ namespace TriboDavi.Service
         private void SetStudentProperties(StudentDTO objectDTO, Student student, Graduation graduation, LegalParent legalParent)
         {
             PropertyCopier<StudentDTO, Student>.Copy(objectDTO, student);
+            if (objectDTO.Address != null)
+            {
+                student.Address = new Address()
+                {
+                    City = objectDTO.Address.City,
+                    Neighborhood = objectDTO.Address.Neighborhood,
+                    StreetName = objectDTO.Address.StreetName,
+                    StreetNumber = objectDTO.Address.StreetNumber
+                };
+                student.Address.SetCreatedAt();
+            }
 
             student.Graduation = graduation;
             student.LegalParent = legalParent;
@@ -236,6 +250,8 @@ namespace TriboDavi.Service
                 }
 
                 SetStudentProperties(objectDTO, student, graduation, legalParent);
+
+                var teste = _studentRepository.GetChanges();
 
                 await _studentRepository.SaveChangesAsync();
 
