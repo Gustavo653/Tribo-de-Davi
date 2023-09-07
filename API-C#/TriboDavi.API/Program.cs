@@ -61,6 +61,7 @@ namespace TriboDavi.API
             builder.Services.AddTransient<IFieldOperationService, FieldOperationService>();
             builder.Services.AddTransient<IFieldOperationTeacherService, FieldOperationTeacherService>();
             builder.Services.AddTransient<IFieldOperationStudentService, FieldOperationStudentService>();
+            builder.Services.AddTransient<IRollCallService, RollCallService>();
 
             builder.Services.AddTransient<ILegalParentRepository, LegalParentRepository>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -77,6 +78,7 @@ namespace TriboDavi.API
             builder.Services.AddTransient<UserManager<User>>();
 
             if (migrate == "true")
+            {
                 using (var serviceProvider = builder.Services.BuildServiceProvider())
                 {
                     var dbContext = serviceProvider.GetService<TriboDaviContext>();
@@ -84,6 +86,7 @@ namespace TriboDavi.API
                     SeedRoles(serviceProvider).Wait();
                     SeedAdminUser(serviceProvider).Wait();
                 }
+            }
 
             builder.Services.AddIdentityCore<User>(options =>
             {
@@ -182,6 +185,8 @@ namespace TriboDavi.API
             {
                 Authorization = new[] { new HangfireAuthorizationFilter() },
             });
+
+            RecurringJob.AddOrUpdate<IRollCallService>("GenerateRollCallDaily", x => x.GenerateRollCall(), Cron.Daily, new RecurringJobOptions() { TimeZone = TimeZoneInfo.Local });
 
             app.UseCors(builder =>
             {
