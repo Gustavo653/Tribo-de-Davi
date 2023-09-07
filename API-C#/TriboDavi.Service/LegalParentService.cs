@@ -55,15 +55,15 @@ namespace TriboDavi.Service
                                                                  .Include(x => x.Students)
                                                                  .Select(x => new
                                                                  {
-                                                                    x.Id,
-                                                                    x.Name,
-                                                                    x.Relationship,
-                                                                    x.RG,
-                                                                    x.CPF,
-                                                                    x.PhoneNumber,
-                                                                    x.CreatedAt,
-                                                                    x.UpdatedAt,
-                                                                    StudentsCount = x.Students.Count
+                                                                     x.Id,
+                                                                     x.Name,
+                                                                     x.Relationship,
+                                                                     x.RG,
+                                                                     x.CPF,
+                                                                     x.PhoneNumber,
+                                                                     x.CreatedAt,
+                                                                     x.UpdatedAt,
+                                                                     StudentsCount = x.Students.Count
                                                                  }).ToListAsync();
             }
             catch (Exception ex)

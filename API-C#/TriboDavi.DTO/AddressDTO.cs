@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TriboDavi.DTO
+﻿namespace TriboDavi.DTO
 {
     public class AddressDTO
     {

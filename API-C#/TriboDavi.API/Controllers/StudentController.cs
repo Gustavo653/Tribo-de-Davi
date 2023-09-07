@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TriboDavi.Domain.Enum;
 using TriboDavi.DTO;
-using TriboDavi.Service;
 using TriboDavi.Service.Interface;
 
 namespace TriboDavi.API.Controllers

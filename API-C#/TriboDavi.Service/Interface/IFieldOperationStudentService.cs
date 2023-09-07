@@ -1,4 +1,3 @@
-using Common.DTO;
 using Common.Infrastructure;
 using TriboDavi.DTO;
 

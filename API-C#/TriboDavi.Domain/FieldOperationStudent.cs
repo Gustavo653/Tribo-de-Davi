@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TriboDavi.Domain
+﻿namespace TriboDavi.Domain
 {
     public class FieldOperationStudent : BaseEntity
     {

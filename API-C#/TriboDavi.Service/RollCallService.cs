@@ -1,11 +1,7 @@
-using AutoMapper;
 using Common.DTO;
-using Common.Functions;
 using Microsoft.EntityFrameworkCore;
-using TriboDavi.DataAccess;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
-using TriboDavi.DTO;
 using TriboDavi.Service.Interface;
 
 namespace TriboDavi.Service

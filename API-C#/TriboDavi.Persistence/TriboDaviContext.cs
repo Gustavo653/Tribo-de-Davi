@@ -48,7 +48,7 @@ namespace TriboDavi.Persistence
 
             modelBuilder.Entity<RollCall>(x =>
             {
-                x.HasIndex("FieldOperationStudentId","Date").IsUnique();
+                x.HasIndex("FieldOperationStudentId", "Date").IsUnique();
             });
 
             modelBuilder.Entity<Graduation>(x =>
