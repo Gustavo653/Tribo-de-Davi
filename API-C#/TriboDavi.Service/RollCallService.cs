@@ -72,7 +72,7 @@ namespace TriboDavi.Service
                                                                   x.Presence,
                                                                   StudentId = x.FieldOperationStudent.Student.Id,
                                                                   StudentName = x.FieldOperationStudent.Student.Name,
-                                                                  StudentAge = DateOnly.FromDateTime(DateTime.Now) - x.FieldOperationStudent.Student.BirthDate,
+                                                                  StudentAge = x.FieldOperationStudent.Student.CalculateAge(),
                                                                   GraduationName = x.FieldOperationStudent.Student.Graduation.Name
                                                               })
                                                               .ToListAsync();
