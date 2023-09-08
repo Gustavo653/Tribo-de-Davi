@@ -2,6 +2,7 @@ using Common.DTO;
 using Microsoft.EntityFrameworkCore;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
+using TriboDavi.DTO;
 using TriboDavi.Service.Interface;
 
 namespace TriboDavi.Service
@@ -17,25 +18,87 @@ namespace TriboDavi.Service
             _rollCallRepository = rollCallRepository;
         }
 
-        public async Task<ResponseDTO> GenerateRollCall()
+        public async Task<ResponseDTO> GenerateRollCall(int? teacherId = null)
         {
             ResponseDTO responseDTO = new();
             try
             {
-                var fieldOperationTeachers = await _fieldOperationStudentRepository.GetTrackedEntities()
+                var fieldOperationStudents = await _fieldOperationStudentRepository.GetTrackedEntities()
                                                                                    .Include(x => x.FieldOperationTeacher)
                                                                                    .Include(x => x.Student)
-                                                                                   .Where(x => x.Enabled)
+                                                                                   .Where(x => x.Enabled &&
+                                                                                               (teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId))
                                                                                    .ToListAsync();
-                var rollCalls = new List<RollCall>();
-                foreach (var item in fieldOperationTeachers)
+                var responses = new List<ResponseDTO>();
+                foreach (var item in fieldOperationStudents)
                 {
-                    RollCall rollCall = new() { Date = DateTime.Now, FieldOperationStudent = item, Presence = false };
-                    rollCall.SetCreatedAt();
-                    rollCalls.Add(rollCall);
+                    ResponseDTO response = new();
+                    RollCall rollCall = new() { Date = DateOnly.FromDateTime(DateTime.Now), FieldOperationStudent = item, Presence = false };
+                    try
+                    {
+                        rollCall.SetCreatedAt();
+                        _rollCallRepository.Insert(rollCall);
+                        response.Object = rollCall;
+                        await _rollCallRepository.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        response.SetError(ex);
+                    }
+                    _rollCallRepository.Detach(rollCall);
+                    responses.Add(response);
                 }
-                _rollCallRepository.InsertRange(rollCalls);
+                responseDTO.Object = responses;
+            }
+            catch (Exception ex)
+            {
+                responseDTO.SetError(ex);
+            }
+            return responseDTO;
+        }
+
+        public async Task<ResponseDTO> GetRollCall(DateOnly date, int? teacherId = null)
+        {
+            ResponseDTO responseDTO = new();
+            try
+            {
+                responseDTO.Object = await _rollCallRepository.GetEntities()
+                                                              .Where(x => x.Date == date && (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                              .Select(x => new
+                                                              {
+                                                                  x.Id,
+                                                                  x.Date,
+                                                                  x.Presence,
+                                                                  StudentId = x.FieldOperationStudent.Student.Id,
+                                                                  StudentName = x.FieldOperationStudent.Student.Name,
+                                                                  GraduationName = x.FieldOperationStudent.Student.Graduation.Name
+                                                              })
+                                                              .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                responseDTO.SetError(ex);
+            }
+            return responseDTO;
+        }
+
+        public async Task<ResponseDTO> SetPresence(PresenceDTO presenceDTO, int? teacherId = null)
+        {
+            ResponseDTO responseDTO = new();
+            try
+            {
+                var rollCall = await _rollCallRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.FieldOperationStudent.Student.Id == presenceDTO.StudentId &&
+                                                                                                       x.Date == presenceDTO.Date &&
+                                                                                                       (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId));
+                if (rollCall == null)
+                {
+                    responseDTO.SetBadInput("Chamada não encontrada!");
+                    return responseDTO;
+                }
+                rollCall.Presence = presenceDTO.Presence;
+                rollCall.SetUpdatedAt();
                 await _rollCallRepository.SaveChangesAsync();
+                responseDTO.Object = rollCall;
             }
             catch (Exception ex)
             {

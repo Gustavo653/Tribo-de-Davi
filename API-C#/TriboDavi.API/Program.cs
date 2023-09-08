@@ -186,7 +186,7 @@ namespace TriboDavi.API
                 Authorization = new[] { new HangfireAuthorizationFilter() },
             });
 
-            RecurringJob.AddOrUpdate<IRollCallService>("GenerateRollCallDaily", x => x.GenerateRollCall(), Cron.Daily, new RecurringJobOptions() { TimeZone = TimeZoneInfo.Local });
+            RecurringJob.AddOrUpdate<IRollCallService>("GenerateRollCallDaily", x => x.GenerateRollCall(null), Cron.Daily, new RecurringJobOptions() { TimeZone = TimeZoneInfo.Local });
 
             app.UseCors(builder =>
             {

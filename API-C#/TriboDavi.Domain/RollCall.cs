@@ -3,6 +3,6 @@
 public class RollCall : BaseEntity
 {
     public required virtual FieldOperationStudent FieldOperationStudent { get; set; }
-    public required virtual DateTime Date { get; set; }
-    public required virtual bool Presence { get; set; }
+    public required DateOnly Date { get; set; }
+    public required bool Presence { get; set; }
 }

@@ -31,5 +31,10 @@ namespace Common.DTO
             Code = 400;
             Message = $"Verifique os registros enviados! Detalhes: {message}";
         }
+        public void SetForbidden()
+        {
+            Code = 403;
+            Message = $"Você não tem permissão para acessar o recurso desejado";
+        }
     }
 }

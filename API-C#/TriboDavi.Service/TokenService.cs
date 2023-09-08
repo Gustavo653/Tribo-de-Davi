@@ -14,17 +14,11 @@ namespace TriboDavi.Service
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _config;
-        private readonly UserManager<User> _userManager;
-        private readonly IMapper _mapper;
         public readonly SymmetricSecurityKey _key;
 
-        public TokenService(IConfiguration config,
-                            UserManager<User> userManager,
-                            IMapper mapper)
+        public TokenService(IConfiguration config)
         {
             _config = config;
-            _userManager = userManager;
-            _mapper = mapper;
             _key = GetSecurityKey(config["TokenKey"]!);
         }
 
