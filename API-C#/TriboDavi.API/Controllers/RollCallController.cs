@@ -19,7 +19,7 @@ namespace TriboDavi.API.Controllers
 
         [HttpGet("")]
         [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
-        public async Task<IActionResult> GetRollCall([FromBody] DateOnly date)
+        public async Task<IActionResult> GetRollCall([FromBody] DateOnly? date)
         {
             int? userId = null;
             var role = User.FindAll(ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();

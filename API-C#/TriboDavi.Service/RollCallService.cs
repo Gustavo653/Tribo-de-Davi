@@ -57,13 +57,13 @@ namespace TriboDavi.Service
             return responseDTO;
         }
 
-        public async Task<ResponseDTO> GetRollCall(DateOnly date, int? teacherId = null)
+        public async Task<ResponseDTO> GetRollCall(DateOnly? date = null, int? teacherId = null)
         {
             ResponseDTO responseDTO = new();
             try
             {
                 responseDTO.Object = await _rollCallRepository.GetEntities()
-                                                              .Where(x => x.Date == date && (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                              .Where(x => (date == null || x.Date == date) && (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId))
                                                               .Select(x => new
                                                               {
                                                                   x.Id,
