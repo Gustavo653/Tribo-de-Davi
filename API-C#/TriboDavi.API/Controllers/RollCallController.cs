@@ -1,7 +1,6 @@
 using Common.Functions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using TriboDavi.Domain.Enum;
 using TriboDavi.DTO;
 using TriboDavi.Service.Interface;
@@ -21,13 +20,7 @@ namespace TriboDavi.API.Controllers
         [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
         public async Task<IActionResult> GetRollCall([FromBody] DateOnly? date)
         {
-            int? userId = null;
-            var role = User.FindAll(ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
-            if (role == nameof(RoleName.Teacher))
-            {
-                userId = Convert.ToInt32(User.GetUserId());
-            }
-            var graduation = await _rollCallService.GetRollCall(date, userId);
+            var graduation = await _rollCallService.GetRollCall(date, User.GetIdStudentTeacher());
             return StatusCode(graduation.Code, graduation);
         }
 
@@ -35,13 +28,7 @@ namespace TriboDavi.API.Controllers
         [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
         public async Task<IActionResult> SetPresence([FromBody] PresenceDTO presenceDTO)
         {
-            int? userId = null;
-            var role = User.FindAll(ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
-            if (role == nameof(RoleName.Teacher))
-            {
-                userId = Convert.ToInt32(User.GetUserId());
-            }
-            var graduation = await _rollCallService.SetPresence(presenceDTO, userId);
+            var graduation = await _rollCallService.SetPresence(presenceDTO, User.GetIdStudentTeacher());
             return StatusCode(graduation.Code, graduation);
         }
 
@@ -49,13 +36,7 @@ namespace TriboDavi.API.Controllers
         [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
         public async Task<IActionResult> GenerateRollCall()
         {
-            int? userId = null;
-            var role = User.FindAll(ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
-            if (role == nameof(RoleName.Teacher))
-            {
-                userId = Convert.ToInt32(User.GetUserId());
-            }
-            var graduation = await _rollCallService.GenerateRollCall(userId);
+            var graduation = await _rollCallService.GenerateRollCall(User.GetIdStudentTeacher());
             return StatusCode(graduation.Code, graduation);
         }
     }

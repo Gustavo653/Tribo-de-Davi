@@ -63,7 +63,8 @@ namespace TriboDavi.Service
             try
             {
                 responseDTO.Object = await _rollCallRepository.GetEntities()
-                                                              .Where(x => (date == null || x.Date == date) && (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                              .Where(x => (date == null || x.Date == date) &&
+                                                                          (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId))
                                                               .Select(x => new
                                                               {
                                                                   x.Id,
@@ -71,6 +72,7 @@ namespace TriboDavi.Service
                                                                   x.Presence,
                                                                   StudentId = x.FieldOperationStudent.Student.Id,
                                                                   StudentName = x.FieldOperationStudent.Student.Name,
+                                                                  StudentAge = DateOnly.FromDateTime(DateTime.Now) - x.FieldOperationStudent.Student.BirthDate,
                                                                   GraduationName = x.FieldOperationStudent.Student.Graduation.Name
                                                               })
                                                               .ToListAsync();

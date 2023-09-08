@@ -18,5 +18,16 @@ namespace Common.Functions
         {
             return user.FindFirst(ClaimTypes.Email)?.Value;
         }
+
+        public static int? GetIdStudentTeacher(this ClaimsPrincipal user)
+        {
+            int? userId = null;
+            var role = user.FindAll(ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
+            if (role != "Admin")
+            {
+                userId = Convert.ToInt32(user.GetUserId());
+            }
+            return userId;
+        }
     }
 }
