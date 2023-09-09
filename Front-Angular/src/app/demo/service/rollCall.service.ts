@@ -17,7 +17,7 @@ export class RollCallService {
     getRollCall(): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/rollcall`;
+                const apiUrl = `${url}/rollCall`;
                 return this.http.get(apiUrl);
             })
         );

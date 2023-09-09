@@ -104,7 +104,7 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                if (objectDTO.BirthDate > DateOnly.FromDateTime(DateTime.Now))
+                if (objectDTO.BirthDate > DateTime.Now)
                 {
                     responseDTO.SetBadInput("A data de nascimento deve ser menor que o dia de hoje!");
                     return responseDTO;
@@ -244,7 +244,7 @@ namespace TriboDavi.Service
 
             try
             {
-                if (objectDTO.BirthDate > DateOnly.FromDateTime(DateTime.Now))
+                if (objectDTO.BirthDate > DateTime.Now)
                 {
                     responseDTO.SetBadInput("A data de nascimento deve ser menor que o dia de hoje!");
                     return responseDTO;

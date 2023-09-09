@@ -76,7 +76,18 @@ export const MenuRoutes = [
     {
         label: 'Professor',
         role: ['Admin', 'Teacher', 'AssistantTeacher'],
-        items: [],
+        items: [
+            {
+                label: 'Gerenciar Alunos',
+                icon: 'pi pi-fw pi-sliders-h',
+                routerLink: ['/teacher/student'],
+            },
+            {
+                label: 'Gerenciar Presença',
+                icon: 'pi pi-fw pi-sliders-h',
+                routerLink: ['/teacher/presence'],
+            },
+        ],
     },
     {
         label: 'Administrador',

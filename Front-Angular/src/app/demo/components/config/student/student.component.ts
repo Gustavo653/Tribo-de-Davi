@@ -225,7 +225,7 @@ export class StudentComponent implements OnInit {
             if (Object.keys(this.selectedRegistry.address).length === 0) {
                 this.selectedRegistry.address = undefined;
             }
-            this.selectedRegistry.birthDate = this.birthDate;
+            this.selectedRegistry.birthDate = this.birthDate.toLocaleDateString();
             if (this.selectedRegistry.id) {
                 this.studentService.updateStudent(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
                     this.hideDialog();
