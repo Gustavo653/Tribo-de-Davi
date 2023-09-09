@@ -7,7 +7,7 @@ namespace TriboDavi.DTO
         [Required]
         public required string Name { get; set; }
         [Required]
-        public required DateTime BirthDate { get; set; }
+        public required DateOnly BirthDate { get; set; }
         [Required]
         [Range(0, int.MaxValue)]
         public required decimal Weight { get; set; }
