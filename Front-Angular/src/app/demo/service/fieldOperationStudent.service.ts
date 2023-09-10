@@ -23,20 +23,20 @@ export class FieldOperationStudentService {
         );
     }
 
-    createFieldOperationStudent(device: any): Observable<any> {
+    createFieldOperationStudent(data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/fieldOperationStudent`;
-                return this.http.post(apiUrl, device);
+                return this.http.post(apiUrl, data);
             })
         );
     }
 
-    updateFieldOperationStudent(id: string, device: any): Observable<any> {
+    updateFieldOperationStudent(id: string, data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/fieldOperationStudent/${id}`;
-                return this.http.put(apiUrl, device);
+                return this.http.put(apiUrl, data);
             })
         );
     }

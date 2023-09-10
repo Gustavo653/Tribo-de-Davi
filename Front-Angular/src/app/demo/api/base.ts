@@ -48,7 +48,7 @@ export interface TableColumn {
 
 export const MessageServiceSuccess = {
     severity: 'success',
-    summary: 'Sua solicitação foi processada com sucesso!',
+    summary: 'Solicitação processada com sucesso!',
     detail: `Os dados foram salvos.`,
 };
 
@@ -80,7 +80,7 @@ export const MenuRoutes = [
             {
                 label: 'Gerenciar Alunos',
                 icon: 'pi pi-fw pi-sliders-h',
-                routerLink: ['/teacher/student'],
+                routerLink: ['/config/students'],
             },
             {
                 label: 'Gerenciar Presença',

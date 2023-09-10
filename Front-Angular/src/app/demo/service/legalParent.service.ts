@@ -23,20 +23,20 @@ export class LegalParentService {
         );
     }
 
-    createLegalParent(device: any): Observable<any> {
+    createLegalParent(data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/legalParent`;
-                return this.http.post(apiUrl, device);
+                return this.http.post(apiUrl, data);
             })
         );
     }
 
-    updateLegalParent(id: string, device: any): Observable<any> {
+    updateLegalParent(id: string, data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/legalParent/${id}`;
-                return this.http.put(apiUrl, device);
+                return this.http.put(apiUrl, data);
             })
         );
     }

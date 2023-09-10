@@ -32,20 +32,20 @@ export class GraduationService {
         );
     }
 
-    createGraduation(device: any): Observable<any> {
+    createGraduation(data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/graduation`;
-                return this.http.post(apiUrl, device);
+                return this.http.post(apiUrl, data);
             })
         );
     }
 
-    updateGraduation(id: string, device: any): Observable<any> {
+    updateGraduation(id: string, data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/graduation/${id}`;
-                return this.http.put(apiUrl, device);
+                return this.http.put(apiUrl, data);
             })
         );
     }

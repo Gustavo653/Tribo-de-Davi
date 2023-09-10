@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { StorageService } from './storage.service';
@@ -14,11 +14,36 @@ export class RollCallService {
         return this.storageService.getAPIURL();
     }
 
-    getRollCall(): Observable<any> {
+    getRollCall(date: Date, studentId: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/rollCall`;
-                return this.http.get(apiUrl);
+                let params = new HttpParams();
+                if (date !== null) {
+                    params = params.set('date', date.toDateString());
+                }
+                if (studentId !== undefined && studentId !== null) {
+                    params = params.set('studentId', studentId);
+                }
+                return this.http.get(apiUrl, { params: params });
+            })
+        );
+    }
+
+    setPresence(data: any): Observable<any> {
+        return this.getAPIURL().pipe(
+            switchMap((url) => {
+                const apiUrl = `${url}/rollCall/presence`;
+                return this.http.post(apiUrl, data);
+            })
+        );
+    }
+
+    generate(): Observable<any> {
+        return this.getAPIURL().pipe(
+            switchMap((url) => {
+                const apiUrl = `${url}/rollCall/generate`;
+                return this.http.post(apiUrl, {});
             })
         );
     }

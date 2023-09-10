@@ -15,6 +15,7 @@ namespace TriboDavi.Service
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly IFieldOperationStudentRepository _fieldOperationStudentRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly IGraduationRepository _graduationRepository;
         private readonly ILegalParentRepository _legalParentRepository;
@@ -25,7 +26,8 @@ namespace TriboDavi.Service
                               UserManager<User> userManager,
                               ILegalParentRepository legalParentRepository,
                               IGraduationRepository graduation,
-                              ITeacherRepository teacherRepository)
+                              ITeacherRepository teacherRepository,
+                              IFieldOperationStudentRepository fieldOperationStudentRepository)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
@@ -33,6 +35,7 @@ namespace TriboDavi.Service
             _legalParentRepository = legalParentRepository;
             _graduationRepository = graduation;
             _teacherRepository = teacherRepository;
+            _fieldOperationStudentRepository = fieldOperationStudentRepository;
         }
 
 
@@ -194,18 +197,19 @@ namespace TriboDavi.Service
             return responseDTO;
         }
 
-        public async Task<ResponseDTO> GetStudentsForListbox()
+        public async Task<ResponseDTO> GetStudentsForListbox(int? teacherId)
         {
             ResponseDTO responseDTO = new();
             try
             {
-                responseDTO.Object = await _studentRepository.GetEntities()
-                                                             .Select(x => new
-                                                             {
-                                                                 Code = x.Id,
-                                                                 Name = x.Name,
-                                                             })
-                                                             .ToListAsync();
+                responseDTO.Object = await _fieldOperationStudentRepository.GetEntities()
+                                                                           .Where(x => (teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                                           .Select(x => new
+                                                                           {
+                                                                               Code = x.Student.Id,
+                                                                               Name = x.Student.Name,
+                                                                           })
+                                                                           .ToListAsync();
             }
             catch (Exception ex)
             {

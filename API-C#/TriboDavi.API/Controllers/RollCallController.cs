@@ -18,9 +18,9 @@ namespace TriboDavi.API.Controllers
 
         [HttpGet("")]
         [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
-        public async Task<IActionResult> GetRollCall([FromBody] DateOnly? date)
+        public async Task<IActionResult> GetRollCall([FromQuery] DateOnly? date, [FromQuery] int? studentId)
         {
-            var graduation = await _rollCallService.GetRollCall(date, User.GetIdStudentTeacher());
+            var graduation = await _rollCallService.GetRollCall(date, studentId, User.GetIdStudentTeacher());
             return StatusCode(graduation.Code, graduation);
         }
 

@@ -32,20 +32,20 @@ export class StudentService {
         );
     }
 
-    createStudent(device: any): Observable<any> {
+    createStudent(data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/student`;
-                return this.http.post(apiUrl, device);
+                return this.http.post(apiUrl, data);
             })
         );
     }
 
-    updateStudent(id: string, device: any): Observable<any> {
+    updateStudent(id: string, data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/student/${id}`;
-                return this.http.put(apiUrl, device);
+                return this.http.put(apiUrl, data);
             })
         );
     }

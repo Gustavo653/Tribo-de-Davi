@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageServiceSuccess } from 'src/app/demo/api/base';
 import { RollCallService } from 'src/app/demo/service/rollCall.service';
+import { StudentService } from 'src/app/demo/service/student.service';
 
 @Component({
     templateUrl: './presence.component.html',
@@ -23,21 +25,45 @@ import { RollCallService } from 'src/app/demo/service/rollCall.service';
 })
 export class PresenceComponent implements OnInit {
     data: any[] = [];
+    studentsListbox: any[] = [];
+    studentId?: number;
+    date: Date = new Date();
+    loading: boolean = true;
     stateOptions: any[] = [
         { label: 'Ausente', value: false },
         { label: 'Presente', value: true },
     ];
-    value: boolean = false;
-    constructor(private rollCallService: RollCallService) {}
+    constructor(private rollCallService: RollCallService, private studentService: StudentService, private messageService: MessageService) {}
 
     ngOnInit(): void {
         this.fetchData();
-        console.log(this.data);
     }
 
     fetchData() {
-        this.rollCallService.getRollCall().subscribe((x) => {
-            this.data = x.object;
+        this.loading = true;
+        this.studentService.getStudentsForListbox().subscribe((x) => {
+            this.studentsListbox = x.object;
+            this.rollCallService.getRollCall(this.date, this.studentId).subscribe((x) => {
+                this.data = x.object;
+                this.loading = false;
+            });
+        });
+    }
+
+    setPresence(data: any) {
+        var json: any = {
+            studentId: data.studentId,
+            date: data.date,
+            presence: data.presence,
+        };
+        this.rollCallService.setPresence(json).subscribe((x) => {
+            this.messageService.add(MessageServiceSuccess);
+        });
+    }
+
+    generateRollCall() {
+        this.rollCallService.generate().subscribe((x) => {
+            this.messageService.add(MessageServiceSuccess);
         });
     }
 }

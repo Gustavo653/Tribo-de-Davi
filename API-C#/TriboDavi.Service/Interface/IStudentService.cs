@@ -6,6 +6,6 @@ namespace TriboDavi.Service.Interface
 {
     public interface IStudentService : IServiceBase<StudentDTO>
     {
-        Task<ResponseDTO> GetStudentsForListbox();
+        Task<ResponseDTO> GetStudentsForListbox(int? teacherId = null);
     }
 }

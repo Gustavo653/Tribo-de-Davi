@@ -1,3 +1,4 @@
+using Common.Functions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TriboDavi.Domain.Enum;
@@ -48,10 +49,10 @@ namespace TriboDavi.API.Controllers
         }
 
         [HttpGet("Listbox")]
-        [Authorize(Roles = nameof(RoleName.Admin))]
+        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
         public async Task<IActionResult> GetStudentsForListbox()
         {
-            var students = await _studentService.GetStudentsForListbox();
+            var students = await _studentService.GetStudentsForListbox(User.GetIdStudentTeacher());
             return StatusCode(students.Code, students);
         }
     }

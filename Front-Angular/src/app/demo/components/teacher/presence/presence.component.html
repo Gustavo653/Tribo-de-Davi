@@ -1,8 +1,31 @@
+<p-toast></p-toast>
 <p-fieldset legend="Filtros">
-    <h3>Chamada do dia 01/01/2020</h3>
+    <div class="flex flex-row flex-wrap justify-content-evenly">
+        <div class="flex flex-column">
+            <label>Data</label>
+            <p-calendar dateFormat="dd/mm/yy" [(ngModel)]="date" (ngModelChange)="fetchData()" [showButtonBar]="true"></p-calendar>
+        </div>
+        <div class="flex flex-column">
+            <label>Aluno</label>
+            <p-dropdown
+                [options]="studentsListbox"
+                [(ngModel)]="studentId"
+                (onChange)="fetchData()"
+                placeholder="Selecione um valor"
+                [filter]="true"
+                filterBy="name"
+                [showClear]="true"
+                optionValue="code"
+                optionLabel="name"
+                appendTo="body"
+                class="w-full"
+            ></p-dropdown>
+        </div>
+        <button pButton icon="pi pi-plus" label="Gerar Lista de Presença" class="p-button" (click)="generateRollCall()"></button>
+    </div>
 </p-fieldset>
 <div class="card mt-3">
-    <p-dataView [value]="data" layout="grid">
+    <p-dataView [loading]="loading" [value]="data" layout="grid">
         <ng-template let-object pTemplate="gridItem">
             <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
                 <div class="p-4 border-1 surface-border surface-card border-round">
@@ -11,13 +34,16 @@
                             <span class="font-semibold">Faixa {{ object.graduationName }}</span>
                             <img class="w-9 shadow-2 border-round" src="https://cdn.discordapp.com/attachments/953134337094717531/1150156797236219974/image.png" [alt]="object.studentName" />
                         </span>
+                        <span class="flex align-items-center gap-2">
+                            <span class="font-semibold">Chamada dia {{ object.date | date : "dd/MM/yyyy" }}</span>
+                        </span>
                     </div>
                     <div class="flex flex-column align-items-center gap-3 py-5">
                         <img class="w-9 shadow-2 border-round" src="https://storage.googleapis.com/tribo-davi/jiu-jitsu-infantil-interna-1024x683.jpg" [alt]="object.studentName" />
                         <div class="text-2xl font-bold">{{ object.studentName }} - {{ object.studentAge }} anos</div>
                     </div>
                     <div class="flex align-items-center justify-content-between">
-                        <p-selectButton [options]="stateOptions" [(ngModel)]="value" optionLabel="label" optionValue="value"></p-selectButton>
+                        <p-selectButton [options]="stateOptions" (onChange)="setPresence(object)" [(ngModel)]="object.presence" optionLabel="label" optionValue="value"></p-selectButton>
                     </div>
                 </div>
             </div>

@@ -32,20 +32,20 @@ export class FieldOperationTeacherService {
         );
     }
 
-    createFieldOperationTeacher(device: any): Observable<any> {
+    createFieldOperationTeacher(data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/fieldOperationTeacher`;
-                return this.http.post(apiUrl, device);
+                return this.http.post(apiUrl, data);
             })
         );
     }
 
-    updateFieldOperationTeacher(id: string, device: any): Observable<any> {
+    updateFieldOperationTeacher(id: string, data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/fieldOperationTeacher/${id}`;
-                return this.http.put(apiUrl, device);
+                return this.http.put(apiUrl, data);
             })
         );
     }

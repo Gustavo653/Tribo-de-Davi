@@ -57,13 +57,14 @@ namespace TriboDavi.Service
             return responseDTO;
         }
 
-        public async Task<ResponseDTO> GetRollCall(DateOnly? date = null, int? teacherId = null)
+        public async Task<ResponseDTO> GetRollCall(DateOnly? date = null, int? studentId = null, int? teacherId = null)
         {
             ResponseDTO responseDTO = new();
             try
             {
                 responseDTO.Object = await _rollCallRepository.GetEntities()
                                                               .Where(x => (date == null || x.Date == date) &&
+                                                                          (studentId == null || x.FieldOperationStudent.Student.Id == studentId) &&
                                                                           (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId))
                                                               .Select(x => new
                                                               {
@@ -76,6 +77,8 @@ namespace TriboDavi.Service
                                                                   GraduationName = x.FieldOperationStudent.Student.Graduation.Name,
                                                                   GraduationUrl = x.FieldOperationStudent.Student.Graduation.Url
                                                               })
+                                                              .OrderBy(x => x.Date)
+                                                              .ThenBy(x => x.StudentName)
                                                               .ToListAsync();
             }
             catch (Exception ex)

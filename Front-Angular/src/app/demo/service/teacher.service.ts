@@ -32,20 +32,20 @@ export class TeacherService {
         );
     }
 
-    createTeacher(device: any): Observable<any> {
+    createTeacher(data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/teacher`;
-                return this.http.post(apiUrl, device);
+                return this.http.post(apiUrl, data);
             })
         );
     }
 
-    updateTeacher(id: string, device: any): Observable<any> {
+    updateTeacher(id: string, data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/teacher/${id}`;
-                return this.http.put(apiUrl, device);
+                return this.http.put(apiUrl, data);
             })
         );
     }
