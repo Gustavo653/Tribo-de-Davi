@@ -9,7 +9,7 @@
         "DOTNET_ENVIRONMENT": "development",
         "Migrate": "true",
         "GCS_BUCKET_NAME": "tribo-davi",
-        "GCS_JSON_CREDENTIALS_PATH": "D:\\Github\\TriboDavi\\API-C#\\mediashow-394823-58b9494861f2.json"
+        "GCS_JSON_CREDENTIALS_PATH": "D:\\Github\\TriboDavi\\API-C#\\TriboDavi.API\\mediashow-394823-58b9494861f2.json"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7007;http://localhost:5007"

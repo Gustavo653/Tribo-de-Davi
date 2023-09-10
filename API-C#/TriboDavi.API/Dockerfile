@@ -5,7 +5,6 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["TriboDavi.API/TriboDavi.API.csproj", "TriboDavi.API/"]
-COPY ["mediashow-394823-58b9494861f2.json", "."]
 COPY ["Common.DTO/Common.DTO.csproj", "Common.DTO/"]
 COPY ["Common.Functions/Common.Functions.csproj", "Common.Functions/"]
 COPY ["TriboDavi.DTO/TriboDavi.DTO.csproj", "TriboDavi.DTO/"]
@@ -25,5 +24,6 @@ RUN dotnet publish "TriboDavi.API.csproj" -c Release -o /app/publish /p:UseAppHo
 
 FROM base AS final
 WORKDIR /app
+COPY ["TriboDavi.API/mediashow-394823-58b9494861f2.json", "."]
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TriboDavi.API.dll"]
