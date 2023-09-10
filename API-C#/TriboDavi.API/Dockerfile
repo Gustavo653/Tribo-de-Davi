@@ -1,11 +1,11 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-COPY mediashow-394823-58b9494861f2.json .
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["TriboDavi.API/TriboDavi.API.csproj", "TriboDavi.API/"]
+COPY ["mediashow-394823-58b9494861f2.json", "."]
 COPY ["Common.DTO/Common.DTO.csproj", "Common.DTO/"]
 COPY ["Common.Functions/Common.Functions.csproj", "Common.Functions/"]
 COPY ["TriboDavi.DTO/TriboDavi.DTO.csproj", "TriboDavi.DTO/"]
