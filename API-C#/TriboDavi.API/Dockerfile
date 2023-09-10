@@ -1,7 +1,6 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
+COPY mediashow-394823-58b9494861f2.json .
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
@@ -19,7 +18,6 @@ COPY ["Common.Infrastructure/Common.Infrastructure.csproj", "Common.Infrastructu
 RUN dotnet restore "TriboDavi.API/TriboDavi.API.csproj"
 COPY . .
 WORKDIR "/src/TriboDavi.API"
-COPY mediashow-394823-58b9494861f2.json /app/
 RUN dotnet build "TriboDavi.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
