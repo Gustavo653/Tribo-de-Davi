@@ -16,6 +16,7 @@ namespace TriboDavi.Service
     {
         private readonly IStudentRepository _studentRepository;
         private readonly IFieldOperationStudentRepository _fieldOperationStudentRepository;
+        private readonly IFieldOperationTeacherRepository _fieldOperationTeacherRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly IGraduationRepository _graduationRepository;
         private readonly ILegalParentRepository _legalParentRepository;
@@ -27,7 +28,8 @@ namespace TriboDavi.Service
                               ILegalParentRepository legalParentRepository,
                               IGraduationRepository graduation,
                               ITeacherRepository teacherRepository,
-                              IFieldOperationStudentRepository fieldOperationStudentRepository)
+                              IFieldOperationStudentRepository fieldOperationStudentRepository,
+                              IFieldOperationTeacherRepository fieldOperationTeacherRepository)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
@@ -36,6 +38,7 @@ namespace TriboDavi.Service
             _graduationRepository = graduation;
             _teacherRepository = teacherRepository;
             _fieldOperationStudentRepository = fieldOperationStudentRepository;
+            _fieldOperationTeacherRepository = fieldOperationTeacherRepository;
         }
 
 
@@ -95,7 +98,7 @@ namespace TriboDavi.Service
                 student.PasswordHash = _userManager.PasswordHasher.HashPassword(student, objectDTO.Password);
         }
 
-        public async Task<ResponseDTO> Create(StudentDTO objectDTO)
+        public async Task<ResponseDTO> Create(StudentDTO objectDTO, int? teacherId = null)
         {
             var responseDTO = new ResponseDTO();
 
@@ -152,6 +155,14 @@ namespace TriboDavi.Service
                 await UpdateSecurityAndRoleAsync(student);
 
                 responseDTO.Object = student;
+
+                if (teacherId != null)
+                {
+                    var fieldOperationTeacher = await _fieldOperationTeacherRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Teacher.Id == teacherId);
+                    FieldOperationStudent fieldOperationStudent = new() { FieldOperationTeacher = fieldOperationTeacher!, Student = student };
+                    await _fieldOperationStudentRepository.InsertAsync(fieldOperationStudent);
+                    await _fieldOperationStudentRepository.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -161,34 +172,32 @@ namespace TriboDavi.Service
             return responseDTO;
         }
 
-        public async Task<ResponseDTO> GetList()
+        public async Task<ResponseDTO> GetList(int? teacherId = null)
         {
             ResponseDTO responseDTO = new();
             try
             {
-                responseDTO.Object = await _studentRepository.GetEntities()
-                                                             .Include(x => x.Address)
-                                                             .Include(x => x.LegalParent)
-                                                             .Include(x => x.Graduation)
-                                                             .Select(x => new
-                                                             {
-                                                                 x.Id,
-                                                                 x.BirthDate,
-                                                                 x.Email,
-                                                                 x.RG,
-                                                                 x.CPF,
-                                                                 x.Name,
-                                                                 x.PhoneNumber,
-                                                                 x.SchoolGrade,
-                                                                 x.Weight,
-                                                                 x.Height,
-                                                                 x.SchoolName,
-                                                                 GraduationId = x.Graduation.Id,
-                                                                 x.Address,
-                                                                 x.Graduation,
-                                                                 x.LegalParent,
-                                                             })
-                                                             .ToListAsync();
+                responseDTO.Object = await _fieldOperationStudentRepository.GetEntities()
+                                                                           .Where(x => teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId)
+                                                                           .Select(x => new
+                                                                           {
+                                                                               x.Student.Id,
+                                                                               x.Student.BirthDate,
+                                                                               x.Student.Email,
+                                                                               x.Student.RG,
+                                                                               x.Student.CPF,
+                                                                               x.Student.Name,
+                                                                               x.Student.PhoneNumber,
+                                                                               x.Student.SchoolGrade,
+                                                                               x.Student.Weight,
+                                                                               x.Student.Height,
+                                                                               x.Student.SchoolName,
+                                                                               GraduationId = x.Student.Graduation.Id,
+                                                                               x.Student.Address,
+                                                                               x.Student.Graduation,
+                                                                               x.Student.LegalParent,
+                                                                           })
+                                                                           .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -242,7 +251,7 @@ namespace TriboDavi.Service
             return responseDTO;
         }
 
-        public async Task<ResponseDTO> Update(int id, StudentDTO objectDTO)
+        public async Task<ResponseDTO> Update(int id, StudentDTO objectDTO, int? teacherId = null)
         {
             var responseDTO = new ResponseDTO();
 
@@ -254,12 +263,12 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                var student = await _studentRepository.GetTrackedEntities()
-                                                      .Include(x => x.LegalParent)
-                                                      .Include(x => x.Graduation)
-                                                      .Include(x => x.Address)
-                                                      .FirstOrDefaultAsync(x => x.Id == id);
-                if (student == null)
+                var fieldOperationStudent = await _fieldOperationStudentRepository.GetEntities()
+                                                                    .Include(x => x.Student).ThenInclude(x => x.LegalParent)
+                                                                    .Include(x => x.Student).ThenInclude(x => x.Graduation)
+                                                                    .Include(x => x.Student).ThenInclude(x => x.Address)
+                                                                    .FirstOrDefaultAsync(x => x.Student.Id == id && (teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId));
+                if (fieldOperationStudent == null)
                 {
                     responseDTO.SetNotFound();
                     return responseDTO;
@@ -273,13 +282,13 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                SetStudentProperties(objectDTO, student, graduation, legalParent);
+                SetStudentProperties(objectDTO, fieldOperationStudent.Student, graduation, legalParent);
 
                 var teste = _studentRepository.GetChanges();
 
                 await _studentRepository.SaveChangesAsync();
 
-                responseDTO.Object = student;
+                responseDTO.Object = fieldOperationStudent.Student;
             }
             catch (Exception ex)
             {
@@ -287,6 +296,21 @@ namespace TriboDavi.Service
             }
 
             return responseDTO;
+        }
+
+        public Task<ResponseDTO> Create(StudentDTO objectDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseDTO> Update(int id, StudentDTO objectDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseDTO> GetList()
+        {
+            throw new NotImplementedException();
         }
     }
 }

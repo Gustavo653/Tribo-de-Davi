@@ -48,7 +48,7 @@ namespace TriboDavi.API.Controllers
         }
 
         [HttpGet("Listbox")]
-        [Authorize(Roles = nameof(RoleName.Admin))]
+        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
         public async Task<IActionResult> GetGraduationsForListbox()
         {
             var graduation = await _graduationService.GetGraduationsForListbox();
