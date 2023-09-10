@@ -3,7 +3,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
@@ -20,6 +19,7 @@ COPY ["Common.Infrastructure/Common.Infrastructure.csproj", "Common.Infrastructu
 RUN dotnet restore "TriboDavi.API/TriboDavi.API.csproj"
 COPY . .
 WORKDIR "/src/TriboDavi.API"
+COPY mediashow-394823-58b9494861f2.json /app/
 RUN dotnet build "TriboDavi.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -28,5 +28,4 @@ RUN dotnet publish "TriboDavi.API.csproj" -c Release -o /app/publish /p:UseAppHo
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY mediashow-394823-58b9494861f2.json /app/
 ENTRYPOINT ["dotnet", "TriboDavi.API.dll"]
