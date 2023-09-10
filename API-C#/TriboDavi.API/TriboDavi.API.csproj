@@ -10,11 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="mediashow-394823-54ae513fb4ce.json" />
-    <Content Remove="mediashow-394823-58b9494861f2.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="mediashow-394823-54ae513fb4ce.json" />
   </ItemGroup>
 
