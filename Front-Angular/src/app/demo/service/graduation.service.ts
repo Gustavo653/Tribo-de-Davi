@@ -36,7 +36,11 @@ export class GraduationService {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/graduation`;
-                return this.http.post(apiUrl, data);
+                const formData = new FormData();
+                formData.append('name', data.name);
+                formData.append('position', data.position);
+                formData.append('file', data.file);
+                return this.http.post(apiUrl, formData);
             })
         );
     }
@@ -45,7 +49,11 @@ export class GraduationService {
         return this.getAPIURL().pipe(
             switchMap((url) => {
                 const apiUrl = `${url}/graduation/${id}`;
-                return this.http.put(apiUrl, data);
+                const formData = new FormData();
+                formData.append('name', data.name);
+                formData.append('position', data.position);
+                formData.append('file', data.file);
+                return this.http.put(apiUrl, formData);
             })
         );
     }

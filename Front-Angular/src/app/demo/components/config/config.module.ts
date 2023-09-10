@@ -23,6 +23,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FieldOperationComponent } from './fieldOperation/fieldOperation.component';
 import { FieldOperationTeacherComponent } from './fieldOperationTeacher/fieldOperationTeacher.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { FileUploadModule } from 'primeng/fileupload';
 import { FieldOperationStudentComponent } from './fieldOperationStudent/fieldOperationStudent.component';
 
 @NgModule({
@@ -45,6 +46,7 @@ import { FieldOperationStudentComponent } from './fieldOperationStudent/fieldOpe
         FieldsetModule,
         DropdownModule,
         ToastModule,
+        FileUploadModule,
         InputTextModule,
         ConfigRoutingModule,
     ],

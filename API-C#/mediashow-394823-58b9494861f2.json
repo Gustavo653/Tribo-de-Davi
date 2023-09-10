@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "mediashow-394823",
+  "private_key_id": "58b9494861f2f0784ef1368ecfef6e9a02899bf5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC1Byq0j+J8stye\nd06w78Uoqn6Go97AbYz+KOmvQZJx6hXWZeDO2JN0F+UodHA6vKAndv+qlSXTXkGH\nk/5nP83aUjreY5Zyr3VQcNJPAYo1jzKUvgFuUv3vBE12m60BXI2grMVMoyBf1O/N\nnRyBqTxXe0G5GDwZN1JurqOnej3f0M/Y8iPiJlNPe9+03qYqZ8E9hvlEHvYDT8CY\nivQ4XKjS6Qt0HZj0W5B9KRl2hEcrro9Mne02q1HwM8k6sc4fpl8pN4pQwCUi4r8+\nezZjMIRYJDHeb5Xg+eF8uuW9Iv9l/P7VcarEZqHjAyS1+9+bksF1PJus0xSVB5Gz\nM/pRK6MTAgMBAAECggEAKBMKFSa1EL3XsQzgUrMBhlsX315vdVHLIIiWEsIFVUpo\nwymSdrfjDJQtmqMMJTSUj6f8ORsDYKNBBm5wpxKs02PYvFp3d7P32HLhW7QPkIO+\nwsa9MlsU89CUBWm5BtAiWitlEe4awJw26eGZ6eo4/XS/u+Xth/eDPBVVDUI2aFFF\n9Ocp2IE7Kj+V1qp+DUxc7ehMq9NTs42TKAG3xXRGLTBuI1lmqNypos/3s92fmL4R\nyPPN4pzvSNmUAXjJ8ftR+GktjVHKu067MElW2KfLsQxOKmChQW33910jCGB3I2gW\nZd37V9mtYWwYf1Iy2xzonucFgOKzex199fZJobAPoQKBgQDkvFQShsDYZTwHCKLp\n7Z3scPfBiuowVmiaWEAq+iIYzFe4FIItor2KBOvvjTUsyNAvArA7sx6xbVwTkVmS\nAyCPYSUoPz07clJJOgdeLoXvIux2ckBbkgabYGgksRiuBIgfUhb8hKbniqa4WnRW\ne7Qf3SaLKy+fr+bGbiXSszKlJwKBgQDKmxSGq3PQZhJj5A7DFmt+pjY9OgSSvDJX\nfUJkCyB0MMzWhKuwKqsJ7/zj053zzowIgJnu8qpzGHXwVOo1SWPu6a8KOHvson4i\n47F6S/t2oY+MuIEt/adftVM0tCzFNSUVeUEb1IRq4tD9jfKj7CMrudSgxvI4KaVT\n2uVdnNA+NQKBgCqSuvsvxZkBTqjofJoZtfkaFaMaXfhdPN7tahQVtl7zOahzeL9R\nuQGFZPyTRcBuKAF3+KFD94SCnE6wEQHSPy8wn5/cFWOJJbOnb1OiSR93Wpe5MC1b\nAovM59VceQF6qnNZ7hlV/1K9RcauX1TxdVcw7Eme4iBQtx1bxwJuhBClAoGAaInB\n+oaGmFXCUWY/s6tixZNPUyIXb/rI4tmPov0WvrzbRChqSdiKLfN1AbyTuFOvb0ej\npWXySrapS9sUiXAXrxNGLLjeQEfLW4cucNK5qglMfyhIBwnlDX4Ks5vvqcV1H/JT\nhN+Pf3MOsHVIaAoUT6BvtJFSM2ZRlsXQKRAbZq0CgYBw0MuEgU7PdGUdJzub4zUN\nqiaGOcd1sdeArJLJoJ/74R7INI/BP3pv8ly6XJwBrKF5Z7rol/M/VNj+M5MiG6Db\n3zkzjtMxOrxg0iPZxJrzpWHuQVzGCof6oWp4LcuK2hBQ4KeU8y1CZY2L92ctOrzM\nyq/ZlbH5RCf23UN/eJDdJw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "tribo-davi-bucket@mediashow-394823.iam.gserviceaccount.com",
+  "client_id": "103375194052258368946",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tribo-davi-bucket%40mediashow-394823.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

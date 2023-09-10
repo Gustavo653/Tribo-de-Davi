@@ -13,10 +13,12 @@ namespace TriboDavi.Service
     {
         private readonly IGraduationRepository _graduationRepository;
         private readonly IMapper _mapper;
-        public GraduationService(IGraduationRepository graduationRepository, IMapper mapper)
+        private readonly IGoogleCloudStorageService _googleCloudStorageService;
+        public GraduationService(IGraduationRepository graduationRepository, IMapper mapper, IGoogleCloudStorageService googleCloudStorageService)
         {
             _graduationRepository = graduationRepository;
             _mapper = mapper;
+            _googleCloudStorageService = googleCloudStorageService;
         }
 
         public async Task<ResponseDTO> Create(GraduationDTO objectDTO)
@@ -32,6 +34,7 @@ namespace TriboDavi.Service
 
                 Graduation graduation = _mapper.Map<Graduation>(objectDTO);
 
+                graduation.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
                 graduation.SetCreatedAt();
 
                 await _graduationRepository.InsertAsync(graduation);
@@ -93,6 +96,7 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
+                await _googleCloudStorageService.DeleteFileFromGcsAsync(graduation.Url);
                 _graduationRepository.Delete(graduation);
                 await _graduationRepository.SaveChangesAsync();
             }
@@ -123,7 +127,9 @@ namespace TriboDavi.Service
 
                 PropertyCopier<GraduationDTO, Graduation>.Copy(objectDTO, graduation);
 
+                await _googleCloudStorageService.DeleteFileFromGcsAsync(graduation.Url);
                 graduation.SetUpdatedAt();
+                graduation.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
 
                 await _graduationRepository.SaveChangesAsync();
 

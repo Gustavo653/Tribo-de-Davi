@@ -62,6 +62,7 @@ namespace TriboDavi.API
             builder.Services.AddTransient<IFieldOperationTeacherService, FieldOperationTeacherService>();
             builder.Services.AddTransient<IFieldOperationStudentService, FieldOperationStudentService>();
             builder.Services.AddTransient<IRollCallService, RollCallService>();
+            builder.Services.AddTransient<IGoogleCloudStorageService, GoogleCloudStorageService>();
 
             builder.Services.AddTransient<ILegalParentRepository, LegalParentRepository>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();

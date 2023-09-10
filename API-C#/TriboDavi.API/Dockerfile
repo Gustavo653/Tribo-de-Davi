@@ -28,4 +28,5 @@ RUN dotnet publish "TriboDavi.API.csproj" -c Release -o /app/publish /p:UseAppHo
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY mediashow-394823-58b9494861f2.json /app/
 ENTRYPOINT ["dotnet", "TriboDavi.API.dll"]

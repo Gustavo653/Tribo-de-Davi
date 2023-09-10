@@ -17,7 +17,7 @@ namespace TriboDavi.API.Controllers
 
         [HttpPost("")]
         [Authorize(Roles = nameof(RoleName.Admin))]
-        public async Task<IActionResult> CreateGraduation([FromBody] GraduationDTO graduationDTO)
+        public async Task<IActionResult> CreateGraduation([FromForm] GraduationDTO graduationDTO)
         {
             var graduation = await _graduationService.Create(graduationDTO);
             return StatusCode(graduation.Code, graduation);
@@ -25,7 +25,7 @@ namespace TriboDavi.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = nameof(RoleName.Admin))]
-        public async Task<IActionResult> UpdateGraduation([FromRoute] int id, [FromBody] GraduationDTO graduationDTO)
+        public async Task<IActionResult> UpdateGraduation([FromRoute] int id, [FromForm] GraduationDTO graduationDTO)
         {
             var graduation = await _graduationService.Update(id, graduationDTO);
             return StatusCode(graduation.Code, graduation);

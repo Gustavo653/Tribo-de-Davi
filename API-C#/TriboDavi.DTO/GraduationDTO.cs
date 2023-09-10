@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace TriboDavi.DTO
 {
@@ -7,7 +8,7 @@ namespace TriboDavi.DTO
         [Required]
         public required string Name { get; set; }
         [Required]
-        public required string Url { get; set; }
+        public required IFormFile File { get; set; }
         [Required]
         public required int Position { get; set; }
     }

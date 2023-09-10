@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { FormField, MessageServiceSuccess, TableColumn } from 'src/app/demo/api/base';
+import { MessageServiceSuccess, TableColumn, UploadEvent } from 'src/app/demo/api/base';
 import { GraduationService } from 'src/app/demo/service/graduation.service';
-import { TeacherService } from 'src/app/demo/service/teacher.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
@@ -25,16 +24,13 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
     ],
 })
 export class GraduationComponent implements OnInit {
+    dialog: boolean = false;
     loading: boolean = true;
     cols: TableColumn[] = [];
     data: any[] = [];
-    fields: FormField[] = [
-        { id: 'name', type: 'text', label: 'Nome', required: true },
-        { id: 'url', type: 'text', label: 'URL', required: true },
-        { id: 'position', type: 'number', label: 'Posição', required: true },
-    ];
+    uploadedFiles: any[] = [];
     modalDialog: boolean = false;
-    selectedRegistry: any;
+    selectedRegistry: any = {};
     constructor(protected layoutService: LayoutService, private graduationService: GraduationService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
 
     ngOnInit() {
@@ -92,13 +88,46 @@ export class GraduationComponent implements OnInit {
     }
 
     create() {
-        this.selectedRegistry = { name: undefined };
+        this.selectedRegistry = {};
         this.modalDialog = true;
     }
 
     editRegistry(registry: any) {
         this.selectedRegistry = { ...registry };
         this.modalDialog = true;
+    }
+
+    hideDialog() {
+        this.selectedRegistry = {};
+        this.modalDialog = false;
+    }
+
+    validateData(): boolean {
+        console.log(this.selectedRegistry);
+        console.log(this.uploadedFiles);
+        if (!this.selectedRegistry.name || !this.selectedRegistry.position || !this.uploadedFiles[0]) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
+            return false;
+        }
+
+        return true;
+    }
+
+    save() {
+        this.selectedRegistry.file = this.uploadedFiles[0];
+        if (this.validateData()) {
+            if (this.selectedRegistry.id) {
+                this.graduationService.updateGraduation(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
+                    this.hideDialog();
+                    this.fetchData();
+                });
+            } else {
+                this.graduationService.createGraduation(this.selectedRegistry).subscribe(() => {
+                    this.hideDialog();
+                    this.fetchData();
+                });
+            }
+        }
     }
 
     deleteRegistry(registry: any) {
@@ -117,23 +146,17 @@ export class GraduationComponent implements OnInit {
         });
     }
 
-    getFormData(registry: any) {
-        this.loading = true;
-        if (!registry) {
-            this.loading = false;
-            this.modalDialog = false;
-        } else {
-            if (registry.id) {
-                this.graduationService.updateGraduation(registry.id, registry).subscribe((x) => {
-                    this.fetchData();
-                    this.modalDialog = false;
-                });
-            } else {
-                this.graduationService.createGraduation(registry).subscribe((x) => {
-                    this.fetchData();
-                    this.modalDialog = false;
-                });
-            }
+    onUpload(event: UploadEvent) {
+        for (let file of event.files) {
+            this.uploadedFiles.push(file);
+        }
+    }
+
+    removeFile(event: any): void {
+        const file: File = event;
+        const index = this.uploadedFiles.findIndex((uploadedFile: File) => uploadedFile.name === file.name);
+        if (index !== -1) {
+            this.uploadedFiles.splice(index, 1);
         }
     }
 
