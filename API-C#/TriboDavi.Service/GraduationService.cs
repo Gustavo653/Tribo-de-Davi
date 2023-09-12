@@ -26,6 +26,12 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
+                if (objectDTO.File == null)
+                {
+                    responseDTO.SetBadInput("Uma foto deve ser enviada!");
+                    return responseDTO;
+                }
+
                 if (await _graduationRepository.GetEntities().AnyAsync(x => x.Name == objectDTO.Name || x.Position == objectDTO.Position))
                 {
                     responseDTO.SetBadInput("Já existe uma graduação cadastrada com este nome e/ou posição!");
@@ -129,9 +135,12 @@ namespace TriboDavi.Service
 
                 PropertyCopier<GraduationDTO, Graduation>.Copy(objectDTO, graduation);
 
-                await _googleCloudStorageService.DeleteFileFromGcsAsync(graduation.Url);
                 graduation.SetUpdatedAt();
-                graduation.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
+                if (objectDTO.File != null)
+                {
+                    await _googleCloudStorageService.DeleteFileFromGcsAsync(graduation.Url);
+                    graduation.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
+                }
 
                 await _graduationRepository.SaveChangesAsync();
 

@@ -2,6 +2,7 @@ using Common.Functions;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -35,6 +36,15 @@ namespace TriboDavi.API
             Console.WriteLine($"(DatabaseConnection) String de conexao com banco de dados para TriboDavi: \n{databaseTriboDavi} \n");
             Console.WriteLine($"(Migrate) Executar migrate: \n{migrate} \n");
             Console.WriteLine("Fim dos parâmetros da aplicação \n");
+
+            builder.Services.Configure<FormOptions>(o =>
+            {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = long.MaxValue;
+                o.MultipartBoundaryLengthLimit = int.MaxValue;
+                o.MultipartHeadersCountLimit = int.MaxValue;
+                o.MultipartHeadersLengthLimit = int.MaxValue;
+            });
 
             builder.Services.AddDbContext<TriboDaviContext>(x =>
             {

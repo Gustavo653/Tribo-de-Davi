@@ -117,7 +117,6 @@ export class FieldOperationTeacherComponent implements OnInit {
     }
 
     validateData(): boolean {
-        console.log(this.selectedRegistry);
         if (!this.selectedRegistry.teacherId || !this.selectedRegistry.fieldOperationId || this.selectedRegistry.enabled == undefined) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
             return false;
