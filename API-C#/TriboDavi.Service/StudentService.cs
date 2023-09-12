@@ -194,6 +194,7 @@ namespace TriboDavi.Service
                                                                            {
                                                                                x.Student.Id,
                                                                                x.Student.BirthDate,
+                                                                               x.Student.Url,
                                                                                x.Student.Email,
                                                                                x.Student.RG,
                                                                                x.Student.CPF,

@@ -37,28 +37,21 @@ export class StudentService {
             switchMap((url) => {
                 const apiUrl = `${url}/student`;
                 const formData = new FormData();
-                formData.append('name', data.name);
-                formData.append('birthDate', data.birthDate);
-                formData.append('file', data.file);
-                formData.append('weight', data.weight);
-                formData.append('height', data.height);
-                formData.append('graduationId', data.graduationId);
-                formData.append('phoneNumber', data.phoneNumber);
-                formData.append('email', data.email);
-                formData.append('password', data.password);
-                formData.append('rg', data.rg);
-                formData.append('cpf', data.cpf);
-                formData.append('schoolName', data.schoolName);
-                formData.append('schoolGrade', data.schoolGrade);
-                formData.append('address.streetName', data.address.streetName);
-                formData.append('address.streetNumber', data.address.streetNumber);
-                formData.append('address.neighborhood', data.address.neighborhood);
-                formData.append('address.city', data.address.city);
-                formData.append('legalParent.name', data.legalParent.name);
-                formData.append('legalParent.relationship', data.legalParent.relationship);
-                formData.append('legalParent.rg', data.legalParent.rg);
-                formData.append('legalParent.cpf', data.legalParent.cpf);
-                formData.append('legalParent.phoneNumber', data.legalParent.phoneNumber);
+                
+                for (const key in data) {
+                    if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
+                        if (typeof data[key] !== 'object') {
+                            formData.append(key, data[key]);
+                        } else {
+                            for (const nestedKey in data[key]) {
+                                if (data[key][nestedKey] !== undefined && data[key][nestedKey] !== null && data[key][nestedKey] !== '') {
+                                    formData.append(`${key}.${nestedKey}`, data[key][nestedKey]);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 return this.http.post(apiUrl, formData);
             })
         );
@@ -69,28 +62,21 @@ export class StudentService {
             switchMap((url) => {
                 const apiUrl = `${url}/student/${id}`;
                 const formData = new FormData();
-                formData.append('name', data.name);
-                formData.append('birthDate', data.birthDate);
-                formData.append('file', data.file);
-                formData.append('weight', data.weight);
-                formData.append('height', data.height);
-                formData.append('graduationId', data.graduationId);
-                formData.append('phoneNumber', data.phoneNumber);
-                formData.append('email', data.email);
-                formData.append('password', data.password);
-                formData.append('rg', data.rg);
-                formData.append('cpf', data.cpf);
-                formData.append('schoolName', data.schoolName);
-                formData.append('schoolGrade', data.schoolGrade);
-                formData.append('address.streetName', data.address.streetName);
-                formData.append('address.streetNumber', data.address.streetNumber);
-                formData.append('address.neighborhood', data.address.neighborhood);
-                formData.append('address.city', data.address.city);
-                formData.append('legalParent.name', data.legalParent.name);
-                formData.append('legalParent.relationship', data.legalParent.relationship);
-                formData.append('legalParent.rg', data.legalParent.rg);
-                formData.append('legalParent.cpf', data.legalParent.cpf);
-                formData.append('legalParent.phoneNumber', data.legalParent.phoneNumber);
+
+                for (const key in data) {
+                    if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
+                        if (typeof data[key] !== 'object') {
+                            formData.append(key, data[key]);
+                        } else {
+                            for (const nestedKey in data[key]) {
+                                if (data[key][nestedKey] !== undefined && data[key][nestedKey] !== null && data[key][nestedKey] !== '') {
+                                    formData.append(`${key}.${nestedKey}`, data[key][nestedKey]);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 return this.http.put(apiUrl, formData);
             })
         );
