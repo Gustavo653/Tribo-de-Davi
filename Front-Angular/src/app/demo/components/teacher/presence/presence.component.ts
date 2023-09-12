@@ -62,8 +62,9 @@ export class PresenceComponent implements OnInit {
     }
 
     generateRollCall() {
-        this.rollCallService.generate().subscribe((x) => {
+        this.rollCallService.generate().subscribe(() => {
             this.messageService.add(MessageServiceSuccess);
+            this.fetchData();
         });
     }
 }

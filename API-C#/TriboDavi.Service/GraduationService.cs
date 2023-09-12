@@ -70,11 +70,13 @@ namespace TriboDavi.Service
             try
             {
                 var graduation = await _graduationRepository.GetEntities()
+                                                            .OrderBy(x => x.Position)
                                                             .Select(x => new
                                                             {
                                                                 Code = x.Id,
                                                                 Name = x.Name,
-                                                            }).ToListAsync();
+                                                            })
+                                                            .ToListAsync();
                 responseDTO.Object = graduation;
             }
             catch (Exception ex)

@@ -170,10 +170,10 @@ export class StudentComponent implements OnInit {
             return false;
         }
 
-        if (this.selectedRegistry.rg && !this.selectedRegistry.rg.match(rgPattern)) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG inválido' });
-            return false;
-        }
+        // if (this.selectedRegistry.rg && !this.selectedRegistry.rg.match(rgPattern)) {
+        //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG inválido' });
+        //     return false;
+        // }
 
         if (this.birthDate > new Date()) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Data de Nascimento inválida' });
@@ -225,7 +225,7 @@ export class StudentComponent implements OnInit {
             if (Object.keys(this.selectedRegistry.address).length === 0) {
                 this.selectedRegistry.address = undefined;
             }
-            this.selectedRegistry.birthDate = this.birthDate.toLocaleDateString();
+            this.selectedRegistry.birthDate = this.birthDate.toISOString();
             if (this.selectedRegistry.id) {
                 this.studentService.updateStudent(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
                     this.hideDialog();

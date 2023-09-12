@@ -159,7 +159,7 @@ namespace TriboDavi.Service
                 if (teacherId != null)
                 {
                     var fieldOperationTeacher = await _fieldOperationTeacherRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Teacher.Id == teacherId);
-                    FieldOperationStudent fieldOperationStudent = new() { FieldOperationTeacher = fieldOperationTeacher!, Student = student };
+                    FieldOperationStudent fieldOperationStudent = new() { FieldOperationTeacher = fieldOperationTeacher!, Student = student, Enabled = true };
                     await _fieldOperationStudentRepository.InsertAsync(fieldOperationStudent);
                     await _fieldOperationStudentRepository.SaveChangesAsync();
                 }
@@ -263,11 +263,11 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                var fieldOperationStudent = await _fieldOperationStudentRepository.GetEntities()
-                                                                    .Include(x => x.Student).ThenInclude(x => x.LegalParent)
-                                                                    .Include(x => x.Student).ThenInclude(x => x.Graduation)
-                                                                    .Include(x => x.Student).ThenInclude(x => x.Address)
-                                                                    .FirstOrDefaultAsync(x => x.Student.Id == id && (teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId));
+                var fieldOperationStudent = await _fieldOperationStudentRepository.GetTrackedEntities()
+                                                                                  .Include(x => x.Student).ThenInclude(x => x.LegalParent)
+                                                                                  .Include(x => x.Student).ThenInclude(x => x.Graduation)
+                                                                                  .Include(x => x.Student).ThenInclude(x => x.Address)
+                                                                                  .FirstOrDefaultAsync(x => x.Student.Id == id && (teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId));
                 if (fieldOperationStudent == null)
                 {
                     responseDTO.SetNotFound();

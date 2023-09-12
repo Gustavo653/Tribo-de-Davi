@@ -188,6 +188,7 @@ namespace TriboDavi.API
             });
 
             RecurringJob.AddOrUpdate<IRollCallService>("GenerateRollCallDaily", x => x.GenerateRollCall(null), Cron.Daily, new RecurringJobOptions() { TimeZone = TimeZoneInfo.Local });
+            RecurringJob.RemoveIfExists("GenerateRollCallDaily");
 
             app.UseCors(builder =>
             {
