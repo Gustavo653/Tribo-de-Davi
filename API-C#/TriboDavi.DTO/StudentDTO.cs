@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace TriboDavi.DTO
 {
@@ -8,6 +9,7 @@ namespace TriboDavi.DTO
         public required string Name { get; set; }
         [Required]
         public required DateTime BirthDate { get; set; }
+        public IFormFile? File { get; set; }
         [Required]
         [Range(0, int.MaxValue)]
         public required decimal Weight { get; set; }

@@ -6,6 +6,7 @@ namespace TriboDavi.Domain
     {
         public required DateTime BirthDate { get; set; }
         public required decimal Weight { get; set; }
+        public required string Url { get; set; }
         public required decimal Height { get; set; }
         public string? SchoolName { get; set; }
         public int? SchoolGrade { get; set; }

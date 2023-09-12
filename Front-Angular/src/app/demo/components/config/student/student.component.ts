@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { FormField, MessageServiceSuccess, TableColumn } from 'src/app/demo/api/base';
+import { FormField, MessageServiceSuccess, TableColumn, UploadEvent } from 'src/app/demo/api/base';
 import { GraduationService } from 'src/app/demo/service/graduation.service';
 import { StudentService } from 'src/app/demo/service/student.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
@@ -30,6 +30,7 @@ export class StudentComponent implements OnInit {
     birthDate: Date = new Date();
     cols: TableColumn[] = [];
     data: any[] = [];
+    uploadedFiles: any[] = [];
     graduationsListbox: any[] = [];
     modalDialog: boolean = false;
     selectedRegistry: any = { address: {}, legalParent: {} };
@@ -163,6 +164,7 @@ export class StudentComponent implements OnInit {
             !this.selectedRegistry.height ||
             !this.birthDate ||
             !this.selectedRegistry.phoneNumber ||
+            (!this.selectedRegistry.id && !this.uploadedFiles[0]) ||
             (!this.selectedRegistry.id && !this.selectedRegistry.password) ||
             !this.selectedRegistry.graduationId
         ) {
@@ -237,6 +239,20 @@ export class StudentComponent implements OnInit {
                     this.fetchData();
                 });
             }
+        }
+    }
+
+    onUpload(event: UploadEvent) {
+        for (let file of event.files) {
+            this.uploadedFiles.push(file);
+        }
+    }
+
+    removeFile(event: any): void {
+        const file: File = event;
+        const index = this.uploadedFiles.findIndex((uploadedFile: File) => uploadedFile.name === file.name);
+        if (index !== -1) {
+            this.uploadedFiles.splice(index, 1);
         }
     }
 

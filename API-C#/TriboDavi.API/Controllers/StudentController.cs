@@ -18,7 +18,7 @@ namespace TriboDavi.API.Controllers
 
         [HttpPost("")]
         [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
-        public async Task<IActionResult> CreateStudent([FromBody] StudentDTO studentDTO)
+        public async Task<IActionResult> CreateStudent([FromForm] StudentDTO studentDTO)
         {
             var student = await _studentService.Create(studentDTO, User.GetIdStudentTeacher());
             return StatusCode(student.Code, student);
@@ -26,7 +26,7 @@ namespace TriboDavi.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
-        public async Task<IActionResult> UpdateStudent([FromRoute] int id, [FromBody] StudentDTO studentDTO)
+        public async Task<IActionResult> UpdateStudent([FromRoute] int id, [FromForm] StudentDTO studentDTO)
         {
             var student = await _studentService.Update(id, studentDTO, User.GetIdStudentTeacher());
             return StatusCode(student.Code, student);

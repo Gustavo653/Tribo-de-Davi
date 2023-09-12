@@ -7,7 +7,7 @@ namespace TriboDavi.DTO
     {
         [Required]
         public required string Name { get; set; }
-        public required IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
         [Required]
         public required int Position { get; set; }
     }

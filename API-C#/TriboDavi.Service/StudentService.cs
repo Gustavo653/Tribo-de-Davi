@@ -15,6 +15,7 @@ namespace TriboDavi.Service
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly IGoogleCloudStorageService _googleCloudStorageService;
         private readonly IFieldOperationStudentRepository _fieldOperationStudentRepository;
         private readonly IFieldOperationTeacherRepository _fieldOperationTeacherRepository;
         private readonly ITeacherRepository _teacherRepository;
@@ -29,7 +30,8 @@ namespace TriboDavi.Service
                               IGraduationRepository graduation,
                               ITeacherRepository teacherRepository,
                               IFieldOperationStudentRepository fieldOperationStudentRepository,
-                              IFieldOperationTeacherRepository fieldOperationTeacherRepository)
+                              IFieldOperationTeacherRepository fieldOperationTeacherRepository,
+                              IGoogleCloudStorageService googleCloudStorageService)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
@@ -39,6 +41,7 @@ namespace TriboDavi.Service
             _teacherRepository = teacherRepository;
             _fieldOperationStudentRepository = fieldOperationStudentRepository;
             _fieldOperationTeacherRepository = fieldOperationTeacherRepository;
+            _googleCloudStorageService = googleCloudStorageService;
         }
 
 
@@ -104,6 +107,12 @@ namespace TriboDavi.Service
 
             try
             {
+                if (objectDTO.File == null)
+                {
+                    responseDTO.SetBadInput("Uma foto deve ser enviada!");
+                    return responseDTO;
+                }
+
                 if (string.IsNullOrEmpty(objectDTO.Password))
                 {
                     responseDTO.SetBadInput("A senha deve ser informada!");
@@ -148,6 +157,8 @@ namespace TriboDavi.Service
                 }
 
                 SetStudentProperties(objectDTO, student, graduation, legalParent);
+
+                student.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
 
                 await _studentRepository.InsertAsync(student);
                 await _studentRepository.SaveChangesAsync();
@@ -284,7 +295,11 @@ namespace TriboDavi.Service
 
                 SetStudentProperties(objectDTO, fieldOperationStudent.Student, graduation, legalParent);
 
-                var teste = _studentRepository.GetChanges();
+                if (objectDTO.File != null)
+                {
+                    await _googleCloudStorageService.DeleteFileFromGcsAsync(fieldOperationStudent.Student.Url);
+                    fieldOperationStudent.Student.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
+                }
 
                 await _studentRepository.SaveChangesAsync();
 
