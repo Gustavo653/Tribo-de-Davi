@@ -39,7 +39,7 @@
                         </span>
                     </div>
                     <div class="flex flex-column align-items-center gap-3 py-5">
-                        <img class="w-9 shadow-2 border-round" src="https://storage.googleapis.com/tribo-davi/jiu-jitsu-infantil-interna-1024x683.jpg" [alt]="object.studentName" />
+                        <img class="w-9 shadow-2 border-round" [src]="object.studentUrl" [alt]="object.studentName" />
                         <div class="text-2xl font-bold">{{ object.studentName }} - {{ object.studentAge }} anos</div>
                     </div>
                     <div class="flex align-items-center justify-content-between">
