@@ -121,10 +121,10 @@ export class LegalParentComponent implements OnInit {
             return false;
         }
 
-        if (!this.selectedRegistry.rg.match(rgPattern)) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG inválido' });
-            return false;
-        }
+        // if (!this.selectedRegistry.rg.match(rgPattern)) {
+        //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG inválido' });
+        //     return false;
+        // }
 
         if (!this.selectedRegistry.cpf.match(cpfPattern)) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CPF inválido' });

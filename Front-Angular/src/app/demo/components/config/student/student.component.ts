@@ -204,10 +204,10 @@ export class StudentComponent implements OnInit {
             }
         }
 
-        if (!this.selectedRegistry.legalParent.rg.match(rgPattern)) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG do responsável legal inválido' });
-            return false;
-        }
+        // if (!this.selectedRegistry.legalParent.rg.match(rgPattern)) {
+        //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG do responsável legal inválido' });
+        //     return false;
+        // }
 
         if (!this.selectedRegistry.legalParent.cpf.match(cpfPattern)) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CPF do responsável legal inválido' });
