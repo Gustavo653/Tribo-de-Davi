@@ -219,6 +219,12 @@ namespace TriboDavi.API
 
             app.MapHealthChecks("/health");
 
+            app.Use(async (context, next) =>
+            {
+                context.Features.Get<IHttpMaxRequestBodySizeFeature>().MaxRequestBodySize = null;
+                await next.Invoke();
+            });
+
             app.Run();
         }
 
