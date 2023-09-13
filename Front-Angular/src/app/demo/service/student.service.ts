@@ -37,15 +37,22 @@ export class StudentService {
             switchMap((url) => {
                 const apiUrl = `${url}/student`;
                 const formData = new FormData();
-                
+
                 for (const key in data) {
-                    if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
-                        if (typeof data[key] !== 'object') {
-                            formData.append(key, data[key]);
-                        } else {
-                            for (const nestedKey in data[key]) {
-                                if (data[key][nestedKey] !== undefined && data[key][nestedKey] !== null && data[key][nestedKey] !== '') {
-                                    formData.append(`${key}.${nestedKey}`, data[key][nestedKey]);
+                    if (data.hasOwnProperty(key)) {
+                        const value = data[key];
+
+                        if (value !== undefined && value !== null && value !== '') {
+                            if (typeof value !== 'object' || value instanceof File) {
+                                formData.append(key, value);
+                            } else {
+                                for (const nestedKey in value) {
+                                    if (value.hasOwnProperty(nestedKey)) {
+                                        const nestedValue = value[nestedKey];
+                                        if (nestedValue !== undefined && nestedValue !== null && nestedValue !== '') {
+                                            formData.append(`${key}.${nestedKey}`, nestedValue);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -64,13 +71,20 @@ export class StudentService {
                 const formData = new FormData();
 
                 for (const key in data) {
-                    if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
-                        if (typeof data[key] !== 'object') {
-                            formData.append(key, data[key]);
-                        } else {
-                            for (const nestedKey in data[key]) {
-                                if (data[key][nestedKey] !== undefined && data[key][nestedKey] !== null && data[key][nestedKey] !== '') {
-                                    formData.append(`${key}.${nestedKey}`, data[key][nestedKey]);
+                    if (data.hasOwnProperty(key)) {
+                        const value = data[key];
+
+                        if (value !== undefined && value !== null && value !== '') {
+                            if (typeof value !== 'object' || value instanceof File) {
+                                formData.append(key, value);
+                            } else {
+                                for (const nestedKey in value) {
+                                    if (value.hasOwnProperty(nestedKey)) {
+                                        const nestedValue = value[nestedKey];
+                                        if (nestedValue !== undefined && nestedValue !== null && nestedValue !== '') {
+                                            formData.append(`${key}.${nestedKey}`, nestedValue);
+                                        }
+                                    }
                                 }
                             }
                         }

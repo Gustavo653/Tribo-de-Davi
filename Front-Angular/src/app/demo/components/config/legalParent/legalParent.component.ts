@@ -97,7 +97,7 @@ export class LegalParentComponent implements OnInit {
     }
 
     create() {
-        this.selectedRegistry = { name: undefined };
+        this.selectedRegistry = {};
         this.modalDialog = true;
     }
 
@@ -112,7 +112,6 @@ export class LegalParentComponent implements OnInit {
     }
 
     validateData(): boolean {
-        const rgPattern = /^[0-9]{2}\.[0-9]{3}\.[0-9]{3}-[0-9]{1}$/;
         const cpfPattern = /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/;
         const phoneNumberPattern = /^[0-9]{11}$/;
 
@@ -120,11 +119,6 @@ export class LegalParentComponent implements OnInit {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
             return false;
         }
-
-        // if (!this.selectedRegistry.rg.match(rgPattern)) {
-        //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG inválido' });
-        //     return false;
-        // }
 
         if (!this.selectedRegistry.cpf.match(cpfPattern)) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CPF inválido' });

@@ -4,7 +4,7 @@
 <p-dialog [(visible)]="modalDialog" header="Detalhes do Registro" [transitionOptions]="'100ms'" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="grid">
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-3">
                 <p-fieldset legend="Dados Pessoais">
                     <label>Nome</label><small class="p-error">*</small>
                     <input [(ngModel)]="selectedRegistry.name" pInputText />
@@ -26,7 +26,7 @@
                     <p-calendar [(ngModel)]="birthDate" dateFormat="dd/mm/yy" [showTime]="false" [showButtonBar]="true" appendTo="body"></p-calendar>
                 </p-fieldset>
             </div>
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-3">
                 <p-fieldset legend="Dados de Contato">
                     <label>Email</label><small class="p-error">*</small>
                     <input [(ngModel)]="selectedRegistry.email" pInputText />
@@ -42,7 +42,11 @@
                         <label>Cidade</label>
                         <input [(ngModel)]="selectedRegistry.address.city" pInputText />
                     </p-fieldset>
-                    <label>Imagem</label><small *ngIf="!selectedRegistry.id" class="p-error">*</small>
+                </p-fieldset>
+            </div>
+            <div class="col-12 md:col-6 lg:col-3">
+                <p-fieldset legend="Imagem"
+                    ><label>Imagem</label><small *ngIf="!selectedRegistry.id" class="p-error">*</small>
                     <p-fileUpload
                         name="file"
                         accept="image/*"
@@ -56,10 +60,10 @@
                         [maxFileSize]="20000000"
                     >
                     </p-fileUpload>
-                    <img class="w-9 shadow-2 border-round" [src]="selectedRegistry.url" />
-                </p-fieldset>
+                    <img class="w-full mt-4 shadow-2 border-round" [src]="selectedRegistry.url"
+                /></p-fieldset>
             </div>
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-3">
                 <p-fieldset legend="Vínculos">
                     <label>Graduação</label><small class="p-error">*</small>
                     <p-dropdown

@@ -105,32 +105,6 @@ export class StudentComponent implements OnInit {
     }
 
     create() {
-        // this.selectedRegistry = {
-        //     name: 'ffffffffffff',
-        //     birthDate: '2020-08-30T17:40:51.853Z',
-        //     weight: 2147483647,
-        //     height: 2147483647,
-        //     graduationId: 1,
-        //     phoneNumber: '11111111111',
-        //     email: 'user@example.com',
-        //     password: 'string',
-        //     cpf: '877.226.889-87',
-        //     schoolName: 'stringdd',
-        //     schoolGrade: 0,
-        //     address: {
-        //         streetName: 'string',
-        //         streetNumber: 'string',
-        //         neighborhood: 'string',
-        //         city: 'string',
-        //     },
-        //     legalParent: {
-        //         name: 'string',
-        //         relationship: 'string',
-        //         rg: '79.695.857-7',
-        //         cpf: '140.293.030-55',
-        //         phoneNumber: '11111111111',
-        //     },
-        // };
         this.selectedRegistry = { address: {}, legalParent: {} };
         this.modalDialog = true;
     }
@@ -147,7 +121,6 @@ export class StudentComponent implements OnInit {
     }
 
     validateData(): boolean {
-        const rgPattern = /^[0-9]{2}\.[0-9]{3}\.[0-9]{3}-[0-9]{1}$/;
         const cpfPattern = /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/;
         const phoneNumberPattern = /^[0-9]{11}$/;
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -171,11 +144,6 @@ export class StudentComponent implements OnInit {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
             return false;
         }
-
-        // if (this.selectedRegistry.rg && !this.selectedRegistry.rg.match(rgPattern)) {
-        //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG inválido' });
-        //     return false;
-        // }
 
         if (this.birthDate > new Date()) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Data de Nascimento inválida' });
@@ -204,11 +172,6 @@ export class StudentComponent implements OnInit {
             }
         }
 
-        // if (!this.selectedRegistry.legalParent.rg.match(rgPattern)) {
-        //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'RG do responsável legal inválido' });
-        //     return false;
-        // }
-
         if (!this.selectedRegistry.legalParent.cpf.match(cpfPattern)) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CPF do responsável legal inválido' });
             return false;
@@ -223,11 +186,8 @@ export class StudentComponent implements OnInit {
     }
 
     save() {
-        console.log(this.selectedRegistry);
+        this.selectedRegistry.file = this.uploadedFiles[0];
         if (this.validateData()) {
-            // if (Object.keys(this.selectedRegistry.address).length === 0) {
-            //     this.selectedRegistry.address = undefined;
-            // }
             this.selectedRegistry.birthDate = this.birthDate.toISOString();
             if (this.selectedRegistry.id) {
                 this.studentService.updateStudent(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {

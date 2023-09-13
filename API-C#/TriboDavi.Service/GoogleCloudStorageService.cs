@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Google;
 
 namespace TriboDavi.Service
 {
@@ -41,10 +42,25 @@ namespace TriboDavi.Service
             return $"https://storage.googleapis.com/{_bucketName}/{objectName}";
         }
 
-        public async Task DeleteFileFromGcsAsync(string objectName)
+        public async Task DeleteFileFromGcsAsync(string? objectName)
         {
-            if (objectName.StartsWith($"https://storage.googleapis.com/{_bucketName}/"))
-                await _storageClient.DeleteObjectAsync(_bucketName, objectName.Substring(objectName.LastIndexOf('/') + 1));
+            if (!string.IsNullOrEmpty(objectName))
+            {
+                if (objectName.StartsWith($"https://storage.googleapis.com/{_bucketName}/"))
+                {
+                    try
+                    {
+                        await _storageClient.DeleteObjectAsync(_bucketName, objectName.Substring(objectName.LastIndexOf('/') + 1));
+                    }
+                    catch (GoogleApiException ex)
+                    {
+                        if (ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
+                        { }
+                        else
+                            throw;
+                    }
+                }
+            }
         }
     }
 }
