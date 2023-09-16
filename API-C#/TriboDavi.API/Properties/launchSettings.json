@@ -8,7 +8,7 @@
         "DatabaseConnection": "Server=localhost;Database=TriboDaviAPI;User Id=postgres;Password=UL^q^84Vcm83fYdgGdZu;Integrated Security=false;",
         "DOTNET_ENVIRONMENT": "development",
         "Migrate": "true",
-        "GCS_BUCKET_NAME": "tribo-davi",
+        "GCS_BUCKET_NAME": "tribo-davi-hom",
         "GCS_JSON_CREDENTIALS_PATH": "D:\\Github\\TriboDavi\\API-C#\\TriboDavi.API\\mediashow-394823-54ae513fb4ce.json"
       },
       "dotnetRunMessages": true,

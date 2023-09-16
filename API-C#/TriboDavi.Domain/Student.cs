@@ -12,6 +12,7 @@ namespace TriboDavi.Domain
         public int? SchoolGrade { get; set; }
         public virtual Address? Address { get; set; }
         public virtual required LegalParent LegalParent { get; set; }
+        public virtual IEnumerable<FieldOperationStudent>? FieldOperationStudents { get; set; }
         public int CalculateAge()
         {
             DateTime currentDate = DateTime.Now;
@@ -21,6 +22,11 @@ namespace TriboDavi.Domain
                 age--;
 
             return age;
+        }
+
+        public string GetUrl()
+        {
+            return Url.Replace("tribo-davi", Environment.GetEnvironmentVariable("GCS_BUCKET_NAME"));
         }
     }
 }

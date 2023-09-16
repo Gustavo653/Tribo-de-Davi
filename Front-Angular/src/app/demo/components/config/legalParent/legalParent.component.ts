@@ -112,16 +112,10 @@ export class LegalParentComponent implements OnInit {
     }
 
     validateData(): boolean {
-        const cpfPattern = /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/;
         const phoneNumberPattern = /^[0-9]{11}$/;
 
         if (!this.selectedRegistry.name || !this.selectedRegistry.rg || !this.selectedRegistry.cpf || !this.selectedRegistry.relationship || !this.selectedRegistry.phoneNumber) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
-            return false;
-        }
-
-        if (!this.selectedRegistry.cpf.match(cpfPattern)) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CPF inválido' });
             return false;
         }
 

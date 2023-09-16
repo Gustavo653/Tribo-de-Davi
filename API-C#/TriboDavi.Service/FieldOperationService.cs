@@ -70,7 +70,7 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                List<FieldOperation> fieldOperation = await _fieldOperationRepository.GetEntities().ToListAsync();
+                List<FieldOperation> fieldOperation = await _fieldOperationRepository.GetEntities().Include(x => x.Address).ToListAsync();
                 responseDTO.Object = fieldOperation;
             }
             catch (Exception ex)

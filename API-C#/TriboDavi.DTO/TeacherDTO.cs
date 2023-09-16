@@ -16,11 +16,9 @@ namespace TriboDavi.DTO
         public required string Email { get; set; }
         public string? Password { get; set; }
         [Required]
-        //[RegularExpression(@"^\d{2}\.\d{3}\.\d{3}-\d{1}$", ErrorMessage = "O campo RG não é válido.")]
-        public string? RG { get; set; }
+        public required string RG { get; set; }
         [Required]
-        [RegularExpression(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$", ErrorMessage = "O campo CPF não é válido.")]
-        public string? CPF { get; set; }
+        public required string CPF { get; set; }
         public int? MainTeacherId { get; set; }
     }
 }

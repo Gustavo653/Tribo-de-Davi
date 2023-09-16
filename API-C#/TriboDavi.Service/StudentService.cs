@@ -188,28 +188,28 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                responseDTO.Object = await _fieldOperationStudentRepository.GetEntities()
-                                                                           .Where(x => teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId)
-                                                                           .Select(x => new
-                                                                           {
-                                                                               x.Student.Id,
-                                                                               x.Student.BirthDate,
-                                                                               x.Student.Url,
-                                                                               x.Student.Email,
-                                                                               x.Student.RG,
-                                                                               x.Student.CPF,
-                                                                               x.Student.Name,
-                                                                               x.Student.PhoneNumber,
-                                                                               x.Student.SchoolGrade,
-                                                                               x.Student.Weight,
-                                                                               x.Student.Height,
-                                                                               x.Student.SchoolName,
-                                                                               GraduationId = x.Student.Graduation.Id,
-                                                                               x.Student.Address,
-                                                                               x.Student.Graduation,
-                                                                               x.Student.LegalParent,
-                                                                           })
-                                                                           .ToListAsync();
+                responseDTO.Object = await _studentRepository.GetEntities()
+                                                             .Where(x => teacherId == null || x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                             .Select(x => new
+                                                             {
+                                                                 x.Id,
+                                                                 x.BirthDate,
+                                                                 Url = x.GetUrl(),
+                                                                 x.Email,
+                                                                 x.RG,
+                                                                 x.CPF,
+                                                                 x.Name,
+                                                                 x.PhoneNumber,
+                                                                 x.SchoolGrade,
+                                                                 x.Weight,
+                                                                 x.Height,
+                                                                 x.SchoolName,
+                                                                 GraduationId = x.Graduation.Id,
+                                                                 x.Address,
+                                                                 x.Graduation,
+                                                                 x.LegalParent,
+                                                             })
+                                                             .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -223,14 +223,15 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                responseDTO.Object = await _fieldOperationStudentRepository.GetEntities()
-                                                                           .Where(x => (teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId))
-                                                                           .Select(x => new
-                                                                           {
-                                                                               Code = x.Student.Id,
-                                                                               Name = x.Student.Name,
-                                                                           })
-                                                                           .ToListAsync();
+                responseDTO.Object = await _studentRepository.GetEntities()
+                                                             .Where(x => teacherId == null || x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                             .Select(x => new
+                                                             {
+                                                                 Code = x.Id,
+                                                                 Name = x.Name,
+                                                             })
+                                                             .OrderBy(x => x.Name)
+                                                             .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -275,12 +276,12 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                var fieldOperationStudent = await _fieldOperationStudentRepository.GetTrackedEntities()
-                                                                                  .Include(x => x.Student).ThenInclude(x => x.LegalParent)
-                                                                                  .Include(x => x.Student).ThenInclude(x => x.Graduation)
-                                                                                  .Include(x => x.Student).ThenInclude(x => x.Address)
-                                                                                  .FirstOrDefaultAsync(x => x.Student.Id == id && (teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId));
-                if (fieldOperationStudent == null)
+                var student = await _studentRepository.GetTrackedEntities()
+                                                      .Include(x => x.LegalParent)
+                                                      .Include(x => x.Graduation)
+                                                      .Include(x => x.Address)
+                                                      .FirstOrDefaultAsync(x => teacherId == null || x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId));
+                if (student == null)
                 {
                     responseDTO.SetNotFound();
                     return responseDTO;
@@ -294,17 +295,17 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                SetStudentProperties(objectDTO, fieldOperationStudent.Student, graduation, legalParent);
+                SetStudentProperties(objectDTO, student, graduation, legalParent);
 
                 if (objectDTO.File != null)
                 {
-                    await _googleCloudStorageService.DeleteFileFromGcsAsync(fieldOperationStudent.Student.Url);
-                    fieldOperationStudent.Student.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
+                    await _googleCloudStorageService.DeleteFileFromGcsAsync(student.GetUrl());
+                    student.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
                 }
 
                 await _studentRepository.SaveChangesAsync();
 
-                responseDTO.Object = fieldOperationStudent.Student;
+                responseDTO.Object = student;
             }
             catch (Exception ex)
             {

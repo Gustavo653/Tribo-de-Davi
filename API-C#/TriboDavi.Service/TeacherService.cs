@@ -160,8 +160,9 @@ namespace TriboDavi.Service
                                                              .Select(x => new
                                                              {
                                                                  Code = x.Id,
-                                                                 x.Name,
+                                                                 Name = x.Name,
                                                              })
+                                                             .OrderBy(x => x.Name)
                                                              .ToListAsync();
             }
             catch (Exception ex)

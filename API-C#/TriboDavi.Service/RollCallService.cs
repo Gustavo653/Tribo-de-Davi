@@ -73,10 +73,10 @@ namespace TriboDavi.Service
                                                                   x.Presence,
                                                                   StudentId = x.FieldOperationStudent.Student.Id,
                                                                   StudentName = x.FieldOperationStudent.Student.Name,
-                                                                  StudentUrl = x.FieldOperationStudent.Student.Url,
+                                                                  StudentUrl = x.FieldOperationStudent.Student.GetUrl(),
                                                                   StudentAge = x.FieldOperationStudent.Student.CalculateAge(),
                                                                   GraduationName = x.FieldOperationStudent.Student.Graduation.Name,
-                                                                  GraduationUrl = x.FieldOperationStudent.Student.Graduation.Url
+                                                                  GraduationUrl = x.FieldOperationStudent.Student.Graduation.GetUrl(),
                                                               })
                                                               .OrderBy(x => x.Date)
                                                               .ThenBy(x => x.StudentName)

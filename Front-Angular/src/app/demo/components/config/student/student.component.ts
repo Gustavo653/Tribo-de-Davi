@@ -121,7 +121,6 @@ export class StudentComponent implements OnInit {
     }
 
     validateData(): boolean {
-        const cpfPattern = /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/;
         const phoneNumberPattern = /^[0-9]{11}$/;
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -150,11 +149,6 @@ export class StudentComponent implements OnInit {
             return false;
         }
 
-        if (this.selectedRegistry.cpf && !this.selectedRegistry.cpf.match(cpfPattern)) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CPF inválido' });
-            return false;
-        }
-
         if (!this.selectedRegistry.phoneNumber.match(phoneNumberPattern)) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Número de telefone inválido' });
             return false;
@@ -170,11 +164,6 @@ export class StudentComponent implements OnInit {
                 this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Se algum campo do endereço estiver preenchido, todos os campos do endereço são obrigatórios.' });
                 return false;
             }
-        }
-
-        if (!this.selectedRegistry.legalParent.cpf.match(cpfPattern)) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CPF do responsável legal inválido' });
-            return false;
         }
 
         if (!this.selectedRegistry.legalParent.phoneNumber.match(phoneNumberPattern)) {

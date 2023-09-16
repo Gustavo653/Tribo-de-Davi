@@ -26,7 +26,6 @@ namespace TriboDavi.DTO
         public required string Email { get; set; }
         public string? Password { get; set; }
         public string? RG { get; set; }
-        [RegularExpression(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$", ErrorMessage = "O campo CPF não é válido.")]
         public string? CPF { get; set; }
         public string? SchoolName { get; set; }
         public int? SchoolGrade { get; set; }

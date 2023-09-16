@@ -104,7 +104,7 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                await _googleCloudStorageService.DeleteFileFromGcsAsync(graduation.Url);
+                await _googleCloudStorageService.DeleteFileFromGcsAsync(graduation.GetUrl());
                 _graduationRepository.Delete(graduation);
                 await _graduationRepository.SaveChangesAsync();
             }
@@ -138,7 +138,7 @@ namespace TriboDavi.Service
                 graduation.SetUpdatedAt();
                 if (objectDTO.File != null)
                 {
-                    await _googleCloudStorageService.DeleteFileFromGcsAsync(graduation.Url);
+                    await _googleCloudStorageService.DeleteFileFromGcsAsync(graduation.GetUrl());
                     graduation.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
                 }
 
