@@ -2,7 +2,6 @@
   "profiles": {
     "TriboDavi": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "DatabaseConnection": "Server=localhost;Database=TriboDaviAPI;User Id=postgres;Password=UL^q^84Vcm83fYdgGdZu;Integrated Security=false;",

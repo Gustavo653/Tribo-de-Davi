@@ -27,7 +27,6 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 export class FieldOperationComponent implements OnInit {
     dialog: boolean = false;
     loading: boolean = true;
-    birthDate: Date = new Date();
     cols: TableColumn[] = [];
     data: any[] = [];
     addressesListbox: any[] = [];
@@ -92,7 +91,6 @@ export class FieldOperationComponent implements OnInit {
 
     editRegistry(registry: any) {
         this.selectedRegistry = { ...registry };
-        this.birthDate = new Date(this.selectedRegistry.birthDate);
         this.modalDialog = true;
     }
 
@@ -112,7 +110,6 @@ export class FieldOperationComponent implements OnInit {
 
     save() {
         if (this.validateData()) {
-            this.selectedRegistry.birthDate = this.birthDate;
             if (this.selectedRegistry.id) {
                 this.fieldOperationService.updateFieldOperation(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
                     this.hideDialog();

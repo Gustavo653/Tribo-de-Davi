@@ -158,27 +158,29 @@ namespace TriboDavi.Service
             try
             {
                 responseDTO.Object = await _studentRepository.GetEntities()
-                                                             .Where(x => teacherId == null || x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                             .Where(x => teacherId == null ||
+                                                                         x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId ||
+                                                                                                           y.FieldOperationTeacher.Teacher.AssistantTeachers.Any(a => a.Id == teacherId)))
                                                              .Select(x => new
                                                              {
-                                                                 x.Id,
-                                                                 x.BirthDate,
-                                                                 Url = x.GetUrl(),
-                                                                 x.Email,
-                                                                 x.RG,
-                                                                 x.CPF,
-                                                                 x.Name,
-                                                                 x.PhoneNumber,
-                                                                 x.SchoolGrade,
-                                                                 x.Weight,
-                                                                 x.Height,
-                                                                 x.SchoolName,
-                                                                 GraduationId = x.Graduation.Id,
-                                                                 LegalParentId = x.LegalParent.Id,
-                                                                 AddressId = x.Address.Id,
-                                                                 x.Address,
-                                                                 x.Graduation,
-                                                                 x.LegalParent,
+                                                             x.Id,
+                                                             x.BirthDate,
+                                                             Url = x.GetUrl(),
+                                                             x.Email,
+                                                             x.RG,
+                                                             x.CPF,
+                                                             x.Name,
+                                                             x.PhoneNumber,
+                                                             x.SchoolGrade,
+                                                             x.Weight,
+                                                             x.Height,
+                                                             x.SchoolName,
+                                                             GraduationId = x.Graduation.Id,
+                                                             LegalParentId = x.LegalParent.Id,
+                                                             AddressId = x.Address != null ? x.Address.Id : 0,
+                                                             x.Address,
+                                                             x.Graduation,
+                                                             x.LegalParent,
                                                              })
                                                              .ToListAsync();
             }
@@ -195,7 +197,9 @@ namespace TriboDavi.Service
             try
             {
                 responseDTO.Object = await _studentRepository.GetEntities()
-                                                             .Where(x => teacherId == null || x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                             .Where(x => teacherId == null ||
+                                                                         x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId ||
+                                                                                                           y.FieldOperationTeacher.Teacher.AssistantTeachers.Any(a => a.Id == teacherId)))
                                                              .Select(x => new
                                                              {
                                                                  Code = x.Id,
@@ -265,7 +269,7 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                var existingStudentWithEmail = await _studentRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
+                var existingStudentWithEmail = await _studentRepository.GetEntities().AnyAsync(x => x.Id != id && x.NormalizedEmail == objectDTO.Email.ToUpper());
                 if (existingStudentWithEmail)
                 {
                     responseDTO.SetBadInput("Já existe um aluno cadastrado com este e-mail!");

@@ -8,7 +8,8 @@
 
         public string GetUrl()
         {
-            return Url.Replace("tribo-davi", Environment.GetEnvironmentVariable("GCS_BUCKET_NAME"));
+            if (Url.Contains("tribo-davi-hom")) return Url;
+            else return Url.Replace("tribo-davi", Environment.GetEnvironmentVariable("GCS_BUCKET_NAME"));
         }
     }
 }

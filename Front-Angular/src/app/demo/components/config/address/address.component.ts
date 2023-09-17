@@ -140,7 +140,7 @@ export class AddressComponent implements OnInit {
     deleteRegistry(registry: any) {
         this.confirmationService.confirm({
             header: 'Deletar registro',
-            message: `Tem certeza que deseja apagar o registro: ${registry.name}`,
+            message: `Tem certeza que deseja apagar o registro: ${registry.streetName}`,
             acceptLabel: 'Aceitar',
             rejectLabel: 'Rejeitar',
             accept: () => {

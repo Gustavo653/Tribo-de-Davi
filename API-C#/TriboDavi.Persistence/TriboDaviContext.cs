@@ -46,6 +46,11 @@ namespace TriboDavi.Persistence
                 x.HasIndex(a => a.Name).IsUnique();
             });
 
+            modelBuilder.Entity<Address>(x =>
+            {
+                x.HasIndex(a => new { a.StreetNumber, a.StreetName, a.Neighborhood }).IsUnique();
+            });
+
             modelBuilder.Entity<RollCall>(x =>
             {
                 x.HasIndex("FieldOperationStudentId", "Date").IsUnique();

@@ -49,7 +49,7 @@ namespace TriboDavi.API.Controllers
         }
 
         [HttpGet("Listbox")]
-        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
+        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}, {nameof(RoleName.AssistantTeacher)}")]
         public async Task<IActionResult> GetStudentsForListbox()
         {
             var students = await _studentService.GetStudentsForListbox(User.GetIdStudentTeacher());

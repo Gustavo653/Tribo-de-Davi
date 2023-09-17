@@ -17,7 +17,7 @@ namespace TriboDavi.API.Controllers
         }
 
         [HttpGet("")]
-        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
+        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}, {nameof(RoleName.AssistantTeacher)}")]
         public async Task<IActionResult> GetRollCall([FromQuery] DateOnly? date, [FromQuery] int? studentId)
         {
             var graduation = await _rollCallService.GetRollCall(date, studentId, User.GetIdStudentTeacher());
@@ -25,7 +25,7 @@ namespace TriboDavi.API.Controllers
         }
 
         [HttpPost("Presence")]
-        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
+        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}, {nameof(RoleName.AssistantTeacher)}")]
         public async Task<IActionResult> SetPresence([FromBody] PresenceDTO presenceDTO)
         {
             var graduation = await _rollCallService.SetPresence(presenceDTO, User.GetIdStudentTeacher());
@@ -33,7 +33,7 @@ namespace TriboDavi.API.Controllers
         }
 
         [HttpPost("Generate")]
-        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}")]
+        [Authorize(Roles = $"{nameof(RoleName.Admin)}, {nameof(RoleName.Teacher)}, {nameof(RoleName.AssistantTeacher)}")]
         public async Task<IActionResult> GenerateRollCall()
         {
             var graduation = await _rollCallService.GenerateRollCall(User.GetIdStudentTeacher());

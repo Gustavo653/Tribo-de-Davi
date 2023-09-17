@@ -26,8 +26,9 @@ namespace TriboDavi.Service
                 var fieldOperationStudents = await _fieldOperationStudentRepository.GetTrackedEntities()
                                                                                    .Include(x => x.FieldOperationTeacher)
                                                                                    .Include(x => x.Student)
-                                                                                   .Where(x => x.Enabled &&
-                                                                                               (teacherId == null || x.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                                                   .Where(x => teacherId == null || 
+                                                                                               x.FieldOperationTeacher.Teacher.Id == teacherId || 
+                                                                                               x.FieldOperationTeacher.Teacher.AssistantTeachers.Any(a => a.Id == teacherId))
                                                                                    .ToListAsync();
                 var responses = new List<ResponseDTO>();
                 foreach (var item in fieldOperationStudents)
@@ -65,7 +66,7 @@ namespace TriboDavi.Service
                 responseDTO.Object = await _rollCallRepository.GetEntities()
                                                               .Where(x => (date == null || x.Date == date) &&
                                                                           (studentId == null || x.FieldOperationStudent.Student.Id == studentId) &&
-                                                                          (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId))
+                                                                          (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId || x.FieldOperationStudent.FieldOperationTeacher.Teacher.AssistantTeachers.Any(a => a.Id == teacherId)))
                                                               .Select(x => new
                                                               {
                                                                   x.Id,
@@ -96,7 +97,7 @@ namespace TriboDavi.Service
             {
                 var rollCall = await _rollCallRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.FieldOperationStudent.Student.Id == presenceDTO.StudentId &&
                                                                                                        x.Date == presenceDTO.Date &&
-                                                                                                       (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId));
+                                                                                                       (teacherId == null || x.FieldOperationStudent.FieldOperationTeacher.Teacher.Id == teacherId || x.FieldOperationStudent.FieldOperationTeacher.Teacher.AssistantTeachers.Any(a => a.Id == teacherId)));
                 if (rollCall == null)
                 {
                     responseDTO.SetBadInput("Chamada não encontrada!");
