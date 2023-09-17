@@ -32,7 +32,7 @@
                     <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                         <span class="flex align-items-center gap-2">
                             <span class="font-semibold">Faixa {{ object.graduationName }}</span>
-                            <img class="w-9 shadow-2 border-round" [src]="object.graduationUrl" [alt]="object.studentName" />
+                            <img class="w-9 shadow-2 border-round" [src]="object.graduationUrl" [alt]="object.graduationName" />
                         </span>
                         <span class="flex align-items-center gap-2">
                             <span class="font-semibold">Chamada dia {{ object.date | date : "dd/MM/yyyy" }}</span>

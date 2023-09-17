@@ -198,9 +198,6 @@ namespace TriboDavi.API
                 Authorization = new[] { new HangfireAuthorizationFilter() },
             });
 
-            RecurringJob.AddOrUpdate<IRollCallService>("GenerateRollCallDaily", x => x.GenerateRollCall(null), Cron.Daily, new RecurringJobOptions() { TimeZone = TimeZoneInfo.Local });
-            RecurringJob.RemoveIfExists("GenerateRollCallDaily");
-
             app.UseCors(builder =>
             {
                 builder.AllowAnyMethod()
@@ -232,7 +229,13 @@ namespace TriboDavi.API
         private static async Task SeedRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
-            var roles = new List<string>() { RoleName.Student.ToString(), RoleName.AssistantTeacher.ToString(), RoleName.Teacher.ToString(), RoleName.Admin.ToString() };
+            var roles = new List<string>() 
+            {
+                RoleName.Student.ToString(),
+                RoleName.AssistantTeacher.ToString(), 
+                RoleName.Teacher.ToString(), 
+                RoleName.Admin.ToString() 
+            };
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -248,7 +251,15 @@ namespace TriboDavi.API
             var adminEmail = "admin@admin.com";
 
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
-            var teacher = new Teacher() { Name = "Admin", CPF = "000.000.000-00", Graduation = new Graduation() { Name = "Admin", Url = "Admin", Position = -1 }, RG = "0.000.000", Email = adminEmail, UserName = "admin" };
+            var teacher = new Teacher()
+            {
+                Name = "Admin",
+                CPF = "000.000.000-00",
+                Graduation = new Graduation() { Name = "Admin", Url = "Admin", Position = -1, GraduationType = GraduationType.Adult },
+                RG = "0.000.000",
+                Email = adminEmail,
+                UserName = "admin"
+            };
             if (adminUser == null)
             {
                 await userManager.CreateAsync(teacher, "Admin@123");

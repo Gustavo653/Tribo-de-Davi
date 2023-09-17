@@ -31,6 +31,10 @@ export class GraduationComponent implements OnInit {
     uploadedFiles: any[] = [];
     modalDialog: boolean = false;
     selectedRegistry: any = {};
+    stateOptions: any[] = [
+        { label: 'Criança', value: 0 },
+        { label: 'Adulto', value: 1 },
+    ];
     constructor(protected layoutService: LayoutService, private graduationService: GraduationService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
 
     ngOnInit() {
@@ -103,7 +107,7 @@ export class GraduationComponent implements OnInit {
     }
 
     validateData(): boolean {
-        if (!this.selectedRegistry.name || !this.selectedRegistry.position || (!this.selectedRegistry.id && !this.uploadedFiles[0])) {
+        if (!this.selectedRegistry.name || !this.selectedRegistry.position || !this.selectedRegistry.graduationType || (!this.selectedRegistry.id && !this.uploadedFiles[0])) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
             return false;
         }

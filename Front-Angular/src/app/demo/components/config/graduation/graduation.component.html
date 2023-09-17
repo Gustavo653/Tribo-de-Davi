@@ -10,6 +10,8 @@
                     <input [(ngModel)]="selectedRegistry.name" pInputText />
                     <label>Posição</label><small class="p-error">*</small>
                     <p-inputNumber [(ngModel)]="selectedRegistry.position" [min]="0" [maxFractionDigits]="0"> </p-inputNumber>
+                    <label>Tipo</label><small class="p-error">*</small>
+                    <p-selectButton [options]="stateOptions" [(ngModel)]="selectedRegistry.graduationType" optionLabel="label" optionValue="value"></p-selectButton>
                 </p-fieldset>
             </div>
             <div class="col-12 md:col-6 lg:col-6">
@@ -28,7 +30,7 @@
                         [maxFileSize]="20000000"
                     >
                     </p-fileUpload>
-                    <img class="w-full mt-4 shadow-2 border-round" [src]="selectedRegistry.url">
+                    <img class="w-full mt-4 shadow-2 border-round" [src]="selectedRegistry.url" />
                 </p-fieldset>
             </div>
         </div>
