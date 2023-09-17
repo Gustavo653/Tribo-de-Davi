@@ -25,9 +25,19 @@ import { FieldOperationTeacherComponent } from './fieldOperationTeacher/fieldOpe
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FieldOperationStudentComponent } from './fieldOperationStudent/fieldOperationStudent.component';
+import { AddressComponent } from './address/address.component';
 
 @NgModule({
-    declarations: [TeacherComponent, GraduationComponent, LegalParentComponent, StudentComponent, FieldOperationComponent, FieldOperationTeacherComponent, FieldOperationStudentComponent],
+    declarations: [
+        TeacherComponent,
+        GraduationComponent,
+        AddressComponent,
+        LegalParentComponent,
+        StudentComponent,
+        FieldOperationComponent,
+        FieldOperationTeacherComponent,
+        FieldOperationStudentComponent,
+    ],
     imports: [
         CommonModule,
         ReactiveFormsModule,

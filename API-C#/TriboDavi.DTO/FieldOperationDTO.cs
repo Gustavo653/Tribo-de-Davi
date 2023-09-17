@@ -7,6 +7,6 @@ namespace TriboDavi.DTO
         [Required]
         public required string Name { get; set; }
         [Required]
-        public required AddressDTO Address { get; set; }
+        public required int AddressId { get; set; }
     }
 }

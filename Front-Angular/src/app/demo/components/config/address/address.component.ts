@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { MessageServiceSuccess, TableColumn } from 'src/app/demo/api/base';
 import { AddressService } from 'src/app/demo/service/address.service';
-import { FieldOperationService } from 'src/app/demo/service/fieldOperation.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
-    templateUrl: './fieldOperation.component.html',
+    templateUrl: './address.component.html',
     providers: [MessageService, ConfirmationService],
     styles: [
         `
@@ -24,28 +23,41 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
         `,
     ],
 })
-export class FieldOperationComponent implements OnInit {
+export class AddressComponent implements OnInit {
     dialog: boolean = false;
     loading: boolean = true;
-    birthDate: Date = new Date();
     cols: TableColumn[] = [];
     data: any[] = [];
     addressesListbox: any[] = [];
     modalDialog: boolean = false;
     selectedRegistry: any = {};
-    constructor(
-        protected layoutService: LayoutService,
-        private fieldOperationService: FieldOperationService,
-        private confirmationService: ConfirmationService,
-        private addressService: AddressService,
-        private messageService: MessageService
-    ) {}
+    constructor(protected layoutService: LayoutService, private addressService: AddressService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
 
     ngOnInit() {
         this.cols = [
             {
-                field: 'name',
-                header: 'Nome',
+                field: 'streetName',
+                header: 'Rua',
+                type: 'text',
+            },
+            {
+                field: 'streetNumber',
+                header: 'Número',
+                type: 'text',
+            },
+            {
+                field: 'neighborhood',
+                header: 'Bairro',
+                type: 'text',
+            },
+            {
+                field: 'fieldOperationsCount',
+                header: 'Quantidade de Campos de Operação',
+                type: 'text',
+            },
+            {
+                field: 'studentsCount',
+                header: 'Quantidade de Alunos',
                 type: 'text',
             },
             {
@@ -92,7 +104,6 @@ export class FieldOperationComponent implements OnInit {
 
     editRegistry(registry: any) {
         this.selectedRegistry = { ...registry };
-        this.birthDate = new Date(this.selectedRegistry.birthDate);
         this.modalDialog = true;
     }
 
@@ -102,7 +113,7 @@ export class FieldOperationComponent implements OnInit {
     }
 
     validateData(): boolean {
-        if (!this.selectedRegistry.name || !this.selectedRegistry.addressId) {
+        if (!this.selectedRegistry.streetName || !this.selectedRegistry.streetNumber || !this.selectedRegistry.neighborhood) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
             return false;
         }
@@ -112,14 +123,13 @@ export class FieldOperationComponent implements OnInit {
 
     save() {
         if (this.validateData()) {
-            this.selectedRegistry.birthDate = this.birthDate;
             if (this.selectedRegistry.id) {
-                this.fieldOperationService.updateFieldOperation(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
+                this.addressService.updateAddress(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
                     this.hideDialog();
                     this.fetchData();
                 });
             } else {
-                this.fieldOperationService.createFieldOperation(this.selectedRegistry).subscribe(() => {
+                this.addressService.createAddress(this.selectedRegistry).subscribe(() => {
                     this.hideDialog();
                     this.fetchData();
                 });
@@ -135,7 +145,7 @@ export class FieldOperationComponent implements OnInit {
             rejectLabel: 'Rejeitar',
             accept: () => {
                 this.loading = true;
-                this.fieldOperationService.deleteFieldOperation(registry.id).subscribe((x) => {
+                this.addressService.deleteAddress(registry.id).subscribe((x) => {
                     this.messageService.add(MessageServiceSuccess);
                     this.fetchData();
                 });
@@ -144,12 +154,9 @@ export class FieldOperationComponent implements OnInit {
     }
 
     fetchData() {
-        this.addressService.getAddressesForListbox().subscribe((x) => {
-            this.addressesListbox = x.object;
-            this.fieldOperationService.getFieldOperations().subscribe((y) => {
-                this.data = y.object;
-                this.loading = false;
-            });
+        this.addressService.getAddresses().subscribe((y) => {
+            this.data = y.object;
+            this.loading = false;
         });
     }
 }

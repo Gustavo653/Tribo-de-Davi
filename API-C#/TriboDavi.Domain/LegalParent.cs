@@ -7,6 +7,6 @@
         public required string RG { get; set; }
         public required string CPF { get; set; }
         public required string PhoneNumber { get; set; }
-        public virtual List<Student> Students { get; set; }
+        public virtual IEnumerable<Student>? Students { get; set; }
     }
 }

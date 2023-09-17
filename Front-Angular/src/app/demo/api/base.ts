@@ -87,6 +87,16 @@ export const MenuRoutes = [
                 icon: 'pi pi-fw pi-sliders-h',
                 routerLink: ['/teacher/presence'],
             },
+            {
+                label: 'Gerenciar Endereços',
+                icon: 'pi pi-fw pi-sliders-h',
+                routerLink: ['/config/addresses'],
+            },
+            {
+                label: 'Gerenciar Responsáveis Legais',
+                icon: 'pi pi-fw pi-sliders-h',
+                routerLink: ['/config/legal-parents'],
+            },
         ],
     },
     {
@@ -106,6 +116,11 @@ export const MenuRoutes = [
                         label: 'Gerenciar Graduações',
                         icon: 'pi pi-fw pi-sliders-h',
                         routerLink: ['/config/graduations'],
+                    },
+                    {
+                        label: 'Gerenciar Endereços',
+                        icon: 'pi pi-fw pi-sliders-h',
+                        routerLink: ['/config/addresses'],
                     },
                     {
                         label: 'Gerenciar Professores',

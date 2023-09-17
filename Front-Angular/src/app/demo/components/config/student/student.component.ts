@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { FormField, MessageServiceSuccess, TableColumn, UploadEvent } from 'src/app/demo/api/base';
+import { AddressService } from 'src/app/demo/service/address.service';
 import { GraduationService } from 'src/app/demo/service/graduation.service';
+import { LegalParentService } from 'src/app/demo/service/legalParent.service';
 import { StudentService } from 'src/app/demo/service/student.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
@@ -32,13 +34,17 @@ export class StudentComponent implements OnInit {
     data: any[] = [];
     uploadedFiles: any[] = [];
     graduationsListbox: any[] = [];
+    addressesListbox: any[] = [];
+    legalParentsListbox: any[] = [];
     modalDialog: boolean = false;
-    selectedRegistry: any = { address: {}, legalParent: {} };
+    selectedRegistry: any = {};
     constructor(
         protected layoutService: LayoutService,
         private studentService: StudentService,
         private graduationService: GraduationService,
         private confirmationService: ConfirmationService,
+        private addressService: AddressService,
+        private legalParentService: LegalParentService,
         private messageService: MessageService
     ) {}
 
@@ -105,7 +111,7 @@ export class StudentComponent implements OnInit {
     }
 
     create() {
-        this.selectedRegistry = { address: {}, legalParent: {} };
+        this.selectedRegistry = {};
         this.modalDialog = true;
     }
 
@@ -116,7 +122,7 @@ export class StudentComponent implements OnInit {
     }
 
     hideDialog() {
-        this.selectedRegistry = { address: {}, legalParent: {} };
+        this.selectedRegistry = {};
         this.modalDialog = false;
     }
 
@@ -126,11 +132,7 @@ export class StudentComponent implements OnInit {
 
         if (
             !this.selectedRegistry.name ||
-            !this.selectedRegistry.legalParent.name ||
-            !this.selectedRegistry.legalParent.relationship ||
-            !this.selectedRegistry.legalParent.cpf ||
-            !this.selectedRegistry.legalParent.rg ||
-            !this.selectedRegistry.legalParent.phoneNumber ||
+            !this.selectedRegistry.legalParentId ||
             !this.selectedRegistry.email ||
             !this.selectedRegistry.weight ||
             !this.selectedRegistry.height ||
@@ -156,18 +158,6 @@ export class StudentComponent implements OnInit {
 
         if (!this.selectedRegistry.email.match(emailPattern)) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Email inválido' });
-            return false;
-        }
-
-        if (this.selectedRegistry.address && Object.keys(this.selectedRegistry.address).length > 0) {
-            if (!this.selectedRegistry.address.streetName || !this.selectedRegistry.address.streetNumber || !this.selectedRegistry.address.neighborhood || !this.selectedRegistry.address.city) {
-                this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Se algum campo do endereço estiver preenchido, todos os campos do endereço são obrigatórios.' });
-                return false;
-            }
-        }
-
-        if (!this.selectedRegistry.legalParent.phoneNumber.match(phoneNumberPattern)) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Número de telefone do responsável legal inválido' });
             return false;
         }
 
@@ -223,14 +213,20 @@ export class StudentComponent implements OnInit {
     }
 
     fetchData() {
-        this.graduationService.getGraduationsForListbox().subscribe((y) => {
-            this.graduationsListbox = y.object;
-            this.studentService.getStudents().subscribe((z) => {
-                this.data = z.object;
-                this.data.forEach((x) => {
-                    x.address = x.address == null ? {} : x.address;
+        this.addressService.getAddressesForListbox().subscribe((v) => {
+            this.addressesListbox = v.object;
+            this.legalParentService.getLegalParentsForListbox().subscribe((x) => {
+                this.legalParentsListbox = x.object;
+                this.graduationService.getGraduationsForListbox().subscribe((y) => {
+                    this.graduationsListbox = y.object;
+                    this.studentService.getStudents().subscribe((z) => {
+                        this.data = z.object;
+                        this.data.forEach((x) => {
+                            x.address = x.address == null ? {} : x.address;
+                        });
+                        this.loading = false;
+                    });
                 });
-                this.loading = false;
             });
         });
     }

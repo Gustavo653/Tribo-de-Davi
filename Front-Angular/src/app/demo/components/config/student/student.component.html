@@ -32,16 +32,19 @@
                     <input [(ngModel)]="selectedRegistry.email" pInputText />
                     <label>Telefone</label><small class="p-error">*</small>
                     <input [(ngModel)]="selectedRegistry.phoneNumber" pInputText />
-                    <p-fieldset legend="Endereço">
-                        <label>Rua</label>
-                        <input [(ngModel)]="selectedRegistry.address.streetName" pInputText />
-                        <label>Número</label>
-                        <input [(ngModel)]="selectedRegistry.address.streetNumber" pInputText />
-                        <label>Bairro</label>
-                        <input [(ngModel)]="selectedRegistry.address.neighborhood" pInputText />
-                        <label>Cidade</label>
-                        <input [(ngModel)]="selectedRegistry.address.city" pInputText />
-                    </p-fieldset>
+                    <label>Endereço</label>
+                    <p-dropdown
+                        [options]="addressesListbox"
+                        [(ngModel)]="selectedRegistry.addressId"
+                        placeholder="Selecione um valor"
+                        [showClear]="true"
+                        [filter]="true"
+                        filterBy="name"
+                        optionValue="code"
+                        optionLabel="name"
+                        appendTo="body"
+                        class="w-full"
+                    ></p-dropdown>
                 </p-fieldset>
             </div>
             <div class="col-12 md:col-6 lg:col-3">
@@ -60,7 +63,7 @@
                         [maxFileSize]="20000000"
                     >
                     </p-fileUpload>
-                    <img class="w-full mt-4 shadow-2 border-round" [src]="selectedRegistry.url"/>
+                    <img class="w-full mt-4 shadow-2 border-round" [src]="selectedRegistry.url" />
                 </p-fieldset>
             </div>
             <div class="col-12 md:col-6 lg:col-3">
@@ -77,18 +80,18 @@
                         appendTo="body"
                         class="w-full"
                     ></p-dropdown>
-                    <p-fieldset legend="Responsável Legal">
-                        <label>Nome</label><small class="p-error">*</small>
-                        <input [(ngModel)]="selectedRegistry.legalParent.name" pInputText />
-                        <label>Parentesco</label><small class="p-error">*</small>
-                        <input [(ngModel)]="selectedRegistry.legalParent.relationship" pInputText />
-                        <label>RG</label><small class="p-error">*</small>
-                        <input [(ngModel)]="selectedRegistry.legalParent.rg" pInputText />
-                        <label>CPF</label><small class="p-error">*</small>
-                        <input [(ngModel)]="selectedRegistry.legalParent.cpf" pInputText />
-                        <label>Telefone</label><small class="p-error">*</small>
-                        <input [(ngModel)]="selectedRegistry.legalParent.phoneNumber" pInputText />
-                    </p-fieldset>
+                    <label>Responsável Legal</label><small class="p-error">*</small>
+                    <p-dropdown
+                        [options]="legalParentsListbox"
+                        [(ngModel)]="selectedRegistry.legalParentId"
+                        placeholder="Selecione um valor"
+                        [filter]="true"
+                        filterBy="name"
+                        optionValue="code"
+                        optionLabel="name"
+                        appendTo="body"
+                        class="w-full"
+                    ></p-dropdown>
                 </p-fieldset>
             </div>
         </div>

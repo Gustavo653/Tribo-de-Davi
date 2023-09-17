@@ -2,6 +2,7 @@ using AutoMapper;
 using Common.DTO;
 using Common.Functions;
 using Microsoft.EntityFrameworkCore;
+using TriboDavi.DataAccess;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
 using TriboDavi.DTO;
@@ -46,6 +47,25 @@ namespace TriboDavi.Service
             return responseDTO;
         }
 
+        public async Task<ResponseDTO> GetLegalParentsForListbox()
+        {
+            ResponseDTO responseDTO = new();
+            try
+            {
+                responseDTO.Object = await _legalParentRepository.GetEntities()
+                                                                 .Select(x => new
+                                                                 {
+                                                                     Code = x.Id,
+                                                                     Name = $"Nome: {x.Name}, CPF: {x.CPF}",
+                                                                 }).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                responseDTO.SetError(ex);
+            }
+            return responseDTO;
+        }
+
         public async Task<ResponseDTO> GetList()
         {
             ResponseDTO responseDTO = new();
@@ -63,7 +83,7 @@ namespace TriboDavi.Service
                                                                      x.PhoneNumber,
                                                                      x.CreatedAt,
                                                                      x.UpdatedAt,
-                                                                     StudentsCount = x.Students.Count
+                                                                     StudentsCount = x.Students.Count()
                                                                  }).ToListAsync();
             }
             catch (Exception ex)

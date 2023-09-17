@@ -7,11 +7,13 @@ import { StudentComponent } from './student/student.component';
 import { FieldOperationComponent } from './fieldOperation/fieldOperation.component';
 import { FieldOperationTeacherComponent } from './fieldOperationTeacher/fieldOperationTeacher.component';
 import { FieldOperationStudentComponent } from './fieldOperationStudent/fieldOperationStudent.component';
+import { AddressComponent } from './address/address.component';
 
 @NgModule({
     imports: [
         RouterModule.forChild([
             { path: 'students', component: StudentComponent },
+            { path: 'addresses', component: AddressComponent },
             { path: 'teachers', component: TeacherComponent },
             { path: 'graduations', component: GraduationComponent },
             { path: 'legal-parents', component: LegalParentComponent },

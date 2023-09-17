@@ -2,6 +2,7 @@ using AutoMapper;
 using Common.DTO;
 using Common.Functions;
 using Microsoft.EntityFrameworkCore;
+using TriboDavi.DataAccess;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
 using TriboDavi.DTO;
@@ -12,11 +13,13 @@ namespace TriboDavi.Service
     public class FieldOperationService : IFieldOperationService
     {
         private readonly IFieldOperationRepository _fieldOperationRepository;
+        private readonly IAddressRepository _addressRepository;
         private readonly IMapper _mapper;
-        public FieldOperationService(IFieldOperationRepository fieldOperationRepository, IMapper mapper)
+        public FieldOperationService(IFieldOperationRepository fieldOperationRepository, IMapper mapper, IAddressRepository addressRepository)
         {
             _fieldOperationRepository = fieldOperationRepository;
             _mapper = mapper;
+            _addressRepository = addressRepository;
         }
 
         public async Task<ResponseDTO> Create(FieldOperationDTO objectDTO)
@@ -30,8 +33,15 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                FieldOperation fieldOperation = _mapper.Map<FieldOperation>(objectDTO);
+                var address = await _addressRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.AddressId);
+                if (address == null)
+                {
+                    responseDTO.SetBadInput("O endereço informado não existe!");
+                    return responseDTO;
+                }
 
+                FieldOperation fieldOperation = _mapper.Map<FieldOperation>(objectDTO);
+                fieldOperation.Address = address;
                 fieldOperation.SetCreatedAt();
 
                 await _fieldOperationRepository.InsertAsync(fieldOperation);
@@ -70,8 +80,16 @@ namespace TriboDavi.Service
             ResponseDTO responseDTO = new();
             try
             {
-                List<FieldOperation> fieldOperation = await _fieldOperationRepository.GetEntities().Include(x => x.Address).ToListAsync();
-                responseDTO.Object = fieldOperation;
+                responseDTO.Object = await _fieldOperationRepository.GetEntities()
+                                                                    .Select(x => new
+                                                                    {
+                                                                        x.Id,
+                                                                        x.Name,
+                                                                        AddressId = x.Address.Id,
+                                                                        x.CreatedAt,
+                                                                        x.UpdatedAt
+                                                                    })
+                                                                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -116,12 +134,19 @@ namespace TriboDavi.Service
 
                 if (await _fieldOperationRepository.GetEntities().AnyAsync(x => x.Id != id && (x.Name == objectDTO.Name)))
                 {
-                    responseDTO.SetBadInput("Já existe um campo de atuação cadastrado com este nome!");
+                    responseDTO.SetBadInput("Já existe um campo de operação cadastrado com este nome!");
+                    return responseDTO;
+                }
+
+                var address = await _addressRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.AddressId);
+                if (address == null)
+                {
+                    responseDTO.SetBadInput("O endereço informado não existe!");
                     return responseDTO;
                 }
 
                 PropertyCopier<FieldOperationDTO, FieldOperation>.Copy(objectDTO, fieldOperation);
-
+                fieldOperation.Address = address;
                 fieldOperation.SetUpdatedAt();
 
                 await _fieldOperationRepository.SaveChangesAsync();

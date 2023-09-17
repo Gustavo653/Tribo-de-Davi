@@ -15,6 +15,7 @@ namespace TriboDavi.Service
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly IAddressRepository _addressRepository;
         private readonly IGoogleCloudStorageService _googleCloudStorageService;
         private readonly IFieldOperationStudentRepository _fieldOperationStudentRepository;
         private readonly IFieldOperationTeacherRepository _fieldOperationTeacherRepository;
@@ -31,7 +32,8 @@ namespace TriboDavi.Service
                               ITeacherRepository teacherRepository,
                               IFieldOperationStudentRepository fieldOperationStudentRepository,
                               IFieldOperationTeacherRepository fieldOperationTeacherRepository,
-                              IGoogleCloudStorageService googleCloudStorageService)
+                              IGoogleCloudStorageService googleCloudStorageService,
+                              IAddressRepository addressRepository)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
@@ -42,27 +44,7 @@ namespace TriboDavi.Service
             _fieldOperationStudentRepository = fieldOperationStudentRepository;
             _fieldOperationTeacherRepository = fieldOperationTeacherRepository;
             _googleCloudStorageService = googleCloudStorageService;
-        }
-
-
-        private async Task<LegalParent> GetOrCreateLegalParent(LegalParentDTO legalParentDTO)
-        {
-            var legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.CPF == legalParentDTO.CPF)
-                              ?? new LegalParent()
-                              {
-                                  CPF = legalParentDTO.CPF,
-                                  Name = legalParentDTO.Name,
-                                  PhoneNumber = legalParentDTO.PhoneNumber,
-                                  Relationship = legalParentDTO.Relationship,
-                                  RG = legalParentDTO.RG
-                              };
-
-            if (legalParent.Id == 0)
-            {
-                legalParent.SetCreatedAt();
-            }
-
-            return legalParent;
+            _addressRepository = addressRepository;
         }
 
         private async Task UpdateSecurityAndRoleAsync(Student student)
@@ -71,25 +53,11 @@ namespace TriboDavi.Service
             await _userManager.AddToRoleAsync(student, nameof(RoleName.Student));
         }
 
-        private void SetStudentProperties(StudentDTO objectDTO, Student student, Graduation graduation, LegalParent legalParent)
+        private void SetStudentProperties(StudentDTO objectDTO, Student student, Graduation graduation, Address? address, LegalParent legalParent)
         {
             PropertyCopier<StudentDTO, Student>.Copy(objectDTO, student);
-            if (objectDTO.Address != null)
-            {
-                student.Address = new Address()
-                {
-                    City = objectDTO.Address.City ?? "",
-                    Neighborhood = objectDTO.Address.Neighborhood ?? "",
-                    StreetName = objectDTO.Address.StreetName ?? "",
-                    StreetNumber = objectDTO.Address.StreetNumber ?? ""
-                };
-                student.Address.SetCreatedAt();
-            }
-            else
-            {
-                student.Address = null;
-            }
 
+            student.Address = address;
             student.Graduation = graduation;
             student.LegalParent = legalParent;
             student.UserName = student.Email;
@@ -125,12 +93,6 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                if (objectDTO.CPF == objectDTO.LegalParent.CPF)
-                {
-                    responseDTO.SetBadInput("O CPF do estudante deve ser diferente do CPF do responsável legal!");
-                    return responseDTO;
-                }
-
                 var existingTeacherWithEmail = await _teacherRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
                 if (existingTeacherWithEmail)
                 {
@@ -147,7 +109,14 @@ namespace TriboDavi.Service
 
                 var student = _mapper.Map<Student>(objectDTO);
 
-                var legalParent = await GetOrCreateLegalParent(objectDTO.LegalParent);
+                var legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.LegalParentId);
+                if (legalParent == null)
+                {
+                    responseDTO.SetBadInput("O responsável legal informado não existe!");
+                    return responseDTO;
+                }
+
+                var address = await _addressRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.AddressId);
 
                 var graduation = await _graduationRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.GraduationId);
                 if (graduation == null)
@@ -156,7 +125,7 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                SetStudentProperties(objectDTO, student, graduation, legalParent);
+                SetStudentProperties(objectDTO, student, graduation, address, legalParent);
 
                 student.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
 
@@ -205,6 +174,8 @@ namespace TriboDavi.Service
                                                                  x.Height,
                                                                  x.SchoolName,
                                                                  GraduationId = x.Graduation.Id,
+                                                                 LegalParentId = x.LegalParent.Id,
+                                                                 AddressId = x.Address.Id,
                                                                  x.Address,
                                                                  x.Graduation,
                                                                  x.LegalParent,
@@ -287,7 +258,27 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                var legalParent = await GetOrCreateLegalParent(objectDTO.LegalParent);
+                var existingTeacherWithEmail = await _teacherRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
+                if (existingTeacherWithEmail)
+                {
+                    responseDTO.SetBadInput("Já existe um professor cadastrado com este e-mail!");
+                    return responseDTO;
+                }
+
+                var existingStudentWithEmail = await _studentRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
+                if (existingStudentWithEmail)
+                {
+                    responseDTO.SetBadInput("Já existe um aluno cadastrado com este e-mail!");
+                    return responseDTO;
+                }
+
+                var legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.LegalParentId);
+                if (legalParent == null)
+                {
+                    responseDTO.SetBadInput("O responsável legal informado não existe!");
+                    return responseDTO;
+                }
+
                 var graduation = await _graduationRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.GraduationId);
                 if (graduation == null)
                 {
@@ -295,7 +286,9 @@ namespace TriboDavi.Service
                     return responseDTO;
                 }
 
-                SetStudentProperties(objectDTO, student, graduation, legalParent);
+                var address = await _addressRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.AddressId);
+
+                SetStudentProperties(objectDTO, student, graduation, address, legalParent);
 
                 if (objectDTO.File != null)
                 {

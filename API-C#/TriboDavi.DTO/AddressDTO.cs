@@ -1,10 +1,14 @@
-﻿namespace TriboDavi.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TriboDavi.DTO
 {
     public class AddressDTO
     {
-        public string? StreetName { get; set; }
-        public string? StreetNumber { get; set; }
-        public string? Neighborhood { get; set; }
-        public string? City { get; set; }
+        [Required]
+        public required string StreetName { get; set; }
+        [Required]
+        public required string StreetNumber { get; set; }
+        [Required]
+        public required string Neighborhood { get; set; }
     }
 }

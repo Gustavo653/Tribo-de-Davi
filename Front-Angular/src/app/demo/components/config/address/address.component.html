@@ -4,21 +4,12 @@
 <p-dialog [(visible)]="modalDialog" header="Detalhes do Registro" [transitionOptions]="'100ms'" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <p-fieldset legend="Informações Gerais">
-            <label>Nome</label><small class="p-error">*</small>
-            <input [(ngModel)]="selectedRegistry.name" pInputText />
-            <label>Endereço</label><small class="p-error">*</small>
-            <p-dropdown
-                [options]="addressesListbox"
-                [(ngModel)]="selectedRegistry.addressId"
-                placeholder="Selecione um valor"
-                [showClear]="true"
-                [filter]="true"
-                filterBy="name"
-                optionValue="code"
-                optionLabel="name"
-                appendTo="body"
-                class="w-full"
-            ></p-dropdown>
+            <label>Rua</label><small class="p-error">*</small>
+            <input [(ngModel)]="selectedRegistry.streetName" pInputText />
+            <label>Número</label><small class="p-error">*</small>
+            <input [(ngModel)]="selectedRegistry.streetNumber" pInputText />
+            <label>Bairro</label><small class="p-error">*</small>
+            <input [(ngModel)]="selectedRegistry.neighborhood" pInputText />
         </p-fieldset>
     </ng-template>
     <ng-template pTemplate="footer">
@@ -27,7 +18,7 @@
     </ng-template>
 </p-dialog>
 <div class="card" *ngIf="loading == false">
-    <h3>Gerenciar Campos de Operação</h3>
-    <button pButton icon="pi pi-plus" label="Criar Campo de Operação" class="p-button-success mb-3" (click)="create()"></button>
+    <h3>Gerenciar Endereços</h3>
+    <button pButton icon="pi pi-plus" label="Criar Endereço" class="p-button-success mb-3" (click)="create()"></button>
     <app-form-table [loading]="loading" [cols]="cols" [data]="data" (event)="event($event)"></app-form-table>
 </div>

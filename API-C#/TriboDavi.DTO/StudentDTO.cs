@@ -29,8 +29,8 @@ namespace TriboDavi.DTO
         public string? CPF { get; set; }
         public string? SchoolName { get; set; }
         public int? SchoolGrade { get; set; }
-        public AddressDTO? Address { get; set; }
+        public int? AddressId { get; set; }
         [Required]
-        public required LegalParentDTO LegalParent { get; set; }
+        public required int LegalParentId { get; set; }
     }
 }

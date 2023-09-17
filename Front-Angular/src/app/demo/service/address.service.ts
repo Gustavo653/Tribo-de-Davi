@@ -7,53 +7,53 @@ import { StorageService } from './storage.service';
 @Injectable({
     providedIn: 'root',
 })
-export class LegalParentService {
+export class AddressService {
     constructor(private http: HttpClient, private storageService: StorageService) {}
 
     private getAPIURL(): Observable<string> {
         return this.storageService.getAPIURL();
     }
 
-    getLegalParents(): Observable<any> {
+    getAddresses(): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/legalParent`;
+                const apiUrl = `${url}/address`;
                 return this.http.get(apiUrl);
             })
         );
     }
 
-    getLegalParentsForListbox(): Observable<any> {
+    getAddressesForListbox(): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/legalParent/listbox`;
+                const apiUrl = `${url}/address/listbox`;
                 return this.http.get(apiUrl);
             })
         );
     }
 
-    createLegalParent(data: any): Observable<any> {
+    createAddress(data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/legalParent`;
+                const apiUrl = `${url}/address`;
                 return this.http.post(apiUrl, data);
             })
         );
     }
 
-    updateLegalParent(id: string, data: any): Observable<any> {
+    updateAddress(id: string, data: any): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/legalParent/${id}`;
+                const apiUrl = `${url}/address/${id}`;
                 return this.http.put(apiUrl, data);
             })
         );
     }
 
-    deleteLegalParent(id: string): Observable<any> {
+    deleteAddress(id: string): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
-                const apiUrl = `${url}/legalParent/${id}`;
+                const apiUrl = `${url}/address/${id}`;
                 return this.http.delete(apiUrl);
             })
         );
