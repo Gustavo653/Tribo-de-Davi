@@ -22,7 +22,7 @@ export class GraduationService {
             })
         );
     }
-    
+
     getGraduationsForListbox(): Observable<any> {
         return this.getAPIURL().pipe(
             switchMap((url) => {
@@ -37,9 +37,26 @@ export class GraduationService {
             switchMap((url) => {
                 const apiUrl = `${url}/graduation`;
                 const formData = new FormData();
-                formData.append('name', data.name);
-                formData.append('position', data.position);
-                formData.append('file', data.file);
+                for (const key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        const value = data[key];
+
+                        if (value !== undefined && value !== null && value !== '') {
+                            if (typeof value !== 'object' || value instanceof File) {
+                                formData.append(key, value);
+                            } else {
+                                for (const nestedKey in value) {
+                                    if (value.hasOwnProperty(nestedKey)) {
+                                        const nestedValue = value[nestedKey];
+                                        if (nestedValue !== undefined && nestedValue !== null && nestedValue !== '') {
+                                            formData.append(`${key}.${nestedKey}`, nestedValue);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 return this.http.post(apiUrl, formData);
             })
         );
@@ -50,9 +67,26 @@ export class GraduationService {
             switchMap((url) => {
                 const apiUrl = `${url}/graduation/${id}`;
                 const formData = new FormData();
-                formData.append('name', data.name);
-                formData.append('position', data.position);
-                formData.append('file', data.file);
+                for (const key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        const value = data[key];
+
+                        if (value !== undefined && value !== null && value !== '') {
+                            if (typeof value !== 'object' || value instanceof File) {
+                                formData.append(key, value);
+                            } else {
+                                for (const nestedKey in value) {
+                                    if (value.hasOwnProperty(nestedKey)) {
+                                        const nestedValue = value[nestedKey];
+                                        if (nestedValue !== undefined && nestedValue !== null && nestedValue !== '') {
+                                            formData.append(`${key}.${nestedKey}`, nestedValue);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 return this.http.put(apiUrl, formData);
             })
         );
