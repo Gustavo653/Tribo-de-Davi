@@ -107,7 +107,7 @@ export class GraduationComponent implements OnInit {
     }
 
     validateData(): boolean {
-        if (!this.selectedRegistry.name || !this.selectedRegistry.position || !this.selectedRegistry.graduationType != undefined || (!this.selectedRegistry.id && !this.uploadedFiles[0])) {
+        if (!this.selectedRegistry.name || !this.selectedRegistry.position || this.selectedRegistry.graduationType == undefined || (!this.selectedRegistry.id && !this.uploadedFiles[0])) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.' });
             return false;
         }
