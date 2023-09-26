@@ -163,24 +163,24 @@ namespace TriboDavi.Service
                                                                                                            y.FieldOperationTeacher.Teacher.AssistantTeachers.Any(a => a.Id == teacherId)))
                                                              .Select(x => new
                                                              {
-                                                             x.Id,
-                                                             x.BirthDate,
-                                                             Url = x.GetUrl(),
-                                                             x.Email,
-                                                             x.RG,
-                                                             x.CPF,
-                                                             x.Name,
-                                                             x.PhoneNumber,
-                                                             x.SchoolGrade,
-                                                             x.Weight,
-                                                             x.Height,
-                                                             x.SchoolName,
-                                                             GraduationId = x.Graduation.Id,
-                                                             LegalParentId = x.LegalParent.Id,
-                                                             AddressId = x.Address != null ? x.Address.Id : 0,
-                                                             x.Address,
-                                                             x.Graduation,
-                                                             x.LegalParent,
+                                                                 x.Id,
+                                                                 x.BirthDate,
+                                                                 Url = x.GetUrl(),
+                                                                 x.Email,
+                                                                 x.RG,
+                                                                 x.CPF,
+                                                                 x.Name,
+                                                                 x.PhoneNumber,
+                                                                 x.SchoolGrade,
+                                                                 x.Weight,
+                                                                 x.Height,
+                                                                 x.SchoolName,
+                                                                 GraduationId = x.Graduation.Id,
+                                                                 LegalParentId = x.LegalParent.Id,
+                                                                 AddressId = x.Address != null ? x.Address.Id : 0,
+                                                                 x.Address,
+                                                                 x.Graduation,
+                                                                 x.LegalParent,
                                                              })
                                                              .ToListAsync();
             }
@@ -255,7 +255,7 @@ namespace TriboDavi.Service
                                                       .Include(x => x.LegalParent)
                                                       .Include(x => x.Graduation)
                                                       .Include(x => x.Address)
-                                                      .FirstOrDefaultAsync(x => teacherId == null || x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId));
+                                                      .FirstOrDefaultAsync(x => x.Id == id && (teacherId == null || x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId)));
                 if (student == null)
                 {
                     responseDTO.SetNotFound();
