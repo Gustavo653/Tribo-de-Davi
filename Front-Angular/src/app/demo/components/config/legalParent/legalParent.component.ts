@@ -127,7 +127,8 @@ export class LegalParentComponent implements OnInit {
         return true;
     }
 
-    save() {
+    save(val?: number) {
+        if (val == 1) this.selectedRegistry.id = undefined;
         if (this.validateData()) {
             if (this.selectedRegistry.id) {
                 this.legalParentService.updateLegalParent(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {

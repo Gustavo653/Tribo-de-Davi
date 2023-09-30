@@ -121,7 +121,8 @@ export class AddressComponent implements OnInit {
         return true;
     }
 
-    save() {
+    save(val?: number) {
+        if (val == 1) this.selectedRegistry.id = undefined;
         if (this.validateData()) {
             if (this.selectedRegistry.id) {
                 this.addressService.updateAddress(this.selectedRegistry.id, this.selectedRegistry).subscribe(() => {
