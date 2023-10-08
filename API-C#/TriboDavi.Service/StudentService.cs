@@ -53,7 +53,7 @@ namespace TriboDavi.Service
             await _userManager.AddToRoleAsync(student, nameof(RoleName.Student));
         }
 
-        private void SetStudentProperties(StudentDTO objectDTO, Student student, Graduation graduation, Address? address, LegalParent legalParent)
+        private void SetStudentProperties(StudentDTO objectDTO, Student student, Graduation graduation, Address? address, LegalParent? legalParent)
         {
             PropertyCopier<StudentDTO, Student>.Copy(objectDTO, student);
 
@@ -69,65 +69,94 @@ namespace TriboDavi.Service
                 student.PasswordHash = _userManager.PasswordHasher.HashPassword(student, objectDTO.Password);
         }
 
+        private async Task<ResponseDTO?> ValidateStudent(int? id, StudentDTO objectDTO, ResponseDTO responseDTO, LegalParent? legalParent, Graduation? graduation)
+        {
+            if (id == null && objectDTO.File == null)
+            {
+                responseDTO.SetBadInput("Uma foto deve ser enviada!");
+                return responseDTO;
+            }
+
+            if (id == null && string.IsNullOrEmpty(objectDTO.Password))
+            {
+                responseDTO.SetBadInput("A senha deve ser informada!");
+                return responseDTO;
+            }
+
+            if (objectDTO.BirthDate > DateTime.Now)
+            {
+                responseDTO.SetBadInput("A data de nascimento deve ser menor que o dia de hoje!");
+                return responseDTO;
+            }
+
+            var existingTeacherWithEmail = await _teacherRepository.GetEntities()
+                                                                   .AnyAsync(x => (id == null || x.Id != id) && x.NormalizedEmail == objectDTO.Email.ToUpper());
+            if (existingTeacherWithEmail)
+            {
+                responseDTO.SetBadInput("Já existe um professor cadastrado com este e-mail!");
+                return responseDTO;
+            }
+
+            var existingStudentWithEmail = await _studentRepository.GetEntities()
+                                                                   .AnyAsync(x => (id == null || x.Id != id) && x.NormalizedEmail == objectDTO.Email.ToUpper());
+            if (existingStudentWithEmail)
+            {
+                responseDTO.SetBadInput("Já existe um aluno cadastrado com este e-mail!");
+                return responseDTO;
+            }
+
+            if (graduation == null)
+            {
+                responseDTO.SetBadInput("A graduação informada não existe!");
+                return responseDTO;
+            }
+
+            if (Functions.CalculateAge(objectDTO.BirthDate) >= 18)
+            {
+                if (graduation.GraduationType == GraduationType.Kid)
+                {
+                    responseDTO.SetBadInput("A graduação escolhida é para criança!");
+                    return responseDTO;
+                }
+            }
+            else
+            {
+                if (graduation.GraduationType == GraduationType.Adult)
+                {
+                    responseDTO.SetBadInput("A graduação escolhida é para adulto!");
+                    return responseDTO;
+                }
+
+                if (legalParent == null)
+                {
+                    responseDTO.SetBadInput("O responsável legal deve ser informado!");
+                    return responseDTO;
+                }
+            }
+
+            return null;
+        }
+
         public async Task<ResponseDTO> Create(StudentDTO objectDTO, int? teacherId = null)
         {
-            var responseDTO = new ResponseDTO();
+            ResponseDTO responseDTO = new();
 
             try
             {
-                if (objectDTO.File == null)
-                {
-                    responseDTO.SetBadInput("Uma foto deve ser enviada!");
-                    return responseDTO;
-                }
+                var legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.LegalParentId);
+                var address = await _addressRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.AddressId);
+                var graduation = await _graduationRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.GraduationId);
 
-                if (string.IsNullOrEmpty(objectDTO.Password))
-                {
-                    responseDTO.SetBadInput("A senha deve ser informada!");
-                    return responseDTO;
-                }
+                var validate = await ValidateStudent(null, objectDTO, responseDTO, legalParent, graduation);
 
-                if (objectDTO.BirthDate > DateTime.Now)
-                {
-                    responseDTO.SetBadInput("A data de nascimento deve ser menor que o dia de hoje!");
+                if (validate != null)
                     return responseDTO;
-                }
-
-                var existingTeacherWithEmail = await _teacherRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
-                if (existingTeacherWithEmail)
-                {
-                    responseDTO.SetBadInput("Já existe um professor cadastrado com este e-mail!");
-                    return responseDTO;
-                }
-
-                var existingStudentWithEmail = await _studentRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
-                if (existingStudentWithEmail)
-                {
-                    responseDTO.SetBadInput("Já existe um aluno cadastrado com este e-mail!");
-                    return responseDTO;
-                }
 
                 var student = _mapper.Map<Student>(objectDTO);
 
-                var legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.LegalParentId);
-                if (legalParent == null)
-                {
-                    responseDTO.SetBadInput("O responsável legal informado não existe!");
-                    return responseDTO;
-                }
+                SetStudentProperties(objectDTO, student, graduation!, address, legalParent!);
 
-                var address = await _addressRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.AddressId);
-
-                var graduation = await _graduationRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.GraduationId);
-                if (graduation == null)
-                {
-                    responseDTO.SetBadInput("A graduação informada não existe!");
-                    return responseDTO;
-                }
-
-                SetStudentProperties(objectDTO, student, graduation, address, legalParent);
-
-                student.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
+                student.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File!, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File!.FileName)}");
 
                 await _studentRepository.InsertAsync(student);
                 await _studentRepository.SaveChangesAsync();
@@ -165,7 +194,7 @@ namespace TriboDavi.Service
                                                              {
                                                                  x.Id,
                                                                  x.BirthDate,
-                                                                 Url = x.GetUrl(),
+                                                                 Url = Functions.GetUrl(x.Url),
                                                                  x.Email,
                                                                  x.RG,
                                                                  x.CPF,
@@ -176,11 +205,12 @@ namespace TriboDavi.Service
                                                                  x.Height,
                                                                  x.SchoolName,
                                                                  GraduationId = x.Graduation.Id,
-                                                                 LegalParentId = x.LegalParent.Id,
+                                                                 LegalParentId = x.LegalParent != null ? x.LegalParent.Id : 0,
                                                                  AddressId = x.Address != null ? x.Address.Id : 0,
                                                                  x.Address,
                                                                  x.Graduation,
                                                                  x.LegalParent,
+                                                                 x.EmergencyNumber
                                                              })
                                                              .ToListAsync();
             }
@@ -203,7 +233,7 @@ namespace TriboDavi.Service
                                                              .Select(x => new
                                                              {
                                                                  Code = x.Id,
-                                                                 Name = x.Name,
+                                                                 x.Name,
                                                              })
                                                              .OrderBy(x => x.Name)
                                                              .ToListAsync();
@@ -217,7 +247,7 @@ namespace TriboDavi.Service
 
         public async Task<ResponseDTO> Remove(int id)
         {
-            var responseDTO = new ResponseDTO();
+            ResponseDTO responseDTO = new();
 
             try
             {
@@ -241,62 +271,36 @@ namespace TriboDavi.Service
 
         public async Task<ResponseDTO> Update(int id, StudentDTO objectDTO, int? teacherId = null)
         {
-            var responseDTO = new ResponseDTO();
+            ResponseDTO responseDTO = new();
 
             try
             {
-                if (objectDTO.BirthDate > DateTime.Now)
-                {
-                    responseDTO.SetBadInput("A data de nascimento deve ser menor que o dia de hoje!");
-                    return responseDTO;
-                }
-
                 var student = await _studentRepository.GetTrackedEntities()
                                                       .Include(x => x.LegalParent)
                                                       .Include(x => x.Graduation)
                                                       .Include(x => x.Address)
                                                       .FirstOrDefaultAsync(x => x.Id == id && (teacherId == null || x.FieldOperationStudents.Any(y => y.FieldOperationTeacher.Teacher.Id == teacherId)));
+
                 if (student == null)
                 {
                     responseDTO.SetNotFound();
                     return responseDTO;
                 }
 
-                var existingTeacherWithEmail = await _teacherRepository.GetEntities().AnyAsync(x => x.NormalizedEmail == objectDTO.Email.ToUpper());
-                if (existingTeacherWithEmail)
-                {
-                    responseDTO.SetBadInput("Já existe um professor cadastrado com este e-mail!");
-                    return responseDTO;
-                }
-
-                var existingStudentWithEmail = await _studentRepository.GetEntities().AnyAsync(x => x.Id != id && x.NormalizedEmail == objectDTO.Email.ToUpper());
-                if (existingStudentWithEmail)
-                {
-                    responseDTO.SetBadInput("Já existe um aluno cadastrado com este e-mail!");
-                    return responseDTO;
-                }
-
                 var legalParent = await _legalParentRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.LegalParentId);
-                if (legalParent == null)
-                {
-                    responseDTO.SetBadInput("O responsável legal informado não existe!");
-                    return responseDTO;
-                }
-
-                var graduation = await _graduationRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.GraduationId);
-                if (graduation == null)
-                {
-                    responseDTO.SetBadInput("A graduação informada não existe!");
-                    return responseDTO;
-                }
-
                 var address = await _addressRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.AddressId);
+                var graduation = await _graduationRepository.GetTrackedEntities().FirstOrDefaultAsync(x => x.Id == objectDTO.GraduationId);
 
-                SetStudentProperties(objectDTO, student, graduation, address, legalParent);
+                var validate = await ValidateStudent(id, objectDTO, responseDTO, legalParent, graduation);
+
+                if (validate != null)
+                    return responseDTO;
+
+                SetStudentProperties(objectDTO, student, graduation!, address, legalParent);
 
                 if (objectDTO.File != null)
                 {
-                    await _googleCloudStorageService.DeleteFileFromGcsAsync(student.GetUrl());
+                    await _googleCloudStorageService.DeleteFileFromGcsAsync(Functions.GetUrl(student.Url));
                     student.Url = await _googleCloudStorageService.UploadFileToGcsAsync(objectDTO.File, $"{Guid.NewGuid()}{Path.GetExtension(objectDTO.File.FileName)}");
                 }
 

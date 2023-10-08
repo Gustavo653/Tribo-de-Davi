@@ -1,4 +1,5 @@
 using Common.DTO;
+using Common.Functions;
 using Microsoft.EntityFrameworkCore;
 using TriboDavi.DataAccess.Interface;
 using TriboDavi.Domain;
@@ -26,8 +27,8 @@ namespace TriboDavi.Service
                 var fieldOperationStudents = await _fieldOperationStudentRepository.GetTrackedEntities()
                                                                                    .Include(x => x.FieldOperationTeacher)
                                                                                    .Include(x => x.Student)
-                                                                                   .Where(x => teacherId == null || 
-                                                                                               x.FieldOperationTeacher.Teacher.Id == teacherId || 
+                                                                                   .Where(x => teacherId == null ||
+                                                                                               x.FieldOperationTeacher.Teacher.Id == teacherId ||
                                                                                                x.FieldOperationTeacher.Teacher.AssistantTeachers.Any(a => a.Id == teacherId))
                                                                                    .ToListAsync();
                 var responses = new List<ResponseDTO>();
@@ -74,8 +75,8 @@ namespace TriboDavi.Service
                                                                   x.Presence,
                                                                   StudentId = x.FieldOperationStudent.Student.Id,
                                                                   StudentName = x.FieldOperationStudent.Student.Name,
-                                                                  StudentUrl = x.FieldOperationStudent.Student.GetUrl(),
-                                                                  StudentAge = x.FieldOperationStudent.Student.CalculateAge(),
+                                                                  StudentUrl = Functions.GetUrl(x.FieldOperationStudent.Student.Url),
+                                                                  StudentAge = Functions.CalculateAge(x.FieldOperationStudent.Student.BirthDate),
                                                                   GraduationName = x.FieldOperationStudent.Student.Graduation.Name,
                                                                   GraduationUrl = x.FieldOperationStudent.Student.Graduation.GetUrl(),
                                                               })

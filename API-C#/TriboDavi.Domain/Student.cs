@@ -10,24 +10,9 @@ namespace TriboDavi.Domain
         public required decimal Height { get; set; }
         public string? SchoolName { get; set; }
         public int? SchoolGrade { get; set; }
+        public string? EmergencyNumber { get; set; }
         public virtual Address? Address { get; set; }
-        public virtual required LegalParent LegalParent { get; set; }
+        public virtual LegalParent? LegalParent { get; set; }
         public virtual IEnumerable<FieldOperationStudent>? FieldOperationStudents { get; set; }
-        public int CalculateAge()
-        {
-            DateTime currentDate = DateTime.Now;
-            int age = currentDate.Year - BirthDate.Year;
-
-            if (currentDate.Month < BirthDate.Month || (currentDate.Month == BirthDate.Month && currentDate.Day < BirthDate.Day))
-                age--;
-
-            return age;
-        }
-
-        public string GetUrl()
-        {
-            if (Url.Contains("tribo-davi-hom")) return Url;
-            else return Url.Replace("tribo-davi", Environment.GetEnvironmentVariable("GCS_BUCKET_NAME"));
-        }
     }
 }

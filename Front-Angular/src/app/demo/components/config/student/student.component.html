@@ -32,6 +32,8 @@
                     <input [(ngModel)]="selectedRegistry.email" pInputText />
                     <label>Telefone</label><small class="p-error">*</small>
                     <input [(ngModel)]="selectedRegistry.phoneNumber" pInputText />
+                    <label>Telefone de Emergência</label>
+                    <input [(ngModel)]="selectedRegistry.emergencyNumber" pInputText />
                     <label>Endereço</label>
                     <p-dropdown
                         [options]="addressesListbox"
@@ -80,7 +82,7 @@
                         appendTo="body"
                         class="w-full"
                     ></p-dropdown>
-                    <label>Responsável Legal</label><small class="p-error">*</small>
+                    <label>Responsável Legal</label>
                     <p-dropdown
                         [options]="legalParentsListbox"
                         [(ngModel)]="selectedRegistry.legalParentId"
@@ -91,6 +93,7 @@
                         optionLabel="name"
                         appendTo="body"
                         class="w-full"
+                        [showClear]="true"
                     ></p-dropdown>
                 </p-fieldset>
             </div>

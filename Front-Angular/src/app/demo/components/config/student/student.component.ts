@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { FormField, MessageServiceSuccess, TableColumn, UploadEvent } from 'src/app/demo/api/base';
+import { MessageServiceSuccess, TableColumn, UploadEvent } from 'src/app/demo/api/base';
 import { AddressService } from 'src/app/demo/service/address.service';
 import { GraduationService } from 'src/app/demo/service/graduation.service';
 import { LegalParentService } from 'src/app/demo/service/legalParent.service';
@@ -132,7 +132,6 @@ export class StudentComponent implements OnInit {
 
         if (
             !this.selectedRegistry.name ||
-            !this.selectedRegistry.legalParentId ||
             !this.selectedRegistry.email ||
             !this.selectedRegistry.weight ||
             !this.selectedRegistry.height ||
